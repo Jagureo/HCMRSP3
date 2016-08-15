@@ -1,0 +1,7 @@
+Xelarate    ~4,40-3+5=2&1!10
+Breakout    ~3,36-4+6=3&3!8
+Hammer      ~3,45-4+9=3&2!9
+El Toro Loco~5,47-2+9=5&1!10
+Grave Digger~3,40-3+6=3&2!10
+Obsidian    ~3,30-5+9=1&3!9
+//name~engine,maxspeed-turnpower+mass=accleration&power!size

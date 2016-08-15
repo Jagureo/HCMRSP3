@@ -1,0 +1,57 @@
+﻿Build started 8/15/2016 9:21:15 AM.
+     1>Project "C:\Users\Jagureo\Desktop\SP3Framework\Base\Base.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\Jagureo\Desktop\SP3Framework\/Common/Source /IC:\Users\Jagureo\Desktop\SP3Framework\/glew/include /IC:\Users\Jagureo\Desktop\SP3Framework\/glfw/include /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Application.cpp Source\SceneSP3.cpp
+         SceneSP3.cpp
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(70): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(103): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(112): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(122): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(154): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(204): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(237): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(267): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(475): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(476): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(490): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(491): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(516): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(517): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(530): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(531): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(549): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(550): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(563): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(602): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(913): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jagureo\desktop\sp3framework\base\source\scenesp3.cpp(914): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+         Generating Code...
+         Compiling...
+         Application.cpp
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Jagureo\Desktop\SP3Framework\Debug\Base.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:\Users\Jagureo\Desktop\SP3Framework\Debug /LIBPATH:"C:\Users\Jagureo\Desktop\SP3Framework\/glfw/lib-msvc100" /LIBPATH:C:\Users\Jagureo\Desktop\SP3Framework\/glew/lib Common.lib winmm.lib opengl32.lib glu32.lib glew32.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Jagureo\Desktop\SP3Framework\Debug\Base.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Jagureo\Desktop\SP3Framework\Debug\Base.lib" /MACHINE:X86 Debug\Application.obj
+         Debug\Camera.obj
+         Debug\GameObject.obj
+         Debug\LoadOBJ.obj
+         Debug\LoadTGA.obj
+         Debug\main.obj
+         Debug\Mesh.obj
+         Debug\MeshBuilder.obj
+         Debug\SceneAssignment1.obj
+         Debug\SceneAssignment2.obj
+         Debug\SceneAsteroid.obj
+         Debug\SceneBase.obj
+         Debug\SceneCollision.obj
+         Debug\SceneKinematics.obj
+         Debug\SceneSP3.obj
+         Debug\shader.obj
+         Debug\Utility.obj
+     1>Application.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
+     1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+         Base.vcxproj -> C:\Users\Jagureo\Desktop\SP3Framework\Debug\Base.exe
+     1>Done Building Project "C:\Users\Jagureo\Desktop\SP3Framework\Base\Base.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.34
