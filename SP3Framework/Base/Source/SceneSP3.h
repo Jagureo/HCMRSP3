@@ -6,6 +6,7 @@
 #include "SceneBase.h"
 #include <fstream>
 #include <sstream>
+#include "Map.h"
 using std::stoi;
 using std::ifstream;
 
@@ -35,11 +36,16 @@ public:
 	void CollisionResponse(GameObject *go, GameObject *other);
 
 	void Reset();
+
+	void RenderProps(playMap* map);
 protected:
 
 	GameObject* player1;
 
 	float friction;
+
+	Vector3 mapPosition;
+	playMap testMap;
 
 	//Physics
 	std::vector<GameObject *> m_goList;

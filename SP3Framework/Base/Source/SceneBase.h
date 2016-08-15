@@ -61,6 +61,10 @@ public:
 		GEO_POWERUP,
 		GEO_SAWBLADE,
 		GEO_ICE,
+
+		//SP3
+		GEO_TESTMAP,
+		
 		NUM_GEOMETRY,
 	};
 public:

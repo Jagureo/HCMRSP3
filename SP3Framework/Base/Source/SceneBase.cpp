@@ -129,6 +129,11 @@ void SceneBase::Init()
 	meshList[GEO_SAWBLADE] = MeshBuilder::GenerateQuad("sawblade", Color(1, 1, 1), 2.f);
 	meshList[GEO_SAWBLADE]->textureID = LoadTGA("Image//sawblade.tga");
 
+	// SP 3 STUFF
+
+	meshList[GEO_TESTMAP] = MeshBuilder::GenerateQuad("TESTMAP", Color(1, 1, 1), 10.f);
+	meshList[GEO_TESTMAP]->textureID = LoadTGA("Image//grass_lightblue.tga");
+
 	bLightEnabled = false;
 }
 

@@ -46,6 +46,9 @@ void SceneSP3::Init()
 	m_goList.push_back(player1);
 
 	friction = 0.95f;
+
+	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
+	testMap.setBackground(meshList[GEO_TESTMAP]);
 }
 
 void SceneSP3::Reset()
@@ -402,81 +405,82 @@ void SceneSP3::CollisionResponse(GameObject *go, GameObject *other)
 void SceneSP3::Update(double dt)
 {
 	SceneBase::Update(dt);
-	//player1->pos.Set(25, 50, 1);
+	
+	float diffx = (m_worldWidth / 2) - player1->pos.x;
+	float diffy = (m_worldHeight / 2) - player1->pos.y;
+	mapPosition = Vector3(mapPosition.x + diffx, mapPosition.y + diffy, 1);
+	player1->pos.x = (m_worldWidth / 2);
+	player1->pos.y = (m_worldHeight / 2);
+
+	static bool WPressed = false;
+	static bool UpPressed = false;
+
+
 	if (Application::IsKeyPressed('R'))
 	{
-		//Cleanup GameObjects
-		while (m_goList.size() > 0)
-		{
-			GameObject *go = m_goList.back();
-			delete go;
-			m_goList.pop_back();
-		}
-		Reset();
+		GameObject* testTree = new GameObject(GameObject::MAP_TREE);
+		testTree->pos.Set(0, 0, 1);
+		testMap.addClusterProp(testTree);
 	}
 
-		static bool WPressed = false;
-		static bool UpPressed = false;
+	if (Application::IsKeyPressed('9'))
+	{
+		m_speed = Math::Max(0.f, m_speed - 0.1f);
+	}
+	if (Application::IsKeyPressed('0'))
+	{
+		m_speed += 0.1f;
+	}
 
-
-		if (Application::IsKeyPressed('9'))
+	if (Application::IsKeyPressed('W'))
+	{
+		player1->engine += player1->playerCar.acceleration;
+	}
+	else if (Application::IsKeyPressed('S'))
+	{
+		player1->engine = -1;
+	}
+	else
+	{
+		player1->engine = 0;
+	}
+	if (player1->engine > player1->playerCar.engine)
+	{
+		player1->engine = player1->playerCar.engine;
+	}
+	if (Application::IsKeyPressed('D'))
+	{
+		player1->rotationAngle -= player1->playerCar.turnSpeed;
+		if (player1->vel.Length() < 3)
 		{
-			m_speed = Math::Max(0.f, m_speed - 0.1f);
+			if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
+				player1->rotationAngle += 1 / player1->vel.Length();
+			else
+				player1->rotationAngle += player1->playerCar.turnSpeed;
 		}
-		if (Application::IsKeyPressed('0'))
+		player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
+	}
+	if (Application::IsKeyPressed('A'))
+	{
+		player1->rotationAngle += player1->playerCar.turnSpeed;
+		if (player1->vel.Length() < 3)
 		{
-			m_speed += 0.1f;
+			if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
+				player1->rotationAngle -= 1 / player1->vel.Length();
+			else
+				player1->rotationAngle -= player1->playerCar.turnSpeed;
 		}
-
-		if (Application::IsKeyPressed('W'))
-		{
-			player1->engine += player1->playerCar.acceleration;
-		}
-		else if (Application::IsKeyPressed('S'))
-		{
-			player1->engine = -1;
-		}
-		else
-		{
-			player1->engine = 0;
-		}
-		if (player1->engine > player1->playerCar.engine)
-		{
-			player1->engine = player1->playerCar.engine;
-		}
-		if (Application::IsKeyPressed('D'))
-		{
-			player1->rotationAngle -= player1->playerCar.turnSpeed;
-			if (player1->vel.Length() < 3)
-			{
-				if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
-					player1->rotationAngle += 1 / player1->vel.Length();
-				else
-					player1->rotationAngle += player1->playerCar.turnSpeed;
-			}
-			player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
-		}
-		if (Application::IsKeyPressed('A'))
-		{
-			player1->rotationAngle += player1->playerCar.turnSpeed;
-			if (player1->vel.Length() < 3)
-			{
-				if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
-					player1->rotationAngle -= 1 / player1->vel.Length();
-				else
-					player1->rotationAngle -= player1->playerCar.turnSpeed;
-			}
-			player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
-		}
-		if (player1->vel.Length() < player1->playerCar.topSpeed)
-		{
-			player1->vel += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, 0);
-		}
-		friction = 0.96f - player1->mass * 0.01f;
-		if (player1->vel.x != 0 || player1->vel.y != 0)
-		{
-			player1->vel = player1->vel * friction;
-		}
+		player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
+	}
+	if (player1->vel.Length() < player1->playerCar.topSpeed)
+	{
+		player1->vel += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, 0);
+	}
+	friction = 0.96f - player1->mass * 0.01f;
+	if (player1->vel.x != 0 || player1->vel.y != 0)
+	{
+		player1->vel = player1->vel * friction;
+	}
 
 	//Mouse Section
 	static bool bLButtonState = false;
@@ -729,7 +733,7 @@ void SceneSP3::RenderGO(GameObject *go)
 		modelStack.Rotate(go->ballrotated, 0, 1, 0);
 		modelStack.Rotate(45, 1, 1, 0);
 		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
-		RenderMesh(meshList[GEO_SOCC], true);
+		RenderMesh(meshList[GEO_BALL], true);
 		modelStack.PopMatrix();
 
 		//Exercise 11: think of a way to give balls different colors
@@ -797,6 +801,22 @@ void SceneSP3::RenderGO(GameObject *go)
 	}
 }
 
+void SceneSP3::RenderProps(playMap* map)
+{
+	for (std::vector<GameObject *>::iterator it = map->mapProps.begin(); it != map->mapProps.end(); ++it)
+	{
+		GameObject *go = (GameObject *)*it;
+		if (go->type == GameObject::MAP_TREE)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x + mapPosition.x, go->pos.y + mapPosition.y, go->pos.z + mapPosition.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_SOCC], true);
+			modelStack.PopMatrix();
+		}
+	}
+}
+
 void SceneSP3::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -832,6 +852,7 @@ void SceneSP3::Render()
 		}
 	}
 
+
 	if (m_ghost->active)
 	{
 		modelStack.PushMatrix();
@@ -840,6 +861,14 @@ void SceneSP3::Render()
 		RenderMesh(meshList[GEO_BALL], false);
 		modelStack.PopMatrix();
 	}
+
+	RenderProps(&testMap);
+
+	modelStack.PushMatrix();
+	modelStack.Translate(mapPosition.x, mapPosition.y, mapPosition.z);
+	modelStack.Scale(testMap.getMapSize().x, testMap.getMapSize().y, testMap.getMapSize().z);
+	RenderMesh(testMap.getBackground(), false);
+	modelStack.PopMatrix();
 
 	//modelStack.PushMatrix();
 	//modelStack.Translate(m_worldWidth - 6, 94, 0);
