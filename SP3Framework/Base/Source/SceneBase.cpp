@@ -106,7 +106,7 @@ void SceneBase::Init()
 	meshList[GEO_ICE] = MeshBuilder::GenerateSphere("ball", Color(0.5f, 0.5f, 1), 10, 10, 1.f);
 	meshList[GEO_SOCC] = MeshBuilder::GenerateOBJ("GEO_BALL", "Object//ball1.obj");
 	meshList[GEO_SOCC]->textureID = LoadTGA("Image//ballUV.tga");
-	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 1, 1), 1.f);
+	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 1, 1), 4.f);
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
