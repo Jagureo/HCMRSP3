@@ -137,18 +137,18 @@ bool SceneSP3::CheckCollision3(GameObject *go, GameObject *other, double dt)
 									return ((abs((w0 - b1).Dot(N)) < (r + h / 2)) && ((abs(relativeDisplacement.Dot(NP)) < (l / 2))));
 								break;
 	}
-	case GameObject::GO_GOAL:
-	{
-								if (go->pos.x - go->scale.x > other->pos.x - other->scale.x / 2 && go->pos.x + go->scale.x < other->pos.x + other->scale.x / 2)
-								{
-									if (go->pos.y - go->scale.y > other->pos.y - other->scale.y / 2 && go->pos.y + go->scale.y < other->pos.y + other->scale.y / 2)
-									{
-										return true;
-									}
-								}
-								return false;
-								break;
-	}
+	//case GameObject::GO_GOAL:
+	//{
+	//							if (go->pos.x - go->scale.x > other->pos.x - other->scale.x / 2 && go->pos.x + go->scale.x < other->pos.x + other->scale.x / 2)
+	//							{
+	//								if (go->pos.y - go->scale.y > other->pos.y - other->scale.y / 2 && go->pos.y + go->scale.y < other->pos.y + other->scale.y / 2)
+	//								{
+	//									return true;
+	//								}
+	//							}
+	//							return false;
+	//							break;
+	//}
 	case GameObject::GO_PILLAR:
 	{
 								  float distanceSquared = ((go->pos + go->vel * dt) - (other->pos - other->vel * dt)).LengthSquared();
@@ -470,8 +470,8 @@ void SceneSP3::Update(double dt)
 		std::cout << "LBUTTON DOWN" << std::endl;
 		double x, y;
 		Application::GetCursorPos(&x, &y);
-		int w = 1366;
-		int h = 768;
+		int w = Application::GetWindowWidth();
+		int h = Application::GetWindowHeight();
 		float worldX = x * m_worldWidth / w;
 		float worldY = (h - y) * m_worldHeight / h;
 		m_ghost->pos.Set(worldX, worldY, 0);
@@ -485,8 +485,8 @@ void SceneSP3::Update(double dt)
 		//Exercise 6: spawn small GO_BALL
 		double x, y;
 		Application::GetCursorPos(&x, &y);
-		int w = 1366;
-		int h = 768;
+		int w = Application::GetWindowWidth();
+		int h = Application::GetWindowHeight();
 		float worldX = x * m_worldWidth / w;
 		float worldY = (h - y) * m_worldHeight / h;
 		m_ghost->active = false;
@@ -511,8 +511,8 @@ void SceneSP3::Update(double dt)
 		std::cout << "RBUTTON DOWN" << std::endl;
 		double x, y;
 		Application::GetCursorPos(&x, &y);
-		int w = 1366;
-		int h = 768;
+		int w = Application::GetWindowWidth();
+		int h = Application::GetWindowHeight();
 		float worldX = x * m_worldWidth / w;
 		float worldY = (h - y) * m_worldHeight / h;
 		m_ghost->pos.Set(worldX, worldY, 0);
@@ -525,8 +525,8 @@ void SceneSP3::Update(double dt)
 		//Exercise 10: spawn large GO_BALL
 		double x, y;
 		Application::GetCursorPos(&x, &y);
-		int w = 1366;
-		int h = 768;
+		int w = Application::GetWindowWidth();
+		int h = Application::GetWindowHeight();
 		float worldX = x * m_worldWidth / w;
 		float worldY = (h - y) * m_worldHeight / h;
 
@@ -544,8 +544,8 @@ void SceneSP3::Update(double dt)
 	{
 		double x, y;
 		Application::GetCursorPos(&x, &y);
-		int w = 1366;
-		int h = 768;
+		int w = Application::GetWindowWidth();
+		int h = Application::GetWindowHeight();
 		float worldX = x * m_worldWidth / w;
 		float worldY = (h - y) * m_worldHeight / h;
 		Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
@@ -608,33 +608,7 @@ void SceneSP3::Update(double dt)
 				go->rotationAngle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
 				go->ballrotated += go->vel.Length() * (2 / go->scale.x);
 
-				if (go->pos.y > 90)
-				{
-					if (go->vel.y > 0)
-						go->vel.y *= -1;
-					go->pos.y -= go->pos.y - 90;
-				}
-				else if (go->pos.y < 10)
-				{
-					if (go->vel.y < 0)
-						go->vel.y *= -1;
-					go->pos.y += 10 - go->pos.y;
-				}
-				else if (go->pos.y > 60 || go->pos.y < 40)
-				{
-					if (go->pos.x < 15)
-					{
-						if (go->vel.x < 0)
-							go->vel.x *= -1;
-						go->pos.x += 15 - go->pos.x;
-					}
-					if (go->pos.x > 115)
-					{
-						if (go->vel.x > 0)
-							go->vel.x *= -1;
-						go->pos.x -= go->pos.x - 115;
-					}
-				}
+				
 			}
 			//Exercise 8a: handle collision between GO_BALL and GO_BALL using velocity swap
 
