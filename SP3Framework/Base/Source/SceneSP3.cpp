@@ -44,6 +44,8 @@ void SceneSP3::Init()
 	player1->playerCar.acceleration = 0.5;
 	player1->playerCar.powerUp = 2;
 	m_goList.push_back(player1);
+
+	friction = 0.95f;
 }
 
 void SceneSP3::Reset()
@@ -400,7 +402,7 @@ void SceneSP3::CollisionResponse(GameObject *go, GameObject *other)
 void SceneSP3::Update(double dt)
 {
 	SceneBase::Update(dt);
-	player1->pos.Set(25, 50, 1);
+	//player1->pos.Set(25, 50, 1);
 	if (Application::IsKeyPressed('R'))
 	{
 		//Cleanup GameObjects
@@ -428,55 +430,52 @@ void SceneSP3::Update(double dt)
 
 		if (Application::IsKeyPressed('W'))
 		{
-			if (!WPressed)
-			{
-				WPressed = true;
-			}
+			player1->engine += player1->playerCar.acceleration;
 		}
 		else if (Application::IsKeyPressed('S'))
 		{
-
+			player1->engine = -1;
 		}
 		else
 		{
-
+			player1->engine = 0;
+		}
+		if (player1->engine > player1->playerCar.engine)
+		{
+			player1->engine = player1->playerCar.engine;
 		}
 		if (Application::IsKeyPressed('D'))
 		{
-
+			player1->rotationAngle -= player1->playerCar.turnSpeed;
+			if (player1->vel.Length() < 3)
+			{
+				if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
+					player1->rotationAngle += 1 / player1->vel.Length();
+				else
+					player1->rotationAngle += player1->playerCar.turnSpeed;
+			}
+			player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
 		}
 		if (Application::IsKeyPressed('A'))
 		{
-
+			player1->rotationAngle += player1->playerCar.turnSpeed;
+			if (player1->vel.Length() < 3)
+			{
+				if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
+					player1->rotationAngle -= 1 / player1->vel.Length();
+				else
+					player1->rotationAngle -= player1->playerCar.turnSpeed;
+			}
+			player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
 		}
-
-		if (Application::IsKeyPressed(VK_LSHIFT))
+		if (player1->vel.Length() < player1->playerCar.topSpeed)
 		{
-
+			player1->vel += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, 0);
 		}
-
-		if (Application::IsKeyPressed(VK_UP))
+		friction = 0.96f - player1->mass * 0.01f;
+		if (player1->vel.x != 0 || player1->vel.y != 0)
 		{
-	
-		}
-		else if (Application::IsKeyPressed(VK_DOWN))
-		{
-		
-		}
-
-		if (Application::IsKeyPressed(VK_RIGHT))
-		{
-
-		}
-
-		if (Application::IsKeyPressed(VK_LEFT))
-		{
-
-		}
-
-		if (Application::IsKeyPressed(VK_RSHIFT))
-		{
-			
+			player1->vel = player1->vel * friction;
 		}
 
 	//Mouse Section
@@ -686,43 +685,7 @@ void SceneSP3::Update(double dt)
 							continue;
 						
 					}
-					if (other->type == GameObject::GO_SAWBLADE)
-					{
-						if (!other->active)
-							continue;
-						
-					}
 				}
-			}
-
-			if (go->type == GameObject::GO_SAWBLADE)
-			{
-				if (go->pos.x > m_worldWidth - go->scale.x)
-				{
-					go->ticker--;
-					if (go->vel.x > 0)
-						go->vel.x = -go->vel.x;
-				}
-				else if (go->pos.x < 0 + go->scale.x)
-				{
-					go->ticker--;
-					if (go->vel.x < 0)
-						go->vel.x = -go->vel.x;
-				}
-				if (go->pos.y > m_worldHeight - go->scale.y)
-				{
-					go->ticker--;
-					if (go->vel.y > 0)
-						go->vel.y = -go->vel.y;
-				}
-				else if (go->pos.y < 0 + go->scale.y)
-				{
-					go->ticker--;
-					if (go->vel.y < 0)
-						go->vel.y = -go->vel.y;
-				}
-				if (go->ticker <= 0)
-					go->active = false;
 			}
 
 			if (go->type == GameObject::GO_PARTICLE)

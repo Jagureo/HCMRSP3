@@ -39,6 +39,8 @@ protected:
 
 	GameObject* player1;
 
+	float friction;
+
 	//Physics
 	std::vector<GameObject *> m_goList;
 	float m_speed;
