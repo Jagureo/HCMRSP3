@@ -37,6 +37,8 @@ public:
 	void Reset();
 protected:
 
+	GameObject* player1;
+
 	//Physics
 	std::vector<GameObject *> m_goList;
 	float m_speed;

@@ -24,6 +24,26 @@ void SceneSP3::Init()
 	m_objectCount = 0;
 
 	m_ghost = new GameObject(GameObject::GO_BALL);
+
+	player1 = new GameObject(GameObject::GO_CAR);
+	player1->pos.Set(25, 50, 1);
+	player1->mass = 5;
+	player1->vel.Set(0, 0, 0);
+	player1->rotationAngle = 0;
+	player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
+	player1->rotatedVel.SetToRotation(player1->rotationAngle, 0, 0, 1);
+	player1->engine = 0;
+	player1->turnPower = 3;
+	player1->active = true;
+	player1->scale.Set(10, 5, 1);
+
+	player1->playerCar.engine = 4;
+	player1->playerCar.mass = 5;
+	player1->playerCar.topSpeed = 40;
+	player1->playerCar.turnSpeed = 3;
+	player1->playerCar.acceleration = 0.5;
+	player1->playerCar.powerUp = 2;
+	m_goList.push_back(player1);
 }
 
 void SceneSP3::Reset()
@@ -126,13 +146,13 @@ bool SceneSP3::CheckCollision3(GameObject *go, GameObject *other, double dt)
 								float r = go->scale.x;
 								float h = other->scale.x;
 								float l = other->scale.y;
-
+	
 								Vector3 relativeVelocity = go->vel - other->vel;
 								Vector3 relativeDisplacement = w0 - b1;
-
+	
 								if (relativeDisplacement.Dot(N) < 0)
 									N = -N;
-
+	
 								if (relativeVelocity.Dot(N) > 0)
 									return ((abs((w0 - b1).Dot(N)) < (r + h / 2)) && ((abs(relativeDisplacement.Dot(NP)) < (l / 2))));
 								break;
@@ -202,20 +222,17 @@ bool SceneSP3::CheckCollision3(GameObject *go, GameObject *other, double dt)
 								   Vector3 NP = Vector3(-other->normal.y, other->normal.x, 0);
 								   Vector3 w0 = other->pos + (leftRight * (other->scale.x * 0.5f) * other->normal.Normalized()) + (downUp * (other->scale.y * 0.5f) * NP.Normalized());
 								   float distanceSquared = ((go->pos + go->vel * dt) - (w0 - other->vel * dt)).LengthSquared();
-								   float combinedRadiusSquared = (go->scale.x) * (go->scale.x);
+								   float combinedRadiusSquared = (go->scale.x + 0.5f) * (go->scale.x + 0.5f);
 								   Vector3 relativeVelocity = go->vel - other->vel;
 								   Vector3 relativeDisplacement = w0 - go->pos;
 								   if (distanceSquared < combinedRadiusSquared && relativeVelocity.Dot(relativeDisplacement) > 0)
 								   {
-									   Vector3 u = go->vel;
-									   Vector3 N = (w0 - go->pos).Normalized();
-									   Vector3 uN = u.Dot(N) * N;
-									   go->vel = other->rotatedVel * (u - 2 * uN) + other->vel;
-									   go->vel.z = 0;
-									   go->vel += other->vel;
+									   u1 = go->vel;
 
-									   v1 = other->rotatedVel * go->vel;
-									   v2 = other->vel;
+									   Vector3 N = (other->pos - go->pos).Normalized();
+
+									   go->vel = u1 - 2 * u1.Dot(N) * N;
+									   go->vel.z = 0;
 								   }
 							   }
 							   else
@@ -383,7 +400,7 @@ void SceneSP3::CollisionResponse(GameObject *go, GameObject *other)
 void SceneSP3::Update(double dt)
 {
 	SceneBase::Update(dt);
-
+	player1->pos.Set(25, 50, 1);
 	if (Application::IsKeyPressed('R'))
 	{
 		//Cleanup GameObjects
@@ -774,10 +791,11 @@ void SceneSP3::RenderGO(GameObject *go)
 		modelStack.Rotate(go->rotationAngle, 0, 0, 1);
 		modelStack.Rotate(180, 0, 0, 1);
 		modelStack.Rotate(90, 1, 0, 0);
-		modelStack.Scale(go->scale.x / 10, go->scale.y / 5, go->scale.z);
+		modelStack.Scale(go->scale.x / 10, go->scale.y / 5, go->scale.z / 2);
 		modelStack.Scale(2.5, 2.5, 2.5);
+		RenderMesh(meshList[GEO_CUBE], false);
 		modelStack.PopMatrix();
-
+		
 		break;
 	case GameObject::GO_PILLAR:
 		modelStack.PushMatrix();
@@ -827,6 +845,7 @@ void SceneSP3::Render()
 	// Projection matrix : Orthographic Projection
 	Mtx44 projection;
 	projection.SetToOrtho(0, m_worldWidth, 0, m_worldHeight, -10, 10);
+	//projection.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	projectionStack.LoadMatrix(projection);
 
 	// Camera matrix
@@ -887,10 +906,10 @@ void SceneSP3::Render()
 	float worldX = x * m_worldWidth / w;
 	float worldY = (h - y) * m_worldHeight / h;
 
-	//std::ostringstream ss;
-	//ss.precision(5);
-	//ss << "Pos: " << worldX << ", " << worldY;
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
+	std::ostringstream ss;
+	ss.precision(5);
+	ss << "Pos: " << worldX << ", " << worldY;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
 
 	std::ostringstream ssz;
 	ssz.precision(5);
