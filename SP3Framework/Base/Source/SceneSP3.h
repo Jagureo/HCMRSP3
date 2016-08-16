@@ -9,6 +9,7 @@
 #include "Map.h"
 #include "TextFile.h"
 #include "enemy.h"
+
 using std::stoi;
 using std::ifstream;
 
@@ -30,6 +31,7 @@ public:
 	virtual void Exit();
 
 	void RenderGO(GameObject *go);
+	void RenderEnemy(enemy *go);
 
 	GameObject* FetchGO();
 	bool CheckCollision(GameObject *go, GameObject *other, double dt);
@@ -51,10 +53,11 @@ protected:
 	Vector3 mapPosition;
 	playMap testMap;
 
-	enemy* zebra;
+	//enemy* zebra;
 
 	//Physics
 	std::vector<GameObject *> m_goList;
+	std::vector<enemy *> enemyList;
 	float m_speed;
 	float m_worldWidth;
 	float m_worldHeight;

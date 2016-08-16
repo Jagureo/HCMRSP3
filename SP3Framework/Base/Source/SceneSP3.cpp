@@ -47,7 +47,7 @@ void SceneSP3::Init()
 
 	friction = 0.95f;
 
-	zebra = newEnemy(30,20,10);
+	
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP]);
@@ -476,7 +476,6 @@ void SceneSP3::Update(double dt)
 {
 	SceneBase::Update(dt);
 	
-	std::cout << zebra->getPos() << std::endl;
 
 	float diffx = (m_worldWidth / 2) - player1->pos.x;
 	float diffy = (m_worldHeight / 2) - player1->pos.y;
@@ -487,6 +486,13 @@ void SceneSP3::Update(double dt)
 	static bool WPressed = false;
 	static bool UpPressed = false;
 
+	//std::cout<<zebra->getPos()<<std::endl;
+
+	if (Application::IsKeyPressed('E'))
+	{
+		enemy* animal = newEnemy(30, 10, 0);
+		enemyList.push_back(animal);
+	}
 
 	if (Application::IsKeyPressed('R'))
 	{
@@ -494,7 +500,7 @@ void SceneSP3::Update(double dt)
 		testTree->pos.Set(0, 0, 1);
 		testTree->fresh = true;
 		testTree->active = true;
-		testMap.addClusterProp(testTree);
+		testMap.addSingleProp(testTree);
 		TextFile * hi = new TextFile(TextFile::CAR);
 		hi->SetData("tree", testTree->pos.x, testTree->pos.y, testTree->scale.x);
 		hi->WriteFile("carz.txt");
@@ -515,8 +521,9 @@ void SceneSP3::Update(double dt)
 		testRock->pos.Set(-25, 25, 1);
 		testRock->fresh = true;
 		testRock->active = true;
-		testMap.addClusterProp(testRock);
+		testMap.addSingleProp(testRock);
 	}
+	
 
 	if (Application::IsKeyPressed('9'))
 	{
@@ -584,6 +591,8 @@ void SceneSP3::Update(double dt)
 	{
 		friction -= 0.01f;
 	}
+
+	//std::cout << player1->pos << std::endl;
 
 	if (player1->vel.x != 0 || player1->vel.y != 0)
 	{
@@ -767,6 +776,8 @@ void SceneSP3::Update(double dt)
 				}
 			}
 
+			
+
 			if (go->type == GameObject::GO_CAR)
 			{
 				if (!go->active)
@@ -836,7 +847,31 @@ void SceneSP3::Update(double dt)
 		if ((go->pos - player1->pos).Length() < 10)
 		{
 			CollisionMap(player1, go, dt);
+ 		}
+	}
+
+	for (std::vector<enemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+	{
+		enemy *go = (enemy *)*it;
+		if (go->getNewSpawn() == 1)
+		{
+			go->setPos(go->getPos().x + mapPosition.x, go->getPos().y + mapPosition.y, 2);
+			go->setNewSpawn(false);
 		}
+		else
+		{
+			go->setPos(go->getPos().x + diffx, go->getPos().y + diffy, 2);
+		}
+		if ((go->getPos() - player1->pos).LengthSquared() < 1000)
+		{
+			go->runOff(player1->pos);
+		}
+		else
+		{
+			go->setVel(0, 0, 0);
+		}
+		std::cout << go->getPos() << std::endl;
+		go->updatePos(dt);
 	}
 
 }
@@ -932,6 +967,16 @@ void SceneSP3::RenderGO(GameObject *go)
 	}
 }
 
+void SceneSP3::RenderEnemy(enemy *go)
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z );
+	modelStack.Scale(3,3,3);
+	RenderMesh(meshList[GEO_ENEMY], true);
+	modelStack.PopMatrix();
+}
+
+
 void SceneSP3::RenderProps(playMap* map)
 {
 	glDisable(GL_DEPTH_TEST);
@@ -1017,6 +1062,13 @@ void SceneSP3::Render()
 		}
 	}
 
+	for (std::vector<enemy *>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+	{
+		enemy *go = (enemy *)*it;
+
+		RenderEnemy(go);
+	}
+
 
 	if (m_ghost->active)
 	{
@@ -1034,6 +1086,12 @@ void SceneSP3::Render()
 	modelStack.PopMatrix();
 
 	RenderProps(&testMap);
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(zebra->getPos().x, zebra->getPos().y, zebra->getPos().z );
+	//modelStack.Scale(3,3,3);
+	//RenderMesh(meshList[GEO_ENEMY], true);
+	//modelStack.PopMatrix();
 
 	//modelStack.PushMatrix();
 	//modelStack.Translate(m_worldWidth - 6, 94, 0);

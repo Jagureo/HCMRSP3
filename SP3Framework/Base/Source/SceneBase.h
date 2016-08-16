@@ -66,6 +66,8 @@ public:
 		GEO_TESTMAP,
 		GEO_TREETOP,
 		GEO_ROCK,
+
+		GEO_TESTENEMY,
 		
 		NUM_GEOMETRY,
 	};
