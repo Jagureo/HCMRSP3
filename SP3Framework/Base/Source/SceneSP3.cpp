@@ -402,6 +402,73 @@ void SceneSP3::CollisionResponse(GameObject *go, GameObject *other)
 
 }
 
+void SceneSP3::CollisionMap(GameObject *go, GameObject *other, double dt)
+{
+	switch (other->type)
+	{
+	case GameObject::MAP_TREE:
+	{
+		float distanceSquared = ((go->pos + go->vel * dt) - (other->pos - other->vel * dt)).LengthSquared();
+		float combinedRadiusSquared = (go->scale.x / 3 + other->scale.x) * (go->scale.x / 3 + other->scale.x);
+		Vector3 relativeDisplacement = other->pos - go->pos;
+		if (distanceSquared < combinedRadiusSquared && go->vel.Dot(relativeDisplacement) > 0)
+		{
+			 u1 = go->vel;
+
+			 Vector3 N = (other->pos - go->pos).Normalized();
+
+			 go->vel = u1 - u1.Dot(N) * N;
+			 go->vel.z = 0;
+
+			 other->active = false;
+			 break;
+		}
+		break;
+	}
+	case GameObject::MAP_ROCK:
+	{
+		float distanceSquared = ((go->pos + go->vel * dt) - (other->pos - other->vel * dt)).LengthSquared();
+		float combinedRadiusSquared = (go->scale.x / 3 + other->scale.x) * (go->scale.x / 3 + other->scale.x);
+		Vector3 relativeDisplacement = other->pos - go->pos;
+		if (distanceSquared < combinedRadiusSquared && go->vel.Dot(relativeDisplacement) > 0)
+		{
+			u1 = go->vel;
+
+			Vector3 N = (other->pos - go->pos).Normalized();
+
+			go->vel = u1 - 2 * u1.Dot(N) * N;
+			go->vel.z = 0;
+			break;
+		}
+		break;
+	}
+	case GameObject::MAP_WATER:
+	{
+			float distanceSquared = ((go->pos + go->vel * dt) - (other->pos - other->vel * dt)).LengthSquared();
+			float combinedRadiusSquared = (go->scale.x / 3 + other->scale.x) * (go->scale.x / 3 + other->scale.x);
+			Vector3 relativeDisplacement = other->pos - go->pos;
+			if (distanceSquared < combinedRadiusSquared && go->vel.Dot(relativeDisplacement) > 0)
+			{
+				friction = 0.99f;
+				go->vel *= 0.95f;
+			}
+			break;
+	}
+	case GameObject::MAP_MUD:
+	{
+			float distanceSquared = ((go->pos + go->vel * dt) - (other->pos - other->vel * dt)).LengthSquared();
+			float combinedRadiusSquared = (go->scale.x / 3 + other->scale.x) * (go->scale.x / 3 + other->scale.x);
+			Vector3 relativeDisplacement = other->pos - go->pos;
+			if (distanceSquared < combinedRadiusSquared && go->vel.Dot(relativeDisplacement) > 0)
+			{
+				friction = 0.99f;
+				go->vel *= 0.98f;
+			}
+			break;
+	}
+	}
+}
+
 void SceneSP3::Update(double dt)
 {
 	SceneBase::Update(dt);
@@ -420,7 +487,27 @@ void SceneSP3::Update(double dt)
 	{
 		GameObject* testTree = new GameObject(GameObject::MAP_TREE);
 		testTree->pos.Set(0, 0, 1);
-		testMap.addClusterProp(testTree);
+		testTree->fresh = true;
+		testTree->active = true;
+		testMap.addSingleProp(testTree);
+
+		GameObject* testWater = new GameObject(GameObject::MAP_WATER);
+		testWater->pos.Set(25, 25, 1);
+		testWater->fresh = true;
+		testWater->active = true;
+		testMap.addSingleProp(testWater);
+
+		GameObject* testMud = new GameObject(GameObject::MAP_MUD);
+		testMud->pos.Set(-25, -25, 1);
+		testMud->fresh = true;
+		testMud->active = true;
+		testMap.addSingleProp(testMud);
+
+		GameObject* testRock = new GameObject(GameObject::MAP_ROCK);
+		testRock->pos.Set(-25, 25, 1);
+		testRock->fresh = true;
+		testRock->active = true;
+		testMap.addSingleProp(testRock);
 	}
 
 	if (Application::IsKeyPressed('9'))
@@ -476,7 +563,20 @@ void SceneSP3::Update(double dt)
 	{
 		player1->vel += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, 0);
 	}
-	friction = 0.96f - player1->mass * 0.01f;
+
+	if (friction > 0.99f)
+	{
+		friction = 0.99f;
+	}
+	else if (friction < 0.95f - player1->mass * 0.01f)
+	{
+		friction += 0.01f;
+	}
+	if (friction > 0.96f - player1->mass * 0.01f)
+	{
+		friction -= 0.01f;
+	}
+
 	if (player1->vel.x != 0 || player1->vel.y != 0)
 	{
 		player1->vel = player1->vel * friction;
@@ -708,6 +808,31 @@ void SceneSP3::Update(double dt)
 			//Exercise 13: improve collision detection algorithm [solution to be given later] 
 		}
 	}
+
+	for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
+	{
+		GameObject *go = (GameObject *)*it;
+		if (go->active == false)
+			continue;
+
+		if (go->fresh)
+		{
+			go->pos += mapPosition;
+			go->fresh = false;
+		}
+		else
+		{
+			go->pos = Vector3(go->pos.x + diffx, go->pos.y + diffy, 1);
+		}
+			
+		if ((go->pos - player1->pos).Length() < 10)
+		{
+			CollisionMap(player1, go, dt);
+		}
+		else
+			std::cout << player1->pos << std::endl;
+	}
+
 }
 
 
@@ -806,12 +931,38 @@ void SceneSP3::RenderProps(playMap* map)
 	for (std::vector<GameObject *>::iterator it = map->mapProps.begin(); it != map->mapProps.end(); ++it)
 	{
 		GameObject *go = (GameObject *)*it;
+		if (go->active == false)
+			continue;
 		if (go->type == GameObject::MAP_TREE)
 		{
 			modelStack.PushMatrix();
-			modelStack.Translate(go->pos.x + mapPosition.x, go->pos.y + mapPosition.y, go->pos.z + mapPosition.z);
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
 			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
 			RenderMesh(meshList[GEO_SOCC], true);
+			modelStack.PopMatrix();
+		}
+		else if (go->type == GameObject::MAP_ROCK)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_SOCC], true);
+			modelStack.PopMatrix();
+		}
+		else if (go->type == GameObject::MAP_WATER)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_ICE], true);
+			modelStack.PopMatrix();
+		}
+		else if (go->type == GameObject::MAP_MUD)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_CUBE], true);
 			modelStack.PopMatrix();
 		}
 	}

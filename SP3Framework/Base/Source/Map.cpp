@@ -49,5 +49,4 @@ void playMap::addClusterProp(GameObject* newProp, int density)
 		mapProps.push_back(cluster);
 		propCount++;
 	}
-	
 }

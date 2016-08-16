@@ -26,6 +26,12 @@ struct GameObject
 		GO_POWERUP,
 		GO_SAWBLADE,
 		GO_PARTICLE,
+
+		MAP_TREE,
+		MAP_ROCK,
+		MAP_WATER,
+		MAP_MUD,
+
 		GO_TOTAL, //must be last
 	};
 	GAMEOBJECT_TYPE type;
@@ -43,6 +49,7 @@ struct GameObject
 	bool active;
 	float mass;
 	float ticker;
+	bool fresh;
 
 	GameObject(GAMEOBJECT_TYPE typeValue = GO_BALL);
 	~GameObject();

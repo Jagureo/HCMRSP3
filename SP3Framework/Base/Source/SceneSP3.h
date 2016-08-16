@@ -35,6 +35,8 @@ public:
 	bool CheckCollision3(GameObject *go, GameObject *other, double dt);
 	void CollisionResponse(GameObject *go, GameObject *other);
 
+	void CollisionMap(GameObject *go, GameObject *other, double dt);
+
 	void Reset();
 
 	void RenderProps(playMap* map);
