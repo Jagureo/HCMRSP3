@@ -12,7 +12,7 @@ class playMap
 private:
 	Mesh* background;
 	Vector3 mapSize;
-	int propCount;
+	
 
 public:
 	playMap();
@@ -28,6 +28,7 @@ public:
 	void addClusterProp(GameObject* newProp, int density = 25);
 
 	std::vector<GameObject *> mapProps;
+	int propCount;
 };
 
 #endif

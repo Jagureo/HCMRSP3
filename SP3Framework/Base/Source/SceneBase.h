@@ -64,6 +64,7 @@ public:
 
 		//SP3
 		GEO_TESTMAP,
+		GEO_TREETOP,
 		
 		NUM_GEOMETRY,
 	};

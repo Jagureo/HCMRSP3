@@ -3,6 +3,7 @@
 playMap::playMap()
 {
 	mapSize = Vector3(10, 10, 10);
+	propCount = 0;
 }
 
 playMap::~playMap()
@@ -46,6 +47,8 @@ void playMap::addClusterProp(GameObject* newProp, int density)
 	for (int i = 0; i < density; i++)
 	{
 		cluster->pos.Set(newProp->pos.x + Math::RandFloatMinMax(-25.f, 25.f), newProp->pos.y + Math::RandFloatMinMax(-25.f, 25.f), 1); 
+		cluster->fresh = true;
+		cluster->active = true;
 		mapProps.push_back(cluster);
 		propCount++;
 	}
