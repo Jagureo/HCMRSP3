@@ -13,7 +13,20 @@
 using std::stoi;
 using std::ifstream;
 
-
+enum class states
+{
+	s_Menu,
+	s_Instructions,
+	s_MapEditor,
+	s_Options,
+	s_Tutorial,
+	s_Level2,
+	s_Level3,
+	s_LevelBoss,
+	s_Win,
+	s_Lose,
+	s_Highscore,
+};
 class SceneSP3 : public SceneBase
 {
 	enum class states
@@ -36,8 +49,8 @@ class SceneSP3 : public SceneBase
 	static const int MISSILE_SPEED = 20;
 	static const int MISSILE_POWER = 1;
 
-	states gamestates;
-
+	states gameStates;
+	int arrowSelection;
 public:
 	SceneSP3();
 	~SceneSP3();

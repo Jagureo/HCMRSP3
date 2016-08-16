@@ -20,6 +20,9 @@ void SceneSP3::Init()
 
 	Math::InitRNG();
 
+	TextFile* hi = new TextFile(TextFile::MAP);
+	hi->RemoveMapObj("Map.txt", 3.f, 2.f);
+
 	//Exercise 1: initialize m_objectCount
 	m_objectCount = 0;
 
@@ -53,7 +56,7 @@ void SceneSP3::Init()
 	testMap.setBackground(meshList[GEO_TESTMAP]);
 	testMap.setMapSize(20, 20);
 
-	gamestates = states::s_Level3;
+	gameStates = states::s_Level3;
 }
 
 void SceneSP3::Reset()
@@ -503,9 +506,9 @@ void SceneSP3::Update(double dt)
 		testTree->fresh = true;
 		testTree->active = true;
 		testMap.addClusterProp(testTree);
-		//TextFile * hi = new TextFile(TextFile::CAR);
-		//hi->SetData("tree", testTree->pos.x, testTree->pos.y, testTree->scale.x);
-		//hi->WriteFile("carz.txt");
+		TextFile * hi = new TextFile(TextFile::CAR);
+		hi->SetData("tree", testTree->pos.x, testTree->pos.y, testTree->scale.x);
+		hi->SaveMapObj("carz.txt");
 
 		GameObject* testWater = new GameObject(GameObject::MAP_WATER);
 		testWater->pos.Set(25, 25, 1);
@@ -530,7 +533,7 @@ void SceneSP3::Update(double dt)
 	if (Application::IsKeyPressed('T'))
 	{
 		player1->vel.SetZero();
-		gamestates = states::s_MapEditor;
+		gameStates = states::s_MapEditor;
 	}
 
 	if (Application::IsKeyPressed('9'))
@@ -542,7 +545,7 @@ void SceneSP3::Update(double dt)
 		m_speed += 0.1f;
 	}
 
-	if (gamestates != states::s_MapEditor)
+	if (gameStates != states::s_MapEditor)
 	{
 
 		if (Application::IsKeyPressed('W'))
@@ -610,7 +613,7 @@ void SceneSP3::Update(double dt)
 	}
 
 
-	if (gamestates == states::s_MapEditor)
+	if (gameStates == states::s_MapEditor)
 
 	{
 		mapEditorUpdate(dt);
@@ -651,11 +654,13 @@ void SceneSP3::Update(double dt)
 		float radius = Math::Clamp(size.Length(), 1.f, 1.f);
 		ball->scale.Set(radius, radius, radius);
 		ball->pos = m_ghost->pos;
-		ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
+		//ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
 		ball->mass = radius;
 		ball->ballrotated = 0;
 		m_ghost->active = false;
-
+		TextFile* hi = new TextFile(TextFile::MAP);
+		hi->SetData("ball", ball->pos.x, ball->pos.y, ball->scale.x);
+		hi->SaveMapObj("test.txt");
 		m_estimatedTime = -1;
 	}
 	static bool bRButtonState = false;
@@ -684,14 +689,19 @@ void SceneSP3::Update(double dt)
 		float worldX = x * m_worldWidth / w;
 		float worldY = (h - y) * m_worldHeight / h;
 
-		GameObject* ball = FetchGO();
+		TextFile* hi = new TextFile(TextFile::MAP);
+		if (hi->RemoveMapObj("test.txt", worldX, worldY))
+		{
+			cout << "goodjob" << endl;
+		}
+		/*GameObject* ball = FetchGO();
 		ball->type = GameObject::GO_BALL;
 		ball->scale.Set(3.5f, 3.5f, 3.5f);
 		ball->pos = m_ghost->pos;
 		ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
 		ball->mass = 1.5f * 1.5f * 1.5f;
 		ball->ballrotated = 0;
-		m_ghost->active = false;
+		m_ghost->active = false;*/
 	}
 
 	if (m_ghost->active)
@@ -706,7 +716,54 @@ void SceneSP3::Update(double dt)
 		float radius = Math::Clamp(size.Length(), 0.1f, 1.f);
 		m_ghost->scale.Set(radius, radius, 1.0f);
 	}
+	if (gameStates == states::s_Menu)
+	{
+		static bool arrowkeyUp = false;
+		static bool arrowkeyDown = false;
 
+		if (arrowSelection > 0)
+		{
+			if (Application::IsKeyPressed(VK_UP) && arrowkeyUp == false)
+			{
+				arrowkeyUp = true;
+				arrowSelection--;
+			}
+			else if (!Application::IsKeyPressed(VK_UP) && arrowkeyUp == true)
+				arrowkeyUp = false;
+		}
+		else if (arrowSelection == 0)
+		{
+			if (Application::IsKeyPressed(VK_UP) && arrowkeyUp == false)
+			{
+				arrowkeyUp = true;
+				arrowSelection = 3;
+			}
+			else if (!Application::IsKeyPressed(VK_UP) && arrowkeyUp == true)
+				arrowkeyUp = false;
+
+		}
+
+		if (arrowSelection < 3)
+		{
+			if (Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == false)
+			{
+				arrowkeyDown = true;
+				arrowSelection++;
+			}
+			else if (!Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == true)
+				arrowkeyDown = false;
+		}
+		else if (arrowSelection == 3)
+		{
+			if (Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == false)
+			{
+				arrowkeyDown = true;
+				arrowSelection = 0;
+			}
+			else if (!Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == true)
+				arrowkeyDown = false;
+		}
+	}
 	//Physics Simulation Section
 
 	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
@@ -1248,7 +1305,7 @@ void SceneSP3::Render()
 		modelStack.PopMatrix();
 	}
 
-	if (gamestates != states::s_MapEditor)
+	if (gameStates != states::s_MapEditor)
 	{
 		for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 		{
@@ -1268,7 +1325,7 @@ void SceneSP3::Render()
 		RenderProps(&testMap);
 	}
 
-	if (gamestates == states::s_MapEditor)
+	if (gameStates == states::s_MapEditor)
 	{
 		mapEditorRender();
 	}
@@ -1323,6 +1380,82 @@ void SceneSP3::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], ssz.str(), Color(0, 1, 0), 3, 0, 0);
 
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Collision", Color(0, 1, 0), 3, 0, 0);
+	if (gameStates == states::s_Menu)
+	{
+
+		modelStack.PushMatrix();
+		modelStack.Translate(89, 50, -2);
+		modelStack.Scale(90, 50, 0);
+		RenderMesh(meshList[GEO_MENU_BACKGROUND], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(140, 15, -1);
+		modelStack.Scale(30, 30, 0);
+		RenderMesh(meshList[GEO_MENU_SIGNBOARD], false);
+		modelStack.PopMatrix();
+
+		if (arrowSelection == 0)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(120, 34, 0);
+			modelStack.Scale(3, 3, 0);
+			RenderMesh(meshList[GEO_MENU_ARROW], false);
+			modelStack.PopMatrix();
+		}
+		if (arrowSelection == 1)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(120, 27, 0);
+			modelStack.Scale(3, 3, 0);
+			RenderMesh(meshList[GEO_MENU_ARROW], false);
+			modelStack.PopMatrix();
+		}
+		if (arrowSelection == 2)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(120, 20, 0);
+			modelStack.Scale(3, 3, 0);
+			RenderMesh(meshList[GEO_MENU_ARROW], false);
+			modelStack.PopMatrix();
+		}
+		if (arrowSelection == 3)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(120, 13, 0);
+			modelStack.Scale(3, 3, 0);
+			RenderMesh(meshList[GEO_MENU_ARROW], false);
+			modelStack.PopMatrix();
+		}
+
+
+		modelStack.PushMatrix();
+		modelStack.Translate(140, 32, 1);
+		modelStack.Scale(30, 20, 0);
+		RenderMesh(meshList[GEO_MENU_STARTGAME], false);
+		modelStack.PopMatrix();
+
+
+		modelStack.PushMatrix();
+		modelStack.Translate(140, 25, 2);
+		modelStack.Scale(30, 20, 0);
+		RenderMesh(meshList[GEO_MENU_OPTIONS], false);
+		modelStack.PopMatrix();
+
+
+		modelStack.PushMatrix();
+		modelStack.Translate(140, 18, 3);
+		modelStack.Scale(30, 20, 0);
+		RenderMesh(meshList[GEO_MENU_HIGHSCORE], false);
+		modelStack.PopMatrix();
+
+
+		modelStack.PushMatrix();
+		modelStack.Translate(140, 11, 4);
+		modelStack.Scale(30, 20, 0);
+		RenderMesh(meshList[GEO_MENU_QUIT], false);
+		modelStack.PopMatrix();
+	}
 }
 
 void SceneSP3::Exit()

@@ -142,6 +142,21 @@ void SceneBase::Init()
 
 	meshList[GEO_TESTENEMY] = MeshBuilder::GenerateSphere("enemy", Color(255, 144, 0), 10, 10, 1.f);
 
+	meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("Intro", Color(1, 1, 1), 2.f);
+	meshList[GEO_MENU_BACKGROUND]->textureID = LoadTGA("Image//IntroScreen.tga");
+	meshList[GEO_MENU_SIGNBOARD] = MeshBuilder::GenerateQuad("signboard", Color(1, 1, 1), 2.f);
+	meshList[GEO_MENU_SIGNBOARD]->textureID = LoadTGA("Image//noticeboard.tga");
+	meshList[GEO_MENU_ARROW] = MeshBuilder::GenerateQuad("arrow", Color(1, 1, 1), 2.f);
+	meshList[GEO_MENU_ARROW]->textureID = LoadTGA("Image//arrow.tga");
+	meshList[GEO_MENU_STARTGAME] = MeshBuilder::GenerateQuad("menu_startgame", Color(1, 1, 1), 2.f);
+	meshList[GEO_MENU_STARTGAME]->textureID = LoadTGA("Image//menu_StartGame.tga");
+	meshList[GEO_MENU_OPTIONS] = MeshBuilder::GenerateQuad("menu_options", Color(1, 1, 1), 2.f);
+	meshList[GEO_MENU_OPTIONS]->textureID = LoadTGA("Image//menu_Options.tga");
+	meshList[GEO_MENU_HIGHSCORE] = MeshBuilder::GenerateQuad("menu_highscore", Color(1, 1, 1), 2.f);
+	meshList[GEO_MENU_HIGHSCORE]->textureID = LoadTGA("Image//menu_Highscore.tga");
+	meshList[GEO_MENU_QUIT] = MeshBuilder::GenerateQuad("menu_quit", Color(1, 1, 1), 2.f);
+	meshList[GEO_MENU_QUIT]->textureID = LoadTGA("Image//menu_Quit.tga");
+
 	bLightEnabled = false;
 }
 
