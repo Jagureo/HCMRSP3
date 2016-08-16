@@ -18,11 +18,6 @@ void SceneSP3::Init()
 	//Physics code here
 	m_speed = 1.f;
 
-	//TextFile* text = new TextFile(TextFile::CAR);
-	//text->ReadFile("carz.txt");
-	//text->SetData("car", 25.0f, 1.f, 3.f);
-	//text->WriteFile("test.txt");
-
 	Math::InitRNG();
 
 	//Exercise 1: initialize m_objectCount
@@ -31,7 +26,7 @@ void SceneSP3::Init()
 	m_ghost = new GameObject(GameObject::GO_BALL);
 
 	player1 = new GameObject(GameObject::GO_CAR);
-	player1->pos.Set(25, 50, 1);
+	player1->pos.Set(25, 50, 0);
 	player1->mass = 5;
 	player1->vel.Set(0, 0, 0);
 	player1->rotationAngle = 0;
@@ -54,6 +49,7 @@ void SceneSP3::Init()
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP]);
+	testMap.setMapSize(20, 20);
 }
 
 void SceneSP3::Reset()
@@ -494,8 +490,10 @@ void SceneSP3::Update(double dt)
 		testTree->pos.Set(0, 0, 1);
 		testTree->fresh = true;
 		testTree->active = true;
-		testMap.addSingleProp(testTree);
-
+		testMap.addClusterProp(testTree);
+		TextFile * hi = new TextFile(TextFile::CAR);
+		hi->SetData("tree", testTree->pos.x, testTree->pos.y, testTree->scale.x);
+		hi->WriteFile("carz.txt");
 
 		GameObject* testWater = new GameObject(GameObject::MAP_WATER);
 		testWater->pos.Set(25, 25, 1);
@@ -504,7 +502,7 @@ void SceneSP3::Update(double dt)
 		testMap.addSingleProp(testWater);
 
 		GameObject* testMud = new GameObject(GameObject::MAP_MUD);
-		testMud->pos.Set(-25, -25, 1);
+		testMud->pos.Set(-25 ,-25, 1);
 		testMud->fresh = true;
 		testMud->active = true;
 		testMap.addSingleProp(testMud);
@@ -513,7 +511,7 @@ void SceneSP3::Update(double dt)
 		testRock->pos.Set(-25, 25, 1);
 		testRock->fresh = true;
 		testRock->active = true;
-		testMap.addSingleProp(testRock);
+		testMap.addClusterProp(testRock);
 	}
 
 	if (Application::IsKeyPressed('9'))
@@ -835,7 +833,6 @@ void SceneSP3::Update(double dt)
 		{
 			CollisionMap(player1, go, dt);
 		}
-
 	}
 
 }
@@ -933,26 +930,33 @@ void SceneSP3::RenderGO(GameObject *go)
 
 void SceneSP3::RenderProps(playMap* map)
 {
+	glDisable(GL_DEPTH_TEST);
 	for (std::vector<GameObject *>::iterator it = map->mapProps.begin(); it != map->mapProps.end(); ++it)
 	{
 		GameObject *go = (GameObject *)*it;
 		if (go->active == false)
 			continue;
+		if ((go->pos - player1->pos).Length() > 100)
+		{
+			continue;
+		}
 		if (go->type == GameObject::MAP_TREE)
 		{
 			modelStack.PushMatrix();
-			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
-			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
-			RenderMesh(meshList[GEO_SOCC], true);
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z + 2);
+			modelStack.Scale(go->scale.x * 5, go->scale.y * 5, go->scale.z);
+			RenderMesh(meshList[GEO_TREETOP], true);
 			modelStack.PopMatrix();
 		}
 		else if (go->type == GameObject::MAP_ROCK)
 		{
+			glEnable(GL_DEPTH_TEST);
 			modelStack.PushMatrix();
-			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
-			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
-			RenderMesh(meshList[GEO_SOCC], true);
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z - 2);
+			modelStack.Scale(go->scale.x * 3, go->scale.y * 3, go->scale.z);
+			RenderMesh(meshList[GEO_ROCK], true);
 			modelStack.PopMatrix();
+			glDisable(GL_DEPTH_TEST);
 		}
 		else if (go->type == GameObject::MAP_WATER)
 		{
@@ -971,6 +975,7 @@ void SceneSP3::RenderProps(playMap* map)
 			modelStack.PopMatrix();
 		}
 	}
+	glEnable(GL_DEPTH_TEST);
 }
 
 void SceneSP3::Render()
@@ -1018,13 +1023,13 @@ void SceneSP3::Render()
 		modelStack.PopMatrix();
 	}
 
-	RenderProps(&testMap);
-
 	modelStack.PushMatrix();
-	modelStack.Translate(mapPosition.x, mapPosition.y, mapPosition.z);
+	modelStack.Translate(mapPosition.x, mapPosition.y, mapPosition.z - 9);
 	modelStack.Scale(testMap.getMapSize().x, testMap.getMapSize().y, testMap.getMapSize().z);
 	RenderMesh(testMap.getBackground(), false);
 	modelStack.PopMatrix();
+
+	RenderProps(&testMap);
 
 	//modelStack.PushMatrix();
 	//modelStack.Translate(m_worldWidth - 6, 94, 0);
@@ -1053,6 +1058,11 @@ void SceneSP3::Render()
 	int h = Application::GetWindowHeight();
 	float worldX = x * m_worldWidth / w;
 	float worldY = (h - y) * m_worldHeight / h;
+
+	std::ostringstream ss11;
+	ss11.precision(5);
+	ss11 << "count: " << testMap.propCount;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss11.str(), Color(0, 1, 0), 3, 0, 6);
 
 	std::ostringstream ss;
 	ss.precision(5);
