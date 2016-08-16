@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include "Map.h"
+#include "TextFile.h"
 using std::stoi;
 using std::ifstream;
 

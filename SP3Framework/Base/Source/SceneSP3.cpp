@@ -18,6 +18,11 @@ void SceneSP3::Init()
 	//Physics code here
 	m_speed = 1.f;
 
+	//TextFile* text = new TextFile(TextFile::CAR);
+	//text->ReadFile("carz.txt");
+	//text->SetData("car", 25.0f, 1.f, 3.f);
+	//text->WriteFile("test.txt");
+
 	Math::InitRNG();
 
 	//Exercise 1: initialize m_objectCount
@@ -491,6 +496,7 @@ void SceneSP3::Update(double dt)
 		testTree->active = true;
 		testMap.addSingleProp(testTree);
 
+
 		GameObject* testWater = new GameObject(GameObject::MAP_WATER);
 		testWater->pos.Set(25, 25, 1);
 		testWater->fresh = true;
@@ -829,8 +835,7 @@ void SceneSP3::Update(double dt)
 		{
 			CollisionMap(player1, go, dt);
 		}
-		else
-			std::cout << player1->pos << std::endl;
+
 	}
 
 }
