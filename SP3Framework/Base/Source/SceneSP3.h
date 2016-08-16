@@ -8,6 +8,7 @@
 #include <sstream>
 #include "Map.h"
 #include "TextFile.h"
+#include "enemy.h"
 using std::stoi;
 using std::ifstream;
 
@@ -49,6 +50,8 @@ protected:
 
 	Vector3 mapPosition;
 	playMap testMap;
+
+	enemy* zebra;
 
 	//Physics
 	std::vector<GameObject *> m_goList;

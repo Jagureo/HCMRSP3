@@ -52,6 +52,8 @@ void SceneSP3::Init()
 
 	friction = 0.95f;
 
+	zebra = newEnemy(30,20,10);
+
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP]);
 }
@@ -478,6 +480,8 @@ void SceneSP3::Update(double dt)
 {
 	SceneBase::Update(dt);
 	
+	std::cout << zebra->getPos() << std::endl;
+
 	float diffx = (m_worldWidth / 2) - player1->pos.x;
 	float diffy = (m_worldHeight / 2) - player1->pos.y;
 	mapPosition = Vector3(mapPosition.x + diffx, mapPosition.y + diffy, 1);
