@@ -137,6 +137,8 @@ void SceneBase::Init()
 	meshList[GEO_TREETOP]->textureID = LoadTGA("Image//treetop.tga");
 	meshList[GEO_ROCK] = MeshBuilder::GenerateQuad("rock", Color(1, 1, 1), 1.f);
 	meshList[GEO_ROCK]->textureID = LoadTGA("Image//rock.tga");
+	meshList[HUD_MAPEDITOR] = MeshBuilder::GenerateQuad("gui", Color(1, 1, 1), 1.f);
+	meshList[HUD_MAPEDITOR]->textureID = LoadTGA("Image//editorui.tga");
 
 	meshList[GEO_TESTENEMY] = MeshBuilder::GenerateSphere("enemy", Color(255, 144, 0), 10, 10, 1.f);
 

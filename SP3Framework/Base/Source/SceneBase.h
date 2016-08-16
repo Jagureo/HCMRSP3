@@ -67,7 +67,11 @@ public:
 		GEO_TREETOP,
 		GEO_ROCK,
 
+
 		GEO_TESTENEMY,
+
+		HUD_MAPEDITOR,
+
 		
 		NUM_GEOMETRY,
 	};

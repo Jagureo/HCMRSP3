@@ -16,10 +16,27 @@ using std::ifstream;
 
 class SceneSP3 : public SceneBase
 {
+	enum class states
+	{
+		s_Menu,
+		s_Instructions,
+		s_MapEditor,
+		s_Options,
+		s_Tutorial,
+		s_Level2,
+		s_Level3,
+		s_LevelBoss,
+		s_Win,
+		s_Lose,
+		s_Highscore,
+	};
+
 	static const int MAX_SPEED = 10;
 	static const int BULLET_SPEED = 50;
 	static const int MISSILE_SPEED = 20;
 	static const int MISSILE_POWER = 1;
+
+	states gamestates;
 
 public:
 	SceneSP3();
@@ -40,6 +57,9 @@ public:
 	void CollisionResponse(GameObject *go, GameObject *other);
 
 	void CollisionMap(GameObject *go, GameObject *other, double dt);
+
+	void mapEditorUpdate(double dt);
+	void mapEditorRender();
 
 	void Reset();
 
@@ -64,6 +84,12 @@ protected:
 	float m_estimatedTime;
 	GameObject *m_ghost;
 	int m_objectCount;
+
+	string mapName;
+	bool nameType;
+
+	float newMouseX;
+	float newMouseY;
 
 	//Auditing
 	float m1, m2;

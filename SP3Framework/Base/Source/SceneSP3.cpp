@@ -52,6 +52,8 @@ void SceneSP3::Init()
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP]);
 	testMap.setMapSize(20, 20);
+
+	gamestates = states::s_Level3;
 }
 
 void SceneSP3::Reset()
@@ -500,10 +502,10 @@ void SceneSP3::Update(double dt)
 		testTree->pos.Set(0, 0, 1);
 		testTree->fresh = true;
 		testTree->active = true;
-		testMap.addSingleProp(testTree);
-		TextFile * hi = new TextFile(TextFile::CAR);
-		hi->SetData("tree", testTree->pos.x, testTree->pos.y, testTree->scale.x);
-		hi->WriteFile("carz.txt");
+		testMap.addClusterProp(testTree);
+		//TextFile * hi = new TextFile(TextFile::CAR);
+		//hi->SetData("tree", testTree->pos.x, testTree->pos.y, testTree->scale.x);
+		//hi->WriteFile("carz.txt");
 
 		GameObject* testWater = new GameObject(GameObject::MAP_WATER);
 		testWater->pos.Set(25, 25, 1);
@@ -525,6 +527,12 @@ void SceneSP3::Update(double dt)
 	}
 	
 
+	if (Application::IsKeyPressed('T'))
+	{
+		player1->vel.SetZero();
+		gamestates = states::s_MapEditor;
+	}
+
 	if (Application::IsKeyPressed('9'))
 	{
 		m_speed = Math::Max(0.f, m_speed - 0.1f);
@@ -534,69 +542,78 @@ void SceneSP3::Update(double dt)
 		m_speed += 0.1f;
 	}
 
-	if (Application::IsKeyPressed('W'))
+	if (gamestates != states::s_MapEditor)
 	{
-		player1->engine += player1->playerCar.acceleration;
-	}
-	else if (Application::IsKeyPressed('S'))
-	{
-		player1->engine = -1;
-	}
-	else
-	{
-		player1->engine = 0;
-	}
-	if (player1->engine > player1->playerCar.engine)
-	{
-		player1->engine = player1->playerCar.engine;
-	}
-	if (Application::IsKeyPressed('D'))
-	{
-		player1->rotationAngle -= player1->playerCar.turnSpeed;
-		if (player1->vel.Length() < 3)
+
+		if (Application::IsKeyPressed('W'))
 		{
-			if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
-				player1->rotationAngle += 1 / player1->vel.Length();
-			else
-				player1->rotationAngle += player1->playerCar.turnSpeed;
+			player1->engine += player1->playerCar.acceleration;
 		}
-		player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
-	}
-	if (Application::IsKeyPressed('A'))
-	{
-		player1->rotationAngle += player1->playerCar.turnSpeed;
-		if (player1->vel.Length() < 3)
+		else if (Application::IsKeyPressed('S'))
 		{
-			if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
-				player1->rotationAngle -= 1 / player1->vel.Length();
-			else
-				player1->rotationAngle -= player1->playerCar.turnSpeed;
+			player1->engine = -1;
 		}
-		player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
-	}
-	if (player1->vel.Length() < player1->playerCar.topSpeed)
-	{
-		player1->vel += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, 0);
+		else
+		{
+			player1->engine = 0;
+		}
+		if (player1->engine > player1->playerCar.engine)
+		{
+			player1->engine = player1->playerCar.engine;
+		}
+		if (Application::IsKeyPressed('D'))
+		{
+			player1->rotationAngle -= player1->playerCar.turnSpeed;
+			if (player1->vel.Length() < 3)
+			{
+				if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
+					player1->rotationAngle += 1 / player1->vel.Length();
+				else
+					player1->rotationAngle += player1->playerCar.turnSpeed;
+			}
+			player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
+		}
+		if (Application::IsKeyPressed('A'))
+		{
+			player1->rotationAngle += player1->playerCar.turnSpeed;
+			if (player1->vel.Length() < 3)
+			{
+				if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
+					player1->rotationAngle -= 1 / player1->vel.Length();
+				else
+					player1->rotationAngle -= player1->playerCar.turnSpeed;
+			}
+			player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
+		}
+		if (player1->vel.Length() < player1->playerCar.topSpeed)
+		{
+			player1->vel += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, 0);
+		}
+
+		if (friction > 0.99f)
+		{
+			friction = 0.99f;
+		}
+		else if (friction < 0.95f - player1->mass * 0.01f)
+		{
+			friction += 0.01f;
+		}
+		if (friction > 0.96f - player1->mass * 0.01f)
+		{
+			friction -= 0.01f;
+		}
+
+		if (player1->vel.x != 0 || player1->vel.y != 0)
+		{
+			player1->vel = player1->vel * friction;
+		}
 	}
 
-	if (friction > 0.99f)
-	{
-		friction = 0.99f;
-	}
-	else if (friction < 0.95f - player1->mass * 0.01f)
-	{
-		friction += 0.01f;
-	}
-	if (friction > 0.96f - player1->mass * 0.01f)
-	{
-		friction -= 0.01f;
-	}
 
-	//std::cout << player1->pos << std::endl;
+	if (gamestates == states::s_MapEditor)
 
-	if (player1->vel.x != 0 || player1->vel.y != 0)
 	{
-		player1->vel = player1->vel * friction;
+		mapEditorUpdate(dt);
 	}
 
 	//Mouse Section
@@ -876,6 +893,158 @@ void SceneSP3::Update(double dt)
 
 }
 
+void SceneSP3::mapEditorUpdate(double dt)
+{
+	static bool editName = false;
+
+	if (editName == true && nameType == false)
+	{
+		if (Application::IsKeyPressed(VK_BACK) && mapName.length() > 0)
+		{
+			mapName.pop_back();
+			nameType = true;
+		}
+		else
+		{
+			for (int i = 0; i < 26; i++)
+			{
+				unsigned short key = 65 + i;
+				if ((GetAsyncKeyState(key) & 0x8001) != 0 && mapName.length() < 10)
+				{
+					nameType = true;
+					std::ostringstream ss;
+					ss << mapName << static_cast<char>(key);
+					mapName = ss.str();
+				}
+			}
+		}
+	}
+	else
+	{
+		nameType = false;
+		if (Application::IsKeyPressed(VK_BACK))
+		{
+			nameType = true;
+		}
+		else
+		{
+			for (int i = 0; i < 26; i++)
+			{
+				unsigned short key = 65 + i;
+				if ((GetAsyncKeyState(key) & 0x8001) != 0)
+				{
+					nameType = true;
+				}
+			}
+		}
+	}
+
+	static bool bLButtonState = false;
+	if (!bLButtonState && Application::IsMousePressed(0))
+	{
+		bLButtonState = true;
+		std::cout << "LBUTTON DOWN" << std::endl;
+		double x, y;
+		Application::GetCursorPos(&x, &y);
+		int w = Application::GetWindowWidth();
+		int h = Application::GetWindowHeight();
+		float worldX = x * m_worldWidth / w;
+		float worldY = (h - y) * m_worldHeight / h;
+		
+		if (worldX > 0.9310344f * m_worldWidth && worldX < 0.989068f * m_worldWidth)
+		{
+			if (worldY > 71 && worldY < 80)
+			{
+				
+			}
+			else if(worldY > 57 && worldY < 67)
+			{
+
+			}
+			else if (worldY > 44 && worldY < 54)
+			{
+
+			}
+			else if (worldY > 30 && worldY < 40)
+			{
+
+			}
+			else if (worldY > 16 && worldY < 26)
+			{
+
+			}
+			else if (worldY > 4 && worldY < 14)
+			{
+
+			}
+		}
+		if (worldX > 0.454236f * m_worldWidth && worldX < 0.9103448f * m_worldWidth)
+		{
+			if (worldY > 87 && worldY < 97)
+			{
+				editName = true;
+			}
+		}
+		else
+		{
+			editName = false;
+		}
+		std::cout << " [ " << worldX << " , " << worldY << " ] " << std::endl;
+	}
+	else if (bLButtonState && !Application::IsMousePressed(0))
+	{
+		bLButtonState = false;
+	}
+
+	static bool bRButtonState = false;
+	static bool firstDrag = false;
+	if (!bLButtonState && Application::IsMousePressed(1))
+	{
+		bRButtonState = true;
+		std::cout << "RBUTTON DOWN" << std::endl;
+		double x, y;
+		Application::GetCursorPos(&x, &y);
+		int w = Application::GetWindowWidth();
+		int h = Application::GetWindowHeight();
+		float worldX = x * m_worldWidth / w;
+		float worldY = (h - y) * m_worldHeight / h;
+
+		if (!firstDrag)
+		{
+			newMouseX = worldX;
+			newMouseY = worldY;
+			firstDrag = true;
+		}
+		else
+		{
+			mapPosition = Vector3(mapPosition.x + (worldX - newMouseX), mapPosition.y + (worldY - newMouseY), 1);
+			newMouseX = worldX;
+			newMouseY = worldY;
+		}
+	}
+	else if (bRButtonState && !Application::IsMousePressed(1))
+	{
+		bRButtonState = false;
+		firstDrag = false;
+	}
+}
+
+void SceneSP3::mapEditorRender()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(mapPosition.x, mapPosition.y, mapPosition.z - 9);
+	modelStack.Scale(6, 6, 1);
+	RenderMesh(testMap.getBackground(), false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
+	modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+	RenderMesh(meshList[HUD_MAPEDITOR], false);
+	modelStack.PopMatrix();
+
+	RenderTextOnScreen(meshList[GEO_TEXT], mapName, Color(0, 1, 0), 3, 39, 54);
+}
 
 	//corner
 	//wall = FetchGO();
@@ -1079,13 +1248,30 @@ void SceneSP3::Render()
 		modelStack.PopMatrix();
 	}
 
-	modelStack.PushMatrix();
-	modelStack.Translate(mapPosition.x, mapPosition.y, mapPosition.z - 9);
-	modelStack.Scale(testMap.getMapSize().x, testMap.getMapSize().y, testMap.getMapSize().z);
-	RenderMesh(testMap.getBackground(), false);
-	modelStack.PopMatrix();
+	if (gamestates != states::s_MapEditor)
+	{
+		for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
+		{
+			GameObject *go = (GameObject *)*it;
+			if (go->active)
+			{
+				RenderGO(go);
+			}
+		}
 
-	RenderProps(&testMap);
+		modelStack.PushMatrix();
+		modelStack.Translate(mapPosition.x, mapPosition.y, mapPosition.z - 9);
+		modelStack.Scale(testMap.getMapSize().x, testMap.getMapSize().y, testMap.getMapSize().z);
+		RenderMesh(testMap.getBackground(), false);
+		modelStack.PopMatrix();
+
+		RenderProps(&testMap);
+	}
+
+	if (gamestates == states::s_MapEditor)
+	{
+		mapEditorRender();
+	}
 
 	//modelStack.PushMatrix();
 	//modelStack.Translate(zebra->getPos().x, zebra->getPos().y, zebra->getPos().z );
