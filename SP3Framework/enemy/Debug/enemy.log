@@ -1,0 +1,42 @@
+﻿Build started 8/16/2016 5:04:29 PM.
+     1>Project "C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\enemy\enemy.vcxproj" on node 2 (Rebuild target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\/Common/Source /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D ENEMY_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt enemy.cpp
+         enemy.cpp
+     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(33): warning C4251: 'enemy::position' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'enemy'
+                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
+     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(34): warning C4251: 'enemy::vel' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'enemy'
+                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
+     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(4): warning C4273: 'enemy::enemy' : inconsistent dll linkage
+                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(16) : see previous definition of '{ctor}'
+     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(10): warning C4273: 'enemy::~enemy' : inconsistent dll linkage
+                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(17) : see previous definition of '{dtor}'
+     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(15): warning C4273: 'enemy::getPos' : inconsistent dll linkage
+                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(18) : see previous definition of 'getPos'
+     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(20): warning C4273: 'enemy::getNewSpawn' : inconsistent dll linkage
+                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(20) : see previous definition of 'getNewSpawn'
+     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(25): warning C4273: 'enemy::setNewSpawn' : inconsistent dll linkage
+                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(21) : see previous definition of 'setNewSpawn'
+     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(30): warning C4273: 'enemy::setPos' : inconsistent dll linkage
+                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(24) : see previous definition of 'setPos'
+     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(35): warning C4273: 'enemy::getVel' : inconsistent dll linkage
+                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(19) : see previous definition of 'getVel'
+     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(40): warning C4273: 'enemy::setVel' : inconsistent dll linkage
+                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(23) : see previous definition of 'setVel'
+     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(45): warning C4273: 'enemy::runOff' : inconsistent dll linkage
+                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(22) : see previous definition of 'runOff'
+     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(50): warning C4273: 'enemy::updatePos' : inconsistent dll linkage
+                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(25) : see previous definition of 'updatePos'
+     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(51): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(55): warning C4273: 'newEnemy' : inconsistent dll linkage
+                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(38) : see previous definition of 'newEnemy'
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\enemy.dll" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\enemy.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\enemy.lib" /MACHINE:X86 /DLL Debug\enemy.obj
+         C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\Common.lib
+            Creating library C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\enemy.lib and object C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\enemy.exp
+         enemy.vcxproj -> C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\enemy.dll
+     1>Done Building Project "C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\enemy\enemy.vcxproj" (Rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.73
