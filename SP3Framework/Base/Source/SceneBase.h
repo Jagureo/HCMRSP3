@@ -65,6 +65,7 @@ public:
 		//SP3
 		GEO_TESTMAP,
 		GEO_TREETOP,
+		GEO_ROCK,
 		
 		NUM_GEOMETRY,
 	};

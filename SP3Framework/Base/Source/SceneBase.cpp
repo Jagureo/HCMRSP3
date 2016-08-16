@@ -135,6 +135,8 @@ void SceneBase::Init()
 	meshList[GEO_TESTMAP]->textureID = LoadTGA("Image//grass_lightblue.tga");
 	meshList[GEO_TREETOP] = MeshBuilder::GenerateQuad("treetop", Color(1, 1, 1), 2.f);
 	meshList[GEO_TREETOP]->textureID = LoadTGA("Image//treetop.tga");
+	meshList[GEO_ROCK] = MeshBuilder::GenerateQuad("rock", Color(1, 1, 1), 1.f);
+	meshList[GEO_ROCK]->textureID = LoadTGA("Image//rock.tga");
 
 	bLightEnabled = false;
 }
