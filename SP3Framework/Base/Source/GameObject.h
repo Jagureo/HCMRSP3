@@ -47,6 +47,7 @@ struct GameObject
 	float color;
 	Mtx44 rotatedVel;
 	bool active;
+	bool dead;
 	float mass;
 	float ticker;
 	bool fresh;

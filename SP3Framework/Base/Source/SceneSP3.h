@@ -75,6 +75,7 @@ public:
 
 	void mapEditorUpdate(double dt);
 	void mapEditorRender();
+	void renderSelection(float x1, float y1);
 
 	void Reset();
 
@@ -106,7 +107,7 @@ protected:
 
 	bool dragObj;
 	bool testMode;
-	bool deleteMode;
+	int deleteMode;
 
 	float newMouseX;
 	float newMouseY;

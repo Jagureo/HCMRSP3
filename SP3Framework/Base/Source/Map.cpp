@@ -36,6 +36,30 @@ Mesh* playMap::getBackground()
 
 void playMap::addSingleProp(GameObject* newProp)
 {
+	bool spotFound = false;
+	for (std::vector<GameObject *>::iterator it = mapProps.begin(); it != mapProps.end(); ++it)
+	{
+		GameObject *go = (GameObject *)*it;
+		if (go->dead == true)
+		{
+			spotFound = true;
+			go->active = true;
+			go->type = newProp->type;
+			go->scale = newProp->scale;
+			go->pos = newProp->pos;
+			go->fresh = newProp->fresh;
+			break;
+		}
+	}
+	if (spotFound == false)
+	{
+		mapProps.push_back(newProp);
+		propCount++;
+	}
+}
+
+void playMap::forceAddSingleProp(GameObject* newProp)
+{
 	mapProps.push_back(newProp);
 	propCount++;
 }
@@ -53,5 +77,46 @@ void playMap::addClusterProp(GameObject* newProp, int density)
 		if (i != density - 1)
 			cluster = new GameObject(newProp->type);
 		propCount++;
+	}
+}
+
+void playMap::optimize()
+{
+	int i = 0;
+	for (std::vector<GameObject *>::iterator it = mapProps.begin(); it != mapProps.end(); ++it)
+	{
+		GameObject *go = (GameObject *)*it;
+		if (go->dead == true)
+		{
+			continue;
+		}
+		if (go->active == false)
+		{
+			continue;
+		}
+		for (std::vector<GameObject *>::iterator it2 = it + 1; it2 != mapProps.end(); ++it2)
+		{
+			GameObject *other = (GameObject *)*it2;
+			if (go->type != other->type)
+			{
+				continue;
+			}
+			if (other->dead == true)
+			{
+				continue;
+			}
+			if (other->active == false)
+			{
+				continue;
+			}
+			if ((go->pos - other->pos).LengthSquared() < 0.5f)
+			{
+				go->active = false;
+				go->dead = true;
+				propCount--;
+				break;
+			}
+		}
+		i++;
 	}
 }

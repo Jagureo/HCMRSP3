@@ -25,7 +25,10 @@ public:
 	Mesh* getBackground();
 
 	void addSingleProp(GameObject* newProp);
+	void forceAddSingleProp(GameObject* newProp);
 	void addClusterProp(GameObject* newProp, int density = 25);
+
+	void optimize();
 
 	std::vector<GameObject *> mapProps;
 	int propCount;

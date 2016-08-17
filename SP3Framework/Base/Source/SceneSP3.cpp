@@ -52,7 +52,7 @@ void SceneSP3::Init()
 	diffx = 0;
 	diffy = 0;
 	testMode = false;
-	deleteMode = false;
+	deleteMode = 0;
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP]);
@@ -549,6 +549,10 @@ void SceneSP3::Update(double dt)
 {
 	SceneBase::Update(dt);
 	
+	if (Application::IsKeyPressed('V'))
+	{
+		testMap.optimize();
+	}
 
 	diffx = (m_worldWidth / 2) - player1->pos.x;
 	diffy = (m_worldHeight / 2) - player1->pos.y;
@@ -594,7 +598,7 @@ void SceneSP3::Update(double dt)
 		testRock->pos.Set(-25, 25, 1);
 		testRock->fresh = true;
 		testRock->active = true;
-		testMap.addSingleProp(testRock);
+		testMap.addClusterProp(testRock);
 	}
 	
 
@@ -655,19 +659,19 @@ void SceneSP3::Update(double dt)
 		float worldY = (h - y) * m_worldHeight / h;
 		m_ghost->active = false;
 
-		GameObject* ball = FetchGO();
-		ball->type = GameObject::GO_BALL;
-		Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
-		float radius = Math::Clamp(size.Length(), 1.f, 1.f);
-		ball->scale.Set(radius, radius, radius);
-		ball->pos = m_ghost->pos;
-		//ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
-		ball->mass = radius;
-		ball->ballrotated = 0;
-		m_ghost->active = false;
-		TextFile* hi = new TextFile(TextFile::MAP);
-		hi->SetData("ball", ball->pos.x, ball->pos.y, ball->scale.x);
-		hi->SaveMapObj("test.txt");
+		//GameObject* ball = FetchGO();
+		//ball->type = GameObject::GO_BALL;
+		//Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
+		//float radius = Math::Clamp(size.Length(), 1.f, 1.f);
+		//ball->scale.Set(radius, radius, radius);
+		//ball->pos = m_ghost->pos;
+		////ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
+		//ball->mass = radius;
+		//ball->ballrotated = 0;
+		//m_ghost->active = false;
+		//TextFile* hi = new TextFile(TextFile::MAP);
+		//hi->SetData("ball", ball->pos.x, ball->pos.y, ball->scale.x);
+		//hi->SaveMapObj("test.txt");
 		m_estimatedTime = -1;
 	}
 	static bool bRButtonState = false;
@@ -696,11 +700,11 @@ void SceneSP3::Update(double dt)
 		float worldX = x * m_worldWidth / w;
 		float worldY = (h - y) * m_worldHeight / h;
 
-		TextFile* hi = new TextFile(TextFile::MAP);
-		if (hi->RemoveMapObj("test.txt", worldX, worldY))
-		{
-			cout << "goodjob" << endl;
-		}
+		//TextFile* hi = new TextFile(TextFile::MAP);
+		//if (hi->RemoveMapObj("test.txt", worldX, worldY))
+		//{
+		//	cout << "goodjob" << endl;
+		//}
 		/*GameObject* ball = FetchGO();
 		ball->type = GameObject::GO_BALL;
 		ball->scale.Set(3.5f, 3.5f, 3.5f);
@@ -958,7 +962,7 @@ void SceneSP3::Update(double dt)
 void SceneSP3::mapEditorUpdate(double dt)
 {
 	static bool editName = false;
-
+	static bool firstDrag = false;
 	if (testMode == false)
 	{
 		if (editName == true && nameType == false)
@@ -1027,18 +1031,12 @@ void SceneSP3::mapEditorUpdate(double dt)
 			int h = Application::GetWindowHeight();
 			float worldX = x * m_worldWidth / w;
 			float worldY = (h - y) * m_worldHeight / h;
-			
-			if (deleteMode == true)
+
+			if (deleteMode == 2)
 			{
-				for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
-				{
-					GameObject *go = (GameObject *)*it;
-					if ((go->pos - Vector3(worldX, worldY, 1)).Length() < go->scale.x)
-					{
-						go->active = false;
-					}
-				}
-				deleteMode = false;
+				deleteMode = 3;
+				newMouseX = worldX;
+				newMouseY = worldY;
 			}
 
 			if (worldX > 0.9310344f * m_worldWidth && worldX < 0.989068f * m_worldWidth)
@@ -1052,7 +1050,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 						testWater->pos.Set(worldX, worldY, 1);
 						testWater->fresh = true;
 						testWater->active = true;
-						testMap.addSingleProp(testWater);
+						testMap.forceAddSingleProp(testWater);
 					}
 				}
 				else if (worldY > 57 && worldY < 67)
@@ -1064,7 +1062,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 						testWater->pos.Set(worldX, worldY, 1);
 						testWater->fresh = true;
 						testWater->active = true;
-						testMap.addSingleProp(testWater);
+						testMap.forceAddSingleProp(testWater);
 					}
 				}
 				else if (worldY > 44 && worldY < 54)
@@ -1076,7 +1074,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 						testWater->pos.Set(worldX, worldY, 1);
 						testWater->fresh = true;
 						testWater->active = true;
-						testMap.addSingleProp(testWater);
+						testMap.forceAddSingleProp(testWater);
 					}
 				}
 				else if (worldY > 30 && worldY < 40)
@@ -1088,7 +1086,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 						testWater->pos.Set(worldX, worldY, 1);
 						testWater->fresh = true;
 						testWater->active = true;
-						testMap.addSingleProp(testWater);
+						testMap.forceAddSingleProp(testWater);
 					}
 				}
 				else if (worldY > 16 && worldY < 26)
@@ -1097,33 +1095,98 @@ void SceneSP3::mapEditorUpdate(double dt)
 				}
 				else if (worldY > 4 && worldY < 14)
 				{
-					deleteMode = true;
+					deleteMode = 1;
 				}
 				else
 				{
 					dragObj = false;
 				}
 			}
-			if (worldX > 0.454236f * m_worldWidth && worldX < 0.9103448f * m_worldWidth)
+			if (worldX > 0.454236f * m_worldWidth && worldX < 0.9103448f * m_worldWidth && worldY > 87 && worldY < 97)
 			{
-				if (worldY > 87 && worldY < 97)
-				{
-					editName = true;
-				}
+				editName = true;
+			}
+			else if (worldX > 0.9362068f * m_worldWidth && worldX < 0.9827586f * m_worldWidth && worldY > 88 && worldY < 96)
+			{
+				//save file
+				cout << "SAVING" << endl;
 			}
 			else
 			{
 				editName = false;
+				if (dragObj == false)
+				{
+					std::cout << "DRAGGING EXISTING";
+					for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
+					{
+						GameObject *go = (GameObject *)*it;
+						if (go->active == false)
+							continue;
+						if ((go->pos - Vector3(worldX, worldY, 1)).Length() < go->scale.x && dragObj == false)
+						{
+							go->active = false;
+							dragObj = true;
+							GameObject* newItem = new GameObject(go->type);
+							newItem->pos.Set(worldX, worldY, 1);
+							newItem->fresh = true;
+							newItem->active = true;
+							testMap.forceAddSingleProp(newItem);
+							break;
+						}
+					}
+				}
 			}
 		}
 		if (bLButtonState && !Application::IsMousePressed(0))
 		{
+			double x, y;
+			Application::GetCursorPos(&x, &y);
+			int w = Application::GetWindowWidth();
+			int h = Application::GetWindowHeight();
+			float worldX = x * m_worldWidth / w;
+			float worldY = (h - y) * m_worldHeight / h;
+
 			bLButtonState = false;
 			dragObj = false;
+			if (deleteMode == 1)
+			{
+				deleteMode = 2;
+			}
+
+			if (deleteMode == 3)
+			{
+				for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
+				{
+					GameObject *go = (GameObject *)*it;
+					if (go->pos.x > newMouseX && go->pos.x < worldX)
+					{
+						if (go->pos.y > newMouseY && go->pos.y < worldY)
+						{
+							go->active = false;
+						}
+						else if (go->pos.y < newMouseY && go->pos.y > worldY)
+						{
+							go->active = false;
+						}
+					}
+					else if (go->pos.x < newMouseX && go->pos.x > worldX)
+					{
+						if (go->pos.y > newMouseY && go->pos.y < worldY)
+						{
+							go->active = false;
+						}
+						else if (go->pos.y < newMouseY && go->pos.y > worldY)
+						{
+							go->active = false;
+						}
+					}
+				}
+				deleteMode = 0;
+			}
 		}
 
 		static bool bRButtonState = false;
-		static bool firstDrag = false;
+		
 		if (!bLButtonState && Application::IsMousePressed(1))
 		{
 			bRButtonState = true;
@@ -1159,7 +1222,15 @@ void SceneSP3::mapEditorUpdate(double dt)
 		if (Application::IsKeyPressed(VK_F1))
 		{
 			testMode = true;
-			deleteMode = false;
+			deleteMode = 0;
+			for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
+			{
+				GameObject *go = (GameObject *)*it;
+				if (go->active == false)
+				{
+					go->dead = true;
+				}
+			}
 		}
 	}
 	else if (testMode == true)
@@ -1171,11 +1242,32 @@ void SceneSP3::mapEditorUpdate(double dt)
 			for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 			{
 				GameObject *go = (GameObject *)*it;
-				go->active = true;
+				if (go->dead != true)
+					go->active = true;
 			}
 			testMode = false;
+			deleteMode = 0;
 		}
 	}
+}
+
+void SceneSP3::renderSelection(float x1, float y1)
+{
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	double x, y;
+	Application::GetCursorPos(&x, &y);
+	int w = Application::GetWindowWidth();
+	int h = Application::GetWindowHeight();
+	float worldX = x * m_worldWidth / w;
+	float worldY = (h - y) * m_worldHeight / h;
+
+	modelStack.PushMatrix();
+	modelStack.Translate((x1 + worldX) / 2.f, (y1 + worldY) / 2.f, 3);
+	modelStack.Scale((x1 - worldX), (y1 - worldY), 1);
+	RenderMesh(meshList[HUD_SELECTION], true);
+	modelStack.PopMatrix();
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void SceneSP3::mapEditorRender()
@@ -1192,6 +1284,10 @@ void SceneSP3::mapEditorRender()
 		GameObject *go = (GameObject *)*it;
 		if (go->active == false)
 			continue;
+		if (abs(go->pos.x - player1->pos.x) > m_worldWidth || abs(go->pos.y - player1->pos.y) > m_worldHeight)
+		{
+			continue;
+		}
 		if (go->type == GameObject::MAP_TREE)
 		{
 			modelStack.PushMatrix();
@@ -1228,7 +1324,7 @@ void SceneSP3::mapEditorRender()
 		}
 	}
 
-	if (deleteMode == true)
+	if (deleteMode > 0)
 	{
 		double x, y;
 		Application::GetCursorPos(&x, &y);
@@ -1242,6 +1338,11 @@ void SceneSP3::mapEditorRender()
 		modelStack.Scale(3, 3, 1);
 		RenderMesh(meshList[HUD_DELETEICON], false);
 		modelStack.PopMatrix();
+		
+		if (Application::IsMousePressed(0) && deleteMode > 1)
+		{
+			renderSelection(newMouseX, newMouseY);
+		}
 	}
 	glEnable(GL_DEPTH_TEST);
 
@@ -1365,7 +1466,7 @@ void SceneSP3::RenderProps(playMap* map)
 		GameObject *go = (GameObject *)*it;
 		if (go->active == false)
 			continue;
-		if ((go->pos - player1->pos).Length() > 100)
+		if (abs(go->pos.x - player1->pos.x) > m_worldWidth || abs(go->pos.y - player1->pos.y) > m_worldHeight)
 		{
 			continue;
 		}
