@@ -106,6 +106,7 @@ protected:
 
 	bool dragObj;
 	bool testMode;
+	bool deleteMode;
 
 	float newMouseX;
 	float newMouseY;
