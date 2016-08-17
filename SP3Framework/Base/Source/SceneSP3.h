@@ -71,6 +71,8 @@ public:
 
 	void CollisionMap(GameObject *go, GameObject *other, double dt);
 
+	void playerControl();
+
 	void mapEditorUpdate(double dt);
 	void mapEditorRender();
 
@@ -84,6 +86,7 @@ protected:
 	float friction;
 
 	Vector3 mapPosition;
+	playMap *currentMap;
 	playMap testMap;
 
 	//enemy* zebra;
@@ -101,8 +104,13 @@ protected:
 	string mapName;
 	bool nameType;
 
+	bool dragObj;
+	bool testMode;
+
 	float newMouseX;
 	float newMouseY;
+	float diffx;
+	float diffy;
 
 	//Auditing
 	float m1, m2;
