@@ -982,6 +982,10 @@ void SceneSP3::Update(double dt)
 		Dalasso->throwLasso(player1->pos, Vector3(worldX, worldY, 0));
 		
 	}
+	else
+	{
+		bLButtonState = false;
+	}
 	std::cout << Dalasso->getLassoState() << std::endl;
 
 }
