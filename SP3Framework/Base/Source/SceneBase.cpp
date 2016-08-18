@@ -142,6 +142,8 @@ void SceneBase::Init()
 	meshList[HUD_DELETEICON] = MeshBuilder::GenerateQuad("del", Color(1, 1, 1), 1.f);
 	meshList[HUD_DELETEICON]->textureID = LoadTGA("Image//deleteicon.tga");
 	meshList[HUD_SELECTION] = MeshBuilder::GenerateCube("selection", Color(1, 0, 0), 1.f);
+	meshList[HUD_GRIDLOCK] = MeshBuilder::GenerateQuad("grid", Color(1, 1, 1), 1.f);
+	meshList[HUD_GRIDLOCK]->textureID = LoadTGA("Image//gridlock.tga");
 
 	meshList[GEO_TESTENEMY] = MeshBuilder::GenerateSphere("enemy", Color(255, 144, 0), 10, 10, 1.f);
 

@@ -911,7 +911,7 @@ void SceneSP3::Update(double dt)
 	for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 	{
 		GameObject *go = (GameObject *)*it;
-		if (go->active == false)
+		if (go->dead == true)
 			continue;
 
 		if (go->fresh)
@@ -1051,6 +1051,27 @@ void SceneSP3::mapEditorUpdate(double dt)
 			std::vector<GameObject *>::iterator it = testMap.mapProps.end() - 1;
 			GameObject *go = (GameObject *)*it;
 			go->pos.Set(worldX, worldY, 1);
+
+			if (Application::IsKeyPressed(VK_LSHIFT))
+			{
+				if ((int)(go->pos.x - mapPosition.x) % 10 > 5)
+				{
+					go->pos.x += 10 - ((int)(go->pos.x - mapPosition.x) % 10);
+				}
+				else
+				{
+					go->pos.x -= (int)(go->pos.x - mapPosition.x) % 10;
+				}
+
+				if ((int)(go->pos.y - mapPosition.y) % 10 > 5)
+				{
+					go->pos.y += 10 - ((int)(go->pos.y - mapPosition.y) % 10);
+				}
+				else
+				{
+					go->pos.y -= (int)(go->pos.y - mapPosition.y) % 10;
+				}
+			}
 		}
 		else if (!bLButtonState && Application::IsMousePressed(0))
 		{
@@ -1442,7 +1463,45 @@ void SceneSP3::mapEditorRender()
 	RenderMesh(testMap.getBackground(), false);
 	modelStack.PopMatrix();
 
+	double x, y;
+	Application::GetCursorPos(&x, &y);
+	int w = Application::GetWindowWidth();
+	int h = Application::GetWindowHeight();
+	float worldX = x * m_worldWidth / w;
+	float worldY = (h - y) * m_worldHeight / h;
+
+	if (Application::IsKeyPressed(VK_LSHIFT))
+	{
+		int posx = worldX;
+		int posy = worldY;
+
+		if ((int)(posx - mapPosition.x) % 10 > 5)
+		{
+			posx += 10 - ((int)(posx - mapPosition.x) % 10);
+		}
+		else
+		{
+			posx -= (int)(posx - mapPosition.x) % 10;
+		}
+
+		if ((int)(posy - mapPosition.y) % 10 > 5)
+		{
+			posy += 10 - ((int)(posy - mapPosition.y) % 10);
+		}
+		else
+		{
+			posy -= (int)(posy - mapPosition.y) % 10;
+		}
+
+		modelStack.PushMatrix();
+		modelStack.Translate(posx, posy, -1);
+		modelStack.Scale(55, 55, 1);
+		RenderMesh(meshList[HUD_GRIDLOCK], false);
+		modelStack.PopMatrix();
+	}
+
 	glDisable(GL_DEPTH_TEST);
+
 	for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 	{
 		GameObject *go = (GameObject *)*it;
@@ -1490,13 +1549,6 @@ void SceneSP3::mapEditorRender()
 
 	if (deleteMode > 0)
 	{
-		double x, y;
-		Application::GetCursorPos(&x, &y);
-		int w = Application::GetWindowWidth();
-		int h = Application::GetWindowHeight();
-		float worldX = x * m_worldWidth / w;
-		float worldY = (h - y) * m_worldHeight / h;
-
 		modelStack.PushMatrix();
 		modelStack.Translate(worldX, worldY, 9);
 		modelStack.Scale(3, 3, 1);
