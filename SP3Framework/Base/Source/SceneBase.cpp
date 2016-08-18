@@ -144,6 +144,11 @@ void SceneBase::Init()
 	meshList[HUD_SELECTION] = MeshBuilder::GenerateCube("selection", Color(1, 0, 0), 1.f);
 	meshList[HUD_GRIDLOCK] = MeshBuilder::GenerateQuad("grid", Color(1, 1, 1), 1.f);
 	meshList[HUD_GRIDLOCK]->textureID = LoadTGA("Image//gridlock.tga");
+	meshList[HUD_RADAR] = MeshBuilder::GenerateQuad("radar", Color(1, 1, 1), 1.f);
+	meshList[HUD_RADAR]->textureID = LoadTGA("Image//radar.tga");
+	meshList[HUD_RADARLINE] = MeshBuilder::GenerateCube("radarline", Color(0, 1, 0), 4.f);
+	meshList[HUD_RADARDETECT] = MeshBuilder::GenerateQuad("detect", Color(0, 1, 0), 1.f);
+	//meshList[HUD_RADARDETECT]->textureID = LoadTGA("Image//yellow-orange-bubble-clip-art.tga");
 
 	meshList[GEO_TESTENEMY] = MeshBuilder::GenerateSphere("enemy", Color(255, 144, 0), 10, 10, 1.f);
 

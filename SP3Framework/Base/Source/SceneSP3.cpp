@@ -50,6 +50,7 @@ void SceneSP3::Init()
 	diffy = 0;
 	testMode = false;
 	deleteMode = 0;
+	time = 0;
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP]);
@@ -543,7 +544,8 @@ void SceneSP3::playerControl()
 void SceneSP3::Update(double dt)
 {
 	SceneBase::Update(dt);
-	
+	time++;
+
 	if (Application::IsKeyPressed('V'))
 	{
 		testMap.optimize();
@@ -986,7 +988,7 @@ void SceneSP3::Update(double dt)
 	{
 		bLButtonState = false;
 	}
-	std::cout << Dalasso->getLassoState() << std::endl;
+	//std::cout << Dalasso->getLassoState() << std::endl;
 
 }
 
@@ -1571,6 +1573,64 @@ void SceneSP3::mapEditorRender()
 		modelStack.PopMatrix();
 
 		RenderTextOnScreen(meshList[GEO_TEXT], mapName, Color(0, 1, 0), 3, 39, 54);
+	}
+	else
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(15, 10, 8);
+		modelStack.Scale(20, 20, 1);
+		RenderMesh(meshList[HUD_RADAR], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(15, 10, 9);
+		modelStack.Rotate(time, 0, 0, 1);
+		modelStack.Scale(2.1f, 0.1f, 1);
+		modelStack.Translate(2.f, 0, 0);
+		RenderMesh(meshList[HUD_RADARLINE], false);
+		modelStack.PopMatrix();
+
+		renderMinimap(&testMap);
+	}
+}
+
+void SceneSP3::renderMinimap(playMap* map)
+{
+	for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
+	{
+		GameObject *go = (GameObject *)*it;
+		if (go->active == false)
+			continue;
+		if (go->dead == true)
+			continue;
+		if ((go->pos - player1->pos).Length() < 120)
+		{
+			int i = Math::RadianToDegree(atan2(go->pos.y - player1->pos.y, go->pos.x - player1->pos.x));
+			if (i < 0)
+			{
+				i += 360;
+			}
+			int j = (int)time % 360;
+			if (i > j && j < 100)
+			{
+				j += 100;
+				i -= 260;
+			}
+			if (i < j && i > j - 100)
+			{
+				//cout << Math::RadianToDegree(atan2(go->pos.y - player1->pos.y, go->pos.x - player1->pos.x)) << endl;
+				modelStack.PushMatrix();
+				modelStack.Translate((go->pos.x - player1->pos.x) / 15, (go->pos.y - player1->pos.y) / 15, 1);
+				modelStack.Translate(15, 10, 8);
+				modelStack.Scale(0.4f, 0.4f, 1);
+				RenderMesh(meshList[HUD_RADARDETECT], false);
+				modelStack.PopMatrix();
+			}
+			else
+			{
+				
+			}
+		}
 	}
 }
 

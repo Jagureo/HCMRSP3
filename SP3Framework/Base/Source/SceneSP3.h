@@ -77,6 +77,7 @@ public:
 	void mapEditorUpdate(double dt);
 	void mapEditorRender();
 	void renderSelection(float x1, float y1);
+	void renderMinimap(playMap* map);
 
 	void Reset();
 
@@ -118,6 +119,7 @@ protected:
 	float newMouseY;
 	float diffx;
 	float diffy;
+	float time;
 
 	//Auditing
 	float m1, m2;
