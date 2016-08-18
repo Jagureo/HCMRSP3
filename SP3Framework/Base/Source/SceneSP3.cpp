@@ -1616,6 +1616,7 @@ void SceneSP3::renderMinimap(playMap* map)
 				j += 100;
 				i -= 260;
 			}
+			
 			if (i < j && i > j - 100)
 			{
 				//cout << Math::RadianToDegree(atan2(go->pos.y - player1->pos.y, go->pos.x - player1->pos.x)) << endl;

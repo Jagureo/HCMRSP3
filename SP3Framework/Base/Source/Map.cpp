@@ -109,7 +109,7 @@ void playMap::optimize()
 			{
 				continue;
 			}
-			if ((go->pos - other->pos).LengthSquared() < 0.5f)
+			if ((go->pos - other->pos).LengthSquared() < 5.f)
 			{
 				go->active = false;
 				go->dead = true;
