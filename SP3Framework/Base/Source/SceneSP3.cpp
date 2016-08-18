@@ -20,9 +20,6 @@ void SceneSP3::Init()
 
 	Math::InitRNG();
 
-	TextFile* hi = new TextFile(TextFile::MAP);
-	hi->RemoveMapObj("Map.txt", 3.f, 2.f);
-
 	//Exercise 1: initialize m_objectCount
 	m_objectCount = 0;
 
@@ -57,8 +54,6 @@ void SceneSP3::Init()
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP]);
 	testMap.setMapSize(20, 20);
-
-	gameStates = states::s_Level3;
 }
 
 void SceneSP3::Reset()
@@ -580,7 +575,7 @@ void SceneSP3::Update(double dt)
 		testMap.addClusterProp(testTree);
 		TextFile * hi = new TextFile(TextFile::CAR);
 		hi->SetData("tree", testTree->pos.x, testTree->pos.y, testTree->scale.x);
-		hi->SaveMapObj("carz.txt");
+		hi->WriteFile("carz.txt");
 
 		GameObject* testWater = new GameObject(GameObject::MAP_WATER);
 		testWater->pos.Set(25, 25, 1);
@@ -600,8 +595,6 @@ void SceneSP3::Update(double dt)
 		testRock->active = true;
 		testMap.addClusterProp(testRock);
 	}
-	
-
 	if (Application::IsKeyPressed('T'))
 	{
 		player1->vel.SetZero();
@@ -629,152 +622,154 @@ void SceneSP3::Update(double dt)
 	{
 		mapEditorUpdate(dt);
 	}
+	//else
+	//{
+	//	player1->engine = 0;
+	//}
+	//if (player1->engine > player1->playerCar.engine)
+	//{
+	//	player1->engine = player1->playerCar.engine;
+	//}
+	//if (Application::IsKeyPressed('D'))
+	//{
+	//	player1->rotationAngle -= player1->playerCar.turnSpeed;
+	//	if (player1->vel.Length() < 3)
+	//	{
+	//		if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
+	//			player1->rotationAngle += 1 / player1->vel.Length();
+	//		else
+	//			player1->rotationAngle += player1->playerCar.turnSpeed;
+	//	}
+	//	player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
+	//}
+	//if (Application::IsKeyPressed('A'))
+	//{
+	//	player1->rotationAngle += player1->playerCar.turnSpeed;
+	//	if (player1->vel.Length() < 3)
+	//	{
+	//		if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
+	//			player1->rotationAngle -= 1 / player1->vel.Length();
+	//		else
+	//			player1->rotationAngle -= player1->playerCar.turnSpeed;
+	//	}
+	//	player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
+	//}
+	//if (player1->vel.Length() < player1->playerCar.topSpeed)
+	//{
+	//	player1->vel += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, 0);
+	//}
+
+	//if (friction > 0.99f)
+	//{
+	//	friction = 0.99f;
+	//}
+	//else if (friction < 0.95f - player1->mass * 0.01f)
+	//{
+	//	friction += 0.01f;
+	//}
+	//if (friction > 0.96f - player1->mass * 0.01f)
+	//{
+	//	friction -= 0.01f;
+	//}
+
+	////std::cout << player1->pos << std::endl;
+
+	//if (player1->vel.x != 0 || player1->vel.y != 0)
+	//{
+	//	player1->vel = player1->vel * friction;
+	//}
 
 	//Mouse Section
 	static bool bLButtonState = false;
-	if (!bLButtonState && Application::IsMousePressed(0))
-	{
-		bLButtonState = true;
-		std::cout << "LBUTTON DOWN" << std::endl;
-		double x, y;
-		Application::GetCursorPos(&x, &y);
-		int w = Application::GetWindowWidth();
-		int h = Application::GetWindowHeight();
-		float worldX = x * m_worldWidth / w;
-		float worldY = (h - y) * m_worldHeight / h;
-		m_ghost->pos.Set(worldX, worldY, 0);
-		m_ghost->active = true;
-	}
-	else if (bLButtonState && !Application::IsMousePressed(0))
-	{
-		bLButtonState = false;
-		std::cout << "LBUTTON UP" << std::endl;
+	//if (!bLButtonState && Application::IsMousePressed(0))
+	//{
+	//	bLButtonState = true;
+	//	std::cout << "LBUTTON DOWN" << std::endl;
+	//	double x, y;
+	//	Application::GetCursorPos(&x, &y);
+	//	int w = Application::GetWindowWidth();
+	//	int h = Application::GetWindowHeight();
+	//	float worldX = x * m_worldWidth / w;
+	//	float worldY = (h - y) * m_worldHeight / h;
+	//	m_ghost->pos.Set(worldX, worldY, 0);
+	//	m_ghost->active = true;
+	//}
+	//else if (bLButtonState && !Application::IsMousePressed(0))
+	//{
+	//	bLButtonState = false;
+	//	std::cout << "LBUTTON UP" << std::endl;
 
-		//Exercise 6: spawn small GO_BALL
-		double x, y;
-		Application::GetCursorPos(&x, &y);
-		int w = Application::GetWindowWidth();
-		int h = Application::GetWindowHeight();
-		float worldX = x * m_worldWidth / w;
-		float worldY = (h - y) * m_worldHeight / h;
-		m_ghost->active = false;
+	//	//Exercise 6: spawn small GO_BALL
+	//	double x, y;
+	//	Application::GetCursorPos(&x, &y);
+	//	int w = Application::GetWindowWidth();
+	//	int h = Application::GetWindowHeight();
+	//	float worldX = x * m_worldWidth / w;
+	//	float worldY = (h - y) * m_worldHeight / h;
+	//	m_ghost->active = false;
 
-		//GameObject* ball = FetchGO();
-		//ball->type = GameObject::GO_BALL;
-		//Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
-		//float radius = Math::Clamp(size.Length(), 1.f, 1.f);
-		//ball->scale.Set(radius, radius, radius);
-		//ball->pos = m_ghost->pos;
-		////ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
-		//ball->mass = radius;
-		//ball->ballrotated = 0;
-		//m_ghost->active = false;
-		//TextFile* hi = new TextFile(TextFile::MAP);
-		//hi->SetData("ball", ball->pos.x, ball->pos.y, ball->scale.x);
-		//hi->SaveMapObj("test.txt");
-		m_estimatedTime = -1;
-	}
-	static bool bRButtonState = false;
-	if (!bRButtonState && Application::IsMousePressed(1))
-	{
-		bRButtonState = true;
-		std::cout << "RBUTTON DOWN" << std::endl;
-		double x, y;
-		Application::GetCursorPos(&x, &y);
-		int w = Application::GetWindowWidth();
-		int h = Application::GetWindowHeight();
-		float worldX = x * m_worldWidth / w;
-		float worldY = (h - y) * m_worldHeight / h;
-		m_ghost->pos.Set(worldX, worldY, 0);
-	}
-	else if (bRButtonState && !Application::IsMousePressed(1))
-	{
-		bRButtonState = false;
-		std::cout << "RBUTTON UP" << std::endl;
+	//	GameObject* ball = FetchGO();
+	//	ball->type = GameObject::GO_BALL;
+	//	Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
+	//	float radius = Math::Clamp(size.Length(), 1.f, 1.f);
+	//	ball->scale.Set(radius, radius, radius);
+	//	ball->pos = m_ghost->pos;
+	//	ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
+	//	ball->mass = radius;
+	//	ball->ballrotated = 0;
+	//	m_ghost->active = false;
 
-		//Exercise 10: spawn large GO_BALL
-		double x, y;
-		Application::GetCursorPos(&x, &y);
-		int w = Application::GetWindowWidth();
-		int h = Application::GetWindowHeight();
-		float worldX = x * m_worldWidth / w;
-		float worldY = (h - y) * m_worldHeight / h;
+	//	m_estimatedTime = -1;
+	//}
+	//static bool bRButtonState = false;
+	//if (!bRButtonState && Application::IsMousePressed(1))
+	//{
+	//	bRButtonState = truecout
+	//	std::cout << "RBUTTON DOWN" << std::endl;
+	//	double x, y;
+	//	Application::GetCursorPos(&x, &y);
+	//	int w = Application::GetWindowWidth();
+	//	int h = Application::GetWindowHeight();
+	//	float worldX = x * m_worldWidth / w;
+	//	float worldY = (h - y) * m_worldHeight / h;
+	//	m_ghost->pos.Set(worldX, worldY, 0);
+	//}
+	//else if (bRButtonState && !Application::IsMousePressed(1))
+	//{
+	//	bRButtonState = false;
+	//	std::cout << "RBUTTON UP" << std::endl;
 
-		//TextFile* hi = new TextFile(TextFile::MAP);
-		//if (hi->RemoveMapObj("test.txt", worldX, worldY))
-		//{
-		//	cout << "goodjob" << endl;
-		//}
-		/*GameObject* ball = FetchGO();
-		ball->type = GameObject::GO_BALL;
-		ball->scale.Set(3.5f, 3.5f, 3.5f);
-		ball->pos = m_ghost->pos;
-		ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
-		ball->mass = 1.5f * 1.5f * 1.5f;
-		ball->ballrotated = 0;
-		m_ghost->active = false;*/
-	}
+	//	//Exercise 10: spawn large GO_BALL
+	//	double x, y;
+	//	Application::GetCursorPos(&x, &y);
+	//	int w = Application::GetWindowWidth();
+	//	int h = Application::GetWindowHeight();
+	//	float worldX = x * m_worldWidth / w;
+	//	float worldY = (h - y) * m_worldHeight / h;
 
-	if (m_ghost->active)
-	{
-		double x, y;
-		Application::GetCursorPos(&x, &y);
-		int w = Application::GetWindowWidth();
-		int h = Application::GetWindowHeight();
-		float worldX = x * m_worldWidth / w;
-		float worldY = (h - y) * m_worldHeight / h;
-		Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
-		float radius = Math::Clamp(size.Length(), 0.1f, 1.f);
-		m_ghost->scale.Set(radius, radius, 1.0f);
-	}
-	if (gameStates == states::s_Menu)
-	{
-		static bool arrowkeyUp = false;
-		static bool arrowkeyDown = false;
+	//	GameObject* ball = FetchGO();
+	//	ball->type = GameObject::GO_BALL;
+	//	ball->scale.Set(3.5f, 3.5f, 3.5f);
+	//	ball->pos = m_ghost->pos;
+	//	ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
+	//	ball->mass = 1.5f * 1.5f * 1.5f;
+	//	ball->ballrotated = 0;
+	//	m_ghost->active = false;
+	//}
 
-		if (arrowSelection > 0)
-		{
-			if (Application::IsKeyPressed(VK_UP) && arrowkeyUp == false)
-			{
-				arrowkeyUp = true;
-				arrowSelection--;
-			}
-			else if (!Application::IsKeyPressed(VK_UP) && arrowkeyUp == true)
-				arrowkeyUp = false;
-		}
-		else if (arrowSelection == 0)
-		{
-			if (Application::IsKeyPressed(VK_UP) && arrowkeyUp == false)
-			{
-				arrowkeyUp = true;
-				arrowSelection = 3;
-			}
-			else if (!Application::IsKeyPressed(VK_UP) && arrowkeyUp == true)
-				arrowkeyUp = false;
+	//if (m_ghost->active)
+	//{
+	//	double x, y;
+	//	Application::GetCursorPos(&x, &y);
+	//	int w = Application::GetWindowWidth();
+	//	int h = Application::GetWindowHeight();
+	//	float worldX = x * m_worldWidth / w;
+	//	float worldY = (h - y) * m_worldHeight / h;
+	//	Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
+	//	float radius = Math::Clamp(size.Length(), 0.1f, 1.f);
+	//	m_ghost->scale.Set(radius, radius, 1.0f);
+	//}
 
-		}
-
-		if (arrowSelection < 3)
-		{
-			if (Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == false)
-			{
-				arrowkeyDown = true;
-				arrowSelection++;
-			}
-			else if (!Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == true)
-				arrowkeyDown = false;
-		}
-		else if (arrowSelection == 3)
-		{
-			if (Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == false)
-			{
-				arrowkeyDown = true;
-				arrowSelection = 0;
-			}
-			else if (!Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == true)
-				arrowkeyDown = false;
-		}
-	}
 	//Physics Simulation Section
 
 	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
@@ -861,6 +856,8 @@ void SceneSP3::Update(double dt)
 				}
 			}
 
+			
+
 			if (go->type == GameObject::GO_CAR)
 			{
 				if (!go->active)
@@ -914,6 +911,8 @@ void SceneSP3::Update(double dt)
 	for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 	{
 		GameObject *go = (GameObject *)*it;
+		if (go->active == false)
+			continue;
 
 		if (go->fresh)
 		{
@@ -945,19 +944,49 @@ void SceneSP3::Update(double dt)
 		{
 			go->setPos(go->getPos().x + diffx, go->getPos().y + diffy, 2);
 		}
-		if ((go->getPos() - player1->pos).LengthSquared() < 1000)
+		if ((go->getPos() - player1->pos).LengthSquared() < 2000)
 		{
 			go->runOff(player1->pos);
 		}
 		else
 		{
-			go->setVel(0, 0, 0);
+			go->slowDown();
 		}
-
+		//std::cout << go->getPos() << std::endl;
+		if (Dalasso->checkCaught(player1->pos, go->getPos(), 5) == 1 || go->getCaught() == 1)
+		{
+			go->setCaught(1);
+			go->runOff(player1->pos);
+			if (Dalasso->caughtUpdate(player1->pos, go->getPos()) == 1)
+			{
+				go->setCaught(0);
+			}
+			//std::cout << "hi" << std::endl;
+		}
 		go->updatePos(dt);
+		
 	}
+	Dalasso->updateLasso(player1->pos, dt);
+	if (!bLButtonState && Application::IsMousePressed(0) && Dalasso->getLassoState() == 0 && gameStates != states::s_MapEditor)
+	{
+		bLButtonState = true;
+		std::cout << "LBUTTON DOWN" << std::endl;
+		double x, y;
+		Application::GetCursorPos(&x, &y);
+		int w = Application::GetWindowWidth();
+		int h = Application::GetWindowHeight();
+		float worldX = x * m_worldWidth / w;
+		float worldY = (h - y) * m_worldHeight / h;
+		//m_ghost->pos.Set(worldX, worldY, 0);
+		//m_ghost->active = true;
+		Dalasso->throwLasso(player1->pos, Vector3(worldX, worldY, 0));
+		
+	}
+	std::cout << Dalasso->getLassoState() << std::endl;
 
 }
+
+
 
 void SceneSP3::mapEditorUpdate(double dt)
 {
@@ -1006,7 +1035,6 @@ void SceneSP3::mapEditorUpdate(double dt)
 				}
 			}
 		}
-
 		static bool bLButtonState = false;
 		if (dragObj == true)
 		{
@@ -1016,7 +1044,6 @@ void SceneSP3::mapEditorUpdate(double dt)
 			int h = Application::GetWindowHeight();
 			float worldX = x * m_worldWidth / w;
 			float worldY = (h - y) * m_worldHeight / h;
-
 			std::vector<GameObject *>::iterator it = testMap.mapProps.end() - 1;
 			GameObject *go = (GameObject *)*it;
 			go->pos.Set(worldX, worldY, 1);
@@ -1031,14 +1058,12 @@ void SceneSP3::mapEditorUpdate(double dt)
 			int h = Application::GetWindowHeight();
 			float worldX = x * m_worldWidth / w;
 			float worldY = (h - y) * m_worldHeight / h;
-
 			if (deleteMode == 2)
 			{
 				deleteMode = 3;
 				newMouseX = worldX;
 				newMouseY = worldY;
 			}
-
 			if (worldX > 0.9310344f * m_worldWidth && worldX < 0.989068f * m_worldWidth)
 			{
 				if (worldY > 71 && worldY < 80)
@@ -1091,7 +1116,6 @@ void SceneSP3::mapEditorUpdate(double dt)
 				}
 				else if (worldY > 16 && worldY < 26)
 				{
-
 				}
 				else if (worldY > 4 && worldY < 14)
 				{
@@ -1145,14 +1169,12 @@ void SceneSP3::mapEditorUpdate(double dt)
 			int h = Application::GetWindowHeight();
 			float worldX = x * m_worldWidth / w;
 			float worldY = (h - y) * m_worldHeight / h;
-
 			bLButtonState = false;
 			dragObj = false;
 			if (deleteMode == 1)
 			{
 				deleteMode = 2;
 			}
-
 			if (deleteMode == 3)
 			{
 				for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
@@ -1184,9 +1206,8 @@ void SceneSP3::mapEditorUpdate(double dt)
 				deleteMode = 0;
 			}
 		}
-
 		static bool bRButtonState = false;
-		
+
 		if (!bLButtonState && Application::IsMousePressed(1))
 		{
 			bRButtonState = true;
@@ -1197,7 +1218,6 @@ void SceneSP3::mapEditorUpdate(double dt)
 			int h = Application::GetWindowHeight();
 			float worldX = x * m_worldWidth / w;
 			float worldY = (h - y) * m_worldHeight / h;
-
 			if (!firstDrag)
 			{
 				newMouseX = worldX;
@@ -1218,7 +1238,6 @@ void SceneSP3::mapEditorUpdate(double dt)
 			bRButtonState = false;
 			firstDrag = false;
 		}
-
 		if (Application::IsKeyPressed(VK_F1))
 		{
 			testMode = true;
@@ -1251,122 +1270,25 @@ void SceneSP3::mapEditorUpdate(double dt)
 	}
 }
 
-void SceneSP3::renderSelection(float x1, float y1)
-{
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	double x, y;
-	Application::GetCursorPos(&x, &y);
-	int w = Application::GetWindowWidth();
-	int h = Application::GetWindowHeight();
-	float worldX = x * m_worldWidth / w;
-	float worldY = (h - y) * m_worldHeight / h;
 
-	modelStack.PushMatrix();
-	modelStack.Translate((x1 + worldX) / 2.f, (y1 + worldY) / 2.f, 3);
-	modelStack.Scale((x1 - worldX), (y1 - worldY), 1);
-	RenderMesh(meshList[HUD_SELECTION], true);
-	modelStack.PopMatrix();
-
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-}
-
-void SceneSP3::mapEditorRender()
-{
-	modelStack.PushMatrix();
-	modelStack.Translate(mapPosition.x, mapPosition.y, mapPosition.z - 9);
-	modelStack.Scale(testMap.getMapSize().x, testMap.getMapSize().y, 1);
-	RenderMesh(testMap.getBackground(), false);
-	modelStack.PopMatrix();
-
-	glDisable(GL_DEPTH_TEST);
-	for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
-	{
-		GameObject *go = (GameObject *)*it;
-		if (go->active == false)
-			continue;
-		if (abs(go->pos.x - player1->pos.x) > m_worldWidth || abs(go->pos.y - player1->pos.y) > m_worldHeight)
-		{
-			continue;
-		}
-		if (go->type == GameObject::MAP_TREE)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z + 2);
-			modelStack.Scale(go->scale.x * 5, go->scale.y * 5, go->scale.z);
-			RenderMesh(meshList[GEO_TREETOP], true);
-			modelStack.PopMatrix();
-		}
-		else if (go->type == GameObject::MAP_ROCK)
-		{
-			glEnable(GL_DEPTH_TEST);
-			modelStack.PushMatrix();
-			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z - 2);
-			modelStack.Scale(go->scale.x * 3, go->scale.y * 3, go->scale.z);
-			RenderMesh(meshList[GEO_ROCK], true);
-			modelStack.PopMatrix();
-			glDisable(GL_DEPTH_TEST);
-		}
-		else if (go->type == GameObject::MAP_WATER)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
-			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
-			RenderMesh(meshList[GEO_ICE], true);
-			modelStack.PopMatrix();
-		}
-		else if (go->type == GameObject::MAP_MUD)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
-			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
-			RenderMesh(meshList[GEO_CUBE], true);
-			modelStack.PopMatrix();
-		}
-	}
-
-	if (deleteMode > 0)
-	{
-		double x, y;
-		Application::GetCursorPos(&x, &y);
-		int w = Application::GetWindowWidth();
-		int h = Application::GetWindowHeight();
-		float worldX = x * m_worldWidth / w;
-		float worldY = (h - y) * m_worldHeight / h;
-
-		modelStack.PushMatrix();
-		modelStack.Translate(worldX, worldY, 9);
-		modelStack.Scale(3, 3, 1);
-		RenderMesh(meshList[HUD_DELETEICON], false);
-		modelStack.PopMatrix();
-		
-		if (Application::IsMousePressed(0) && deleteMode > 1)
-		{
-			renderSelection(newMouseX, newMouseY);
-		}
-	}
-	glEnable(GL_DEPTH_TEST);
-
-	if (testMode == false)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
-		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
-		RenderMesh(meshList[HUD_MAPEDITOR], false);
-		modelStack.PopMatrix();
-
-		RenderTextOnScreen(meshList[GEO_TEXT], mapName, Color(0, 1, 0), 3, 39, 54);
-	}
-}
 
 	//corner
 	//wall = FetchGO();
-	//wall->type = GameObject::GO_WALL;
+	//wall->type = GameObject::GO_WALL
 	//wall->pos.Set(112.5f, 88, 1);
 	//wall->normal = Vector3(0.5f, 0.5f, 0).Normalized();
 	//wall->active = true;
 	//wall->scale.Set(2, 6, 1);
 	//wall->rotationAngle = 45;
 
+void SceneSP3::RenderLasso(lasso *go)
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(go->getLassoPos().x, go->getLassoPos().y, 2);
+	modelStack.Scale(3, 3, 3);
+	RenderMesh(meshList[GEO_ENEMYBULLET], false);
+	modelStack.PopMatrix();
+}
 
 void SceneSP3::RenderGO(GameObject *go)
 {
@@ -1508,6 +1430,111 @@ void SceneSP3::RenderProps(playMap* map)
 	glEnable(GL_DEPTH_TEST);
 }
 
+void SceneSP3::mapEditorRender()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(mapPosition.x, mapPosition.y, mapPosition.z - 9);
+	modelStack.Scale(testMap.getMapSize().x, testMap.getMapSize().y, 1);
+	RenderMesh(testMap.getBackground(), false);
+	modelStack.PopMatrix();
+
+	glDisable(GL_DEPTH_TEST);
+	for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
+	{
+		GameObject *go = (GameObject *)*it;
+		if (go->active == false)
+			continue;
+		if (abs(go->pos.x - player1->pos.x) > m_worldWidth || abs(go->pos.y - player1->pos.y) > m_worldHeight)
+		{
+			continue;
+		}
+		if (go->type == GameObject::MAP_TREE)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z + 2);
+			modelStack.Scale(go->scale.x * 5, go->scale.y * 5, go->scale.z);
+			RenderMesh(meshList[GEO_TREETOP], true);
+			modelStack.PopMatrix();
+		}
+		else if (go->type == GameObject::MAP_ROCK)
+		{
+			glEnable(GL_DEPTH_TEST);
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z - 2);
+			modelStack.Scale(go->scale.x * 3, go->scale.y * 3, go->scale.z);
+			RenderMesh(meshList[GEO_ROCK], true);
+			modelStack.PopMatrix();
+			glDisable(GL_DEPTH_TEST);
+		}
+		else if (go->type == GameObject::MAP_WATER)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_ICE], true);
+			modelStack.PopMatrix();
+		}
+		else if (go->type == GameObject::MAP_MUD)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_CUBE], true);
+			modelStack.PopMatrix();
+		}
+	}
+
+	if (deleteMode > 0)
+	{
+		double x, y;
+		Application::GetCursorPos(&x, &y);
+		int w = Application::GetWindowWidth();
+		int h = Application::GetWindowHeight();
+		float worldX = x * m_worldWidth / w;
+		float worldY = (h - y) * m_worldHeight / h;
+
+		modelStack.PushMatrix();
+		modelStack.Translate(worldX, worldY, 9);
+		modelStack.Scale(3, 3, 1);
+		RenderMesh(meshList[HUD_DELETEICON], false);
+		modelStack.PopMatrix();
+
+		if (Application::IsMousePressed(0) && deleteMode > 1)
+		{
+			renderSelection(newMouseX, newMouseY);
+		}
+	}
+	glEnable(GL_DEPTH_TEST);
+
+	if (testMode == false)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[HUD_MAPEDITOR], false);
+		modelStack.PopMatrix();
+
+		RenderTextOnScreen(meshList[GEO_TEXT], mapName, Color(0, 1, 0), 3, 39, 54);
+	}
+}
+
+void SceneSP3::renderSelection(float x1, float y1)
+{
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	double x, y;
+	Application::GetCursorPos(&x, &y);
+	int w = Application::GetWindowWidth();
+	int h = Application::GetWindowHeight();
+	float worldX = x * m_worldWidth / w;
+	float worldY = (h - y) * m_worldHeight / h;
+	modelStack.PushMatrix();
+	modelStack.Translate((x1 + worldX) / 2.f, (y1 + worldY) / 2.f, 3);
+	modelStack.Scale((x1 - worldX), (y1 - worldY), 1);
+	RenderMesh(meshList[HUD_SELECTION], true);
+	modelStack.PopMatrix();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
 void SceneSP3::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1534,14 +1561,14 @@ void SceneSP3::Render()
 
 	RenderMesh(meshList[GEO_AXES], false);
 
-	//for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
-	//{
-	//	GameObject *go = (GameObject *)*it;
-	//	if (go->active)
-	//	{
-	//		RenderGO(go);
-	//	}
-	//}
+	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
+	{
+		GameObject *go = (GameObject *)*it;
+		if (go->active)
+		{
+			RenderGO(go);
+		}
+	}
 
 	for (std::vector<enemy *>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
 	{
@@ -1550,7 +1577,7 @@ void SceneSP3::Render()
 		RenderEnemy(go);
 	}
 
-
+	RenderLasso(Dalasso);
 	if (m_ghost->active)
 	{
 		modelStack.PushMatrix();
@@ -1560,29 +1587,17 @@ void SceneSP3::Render()
 		modelStack.PopMatrix();
 	}
 
-	if (gameStates != states::s_MapEditor)
-	{
-		for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
-		{
-			GameObject *go = (GameObject *)*it;
-			if (go->active)
-			{
-				RenderGO(go);
-			}
-		}
+	modelStack.PushMatrix();
+	modelStack.Translate(mapPosition.x, mapPosition.y, mapPosition.z - 9);
+	modelStack.Scale(testMap.getMapSize().x, testMap.getMapSize().y, testMap.getMapSize().z);
+	RenderMesh(testMap.getBackground(), false);
+	modelStack.PopMatrix();
 
-		modelStack.PushMatrix();
-		modelStack.Translate(mapPosition.x, mapPosition.y, mapPosition.z - 9);
-		modelStack.Scale(testMap.getMapSize().x, testMap.getMapSize().y, testMap.getMapSize().z);
-		RenderMesh(testMap.getBackground(), false);
-		modelStack.PopMatrix();
-
-		RenderProps(&testMap);
-	}
+	RenderProps(&testMap);
 
 	if (gameStates == states::s_MapEditor)
 	{
-		if (testMode == true)
+		/*if (testMode == true)
 		{
 			for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 			{
@@ -1592,7 +1607,7 @@ void SceneSP3::Render()
 					RenderGO(go);
 				}
 			}
-		}
+		}*/
 
 		mapEditorRender();
 	}
@@ -1647,82 +1662,6 @@ void SceneSP3::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], ssz.str(), Color(0, 1, 0), 3, 0, 0);
 
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Collision", Color(0, 1, 0), 3, 0, 0);
-	if (gameStates == states::s_Menu)
-	{
-
-		modelStack.PushMatrix();
-		modelStack.Translate(89, 50, -2);
-		modelStack.Scale(90, 50, 0);
-		RenderMesh(meshList[GEO_MENU_BACKGROUND], false);
-		modelStack.PopMatrix();
-
-		modelStack.PushMatrix();
-		modelStack.Translate(140, 15, -1);
-		modelStack.Scale(30, 30, 0);
-		RenderMesh(meshList[GEO_MENU_SIGNBOARD], false);
-		modelStack.PopMatrix();
-
-		if (arrowSelection == 0)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(120, 34, 0);
-			modelStack.Scale(3, 3, 0);
-			RenderMesh(meshList[GEO_MENU_ARROW], false);
-			modelStack.PopMatrix();
-		}
-		if (arrowSelection == 1)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(120, 27, 0);
-			modelStack.Scale(3, 3, 0);
-			RenderMesh(meshList[GEO_MENU_ARROW], false);
-			modelStack.PopMatrix();
-		}
-		if (arrowSelection == 2)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(120, 20, 0);
-			modelStack.Scale(3, 3, 0);
-			RenderMesh(meshList[GEO_MENU_ARROW], false);
-			modelStack.PopMatrix();
-		}
-		if (arrowSelection == 3)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(120, 13, 0);
-			modelStack.Scale(3, 3, 0);
-			RenderMesh(meshList[GEO_MENU_ARROW], false);
-			modelStack.PopMatrix();
-		}
-
-
-		modelStack.PushMatrix();
-		modelStack.Translate(140, 32, 1);
-		modelStack.Scale(30, 20, 0);
-		RenderMesh(meshList[GEO_MENU_STARTGAME], false);
-		modelStack.PopMatrix();
-
-
-		modelStack.PushMatrix();
-		modelStack.Translate(140, 25, 2);
-		modelStack.Scale(30, 20, 0);
-		RenderMesh(meshList[GEO_MENU_OPTIONS], false);
-		modelStack.PopMatrix();
-
-
-		modelStack.PushMatrix();
-		modelStack.Translate(140, 18, 3);
-		modelStack.Scale(30, 20, 0);
-		RenderMesh(meshList[GEO_MENU_HIGHSCORE], false);
-		modelStack.PopMatrix();
-
-
-		modelStack.PushMatrix();
-		modelStack.Translate(140, 11, 4);
-		modelStack.Scale(30, 20, 0);
-		RenderMesh(meshList[GEO_MENU_QUIT], false);
-		modelStack.PopMatrix();
-	}
 }
 
 void SceneSP3::Exit()

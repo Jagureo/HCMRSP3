@@ -9,6 +9,7 @@
 #include "Map.h"
 #include "TextFile.h"
 #include "enemy.h"
+#include "lasso.h"
 
 using std::stoi;
 using std::ifstream;
@@ -80,9 +81,13 @@ public:
 	void Reset();
 
 	void RenderProps(playMap* map);
+
+	void RenderLasso(lasso* lassoPos);
 protected:
 
 	GameObject* player1;
+
+	lasso* Dalasso = newLasso();
 
 	float friction;
 

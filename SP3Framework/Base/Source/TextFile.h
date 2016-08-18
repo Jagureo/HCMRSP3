@@ -16,13 +16,17 @@ public:
 	{
 		ANIMAL,
 		CAR,
-		MAP,
+
 	};
 	void ReadFile(const string FileName);
-	void SaveMapObj(const string FileName);
-	bool RemoveMapObj(const string FileName, float x , float y);
+	void WriteFile(const string FileName);
+
 
 	void SetData(string type,float x, float y, float scale);
+
+	/*void SetTest(float a, float b);
+
+	string GetType();*/
 
 	TextFile(FileType ftype = ANIMAL);
 	~TextFile();

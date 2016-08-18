@@ -18,8 +18,11 @@
 		Vector3 getPos();
 		Vector3 getVel();
 		bool getNewSpawn();
+		bool getCaught();
 		void setNewSpawn(bool input);
+		void setCaught(bool input);
 		void runOff(Vector3 player);
+		void slowDown();
 		void setVel(float x, float y, float z);
 		void setPos(float x, float y, float z);
 		void updatePos(float dt);
@@ -30,6 +33,7 @@
 
 			EN_TOTAL, //must be last
 		};
+		bool caught;
 		Vector3 position;
 		Vector3 vel;
 		bool newSpawn;

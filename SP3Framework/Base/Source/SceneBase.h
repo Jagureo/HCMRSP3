@@ -67,7 +67,6 @@ public:
 		GEO_TREETOP,
 		GEO_ROCK,
 
-
 		GEO_TESTENEMY,
 
 		HUD_MAPEDITOR,
@@ -81,7 +80,7 @@ public:
 		GEO_MENU_OPTIONS,
 		GEO_MENU_HIGHSCORE,
 		GEO_MENU_QUIT,
-
+		
 		NUM_GEOMETRY,
 	};
 public:
