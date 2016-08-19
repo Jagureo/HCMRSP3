@@ -167,6 +167,8 @@ void SceneBase::Init()
 	meshList[GEO_MENU_QUIT] = MeshBuilder::GenerateQuad("menu_quit", Color(1, 1, 1), 2.f);
 	meshList[GEO_MENU_QUIT]->textureID = LoadTGA("Image//menu_Quit.tga");
 
+	meshList[GEO_ROPE] = MeshBuilder::GenerateCube("rope", Color(1, 1, 0), 1.f);
+
 	bLightEnabled = false;
 }
 
