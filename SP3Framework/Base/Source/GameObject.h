@@ -51,6 +51,7 @@ struct GameObject
 	float mass;
 	float ticker;
 	bool fresh;
+	bool radarVisible;
 
 	GameObject(GAMEOBJECT_TYPE typeValue = GO_BALL);
 	~GameObject();

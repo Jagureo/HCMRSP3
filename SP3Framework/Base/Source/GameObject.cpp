@@ -7,7 +7,8 @@ GameObject::GameObject(GAMEOBJECT_TYPE typeValue)
 	active(false),
 	mass(1.f),
 	dead(false),
-	fresh(true)
+	fresh(true),
+	radarVisible(true)
 {
 }
 

@@ -70,13 +70,35 @@ void playMap::addClusterProp(GameObject* newProp, int density)
 	GameObject* cluster = new GameObject(newProp->type);
 	for (int i = 0; i < density; i++)
 	{
-		cluster->pos.Set(newProp->pos.x + Math::RandFloatMinMax(-25.f, 25.f), newProp->pos.y + Math::RandFloatMinMax(-25.f, 25.f), Math::RandFloatMinMax(-1.f, 1.f));
-		cluster->fresh = true;
-		cluster->active = true;
-		mapProps.push_back(cluster);
-		if (i != density - 1)
-			cluster = new GameObject(newProp->type);
-		propCount++;
+		bool posFound = false;
+		for (std::vector<GameObject *>::iterator it = mapProps.begin(); it != mapProps.end(); ++it)
+		{
+			GameObject *go = (GameObject *)*it;
+			if (go->dead == true)
+			{
+				go->pos.Set(newProp->pos.x + Math::RandFloatMinMax(-25.f, 25.f), newProp->pos.y + Math::RandFloatMinMax(-25.f, 25.f), Math::RandFloatMinMax(-1.f, 1.f));
+				go->fresh = true;
+				go->type = newProp->type;
+				go->active = true;
+				go->dead = false;
+				posFound = true;
+				//mapProps.push_back(cluster);
+				if (i != density - 1)
+					cluster = new GameObject(newProp->type);
+				break;
+			}
+		}
+		if (!posFound)
+		{
+			cluster->pos.Set(newProp->pos.x + Math::RandFloatMinMax(-25.f, 25.f), newProp->pos.y + Math::RandFloatMinMax(-25.f, 25.f), Math::RandFloatMinMax(-1.f, 1.f));
+			cluster->fresh = true;
+			cluster->active = true;
+			mapProps.push_back(cluster);
+			propCount++;
+			if (i != density - 1)
+				cluster = new GameObject(newProp->type);
+		}
+		
 	}
 }
 
@@ -109,14 +131,37 @@ void playMap::optimize()
 			{
 				continue;
 			}
-			if ((go->pos - other->pos).LengthSquared() < 5.f)
+			if ((go->pos - other->pos).LengthSquared() < 15.f)
 			{
-				go->active = false;
-				go->dead = true;
-				propCount--;
-				break;
+				go->radarVisible = false;
+				if ((go->pos - other->pos).LengthSquared() < 5.f)
+				{
+					go->active = false;
+					go->dead = true;
+					//propCount--;
+					break;
+				}
 			}
 		}
 		i++;
 	}
+	i = 0;
+	if (mapProps.size() < 2)
+		return;
+	//else
+		//std::cout << mapProps.size() << std::endl;
+	for (std::vector<GameObject *>::iterator it = mapProps.begin() + 1; it != mapProps.end();)
+	{
+		GameObject *go = (GameObject *)*it;
+		if (go->dead == false || go->active == true)
+			++it;
+		else
+		{
+			std::cout << mapProps.size() << std::endl;
+			it = mapProps.erase(it++);
+			propCount--;
+		}
+		i++;
+	}
+	propCount = mapProps.size() - 1;
 }

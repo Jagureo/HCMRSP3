@@ -926,7 +926,7 @@ void SceneSP3::Update(double dt)
 			go->pos = Vector3(go->pos.x + diffx, go->pos.y + diffy, 1);
 		}
 			
-		if ((go->pos - player1->pos).Length() < 10)
+		if ((go->pos - player1->pos).LengthSquared() < 100)
 		{
 			if (go->active == false)
 				continue;
@@ -1204,7 +1204,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 			}
 			if (deleteMode == 3)
 			{
-				for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
+				for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end();)
 				{
 					GameObject *go = (GameObject *)*it;
 					if (go->pos.x > newMouseX && go->pos.x < worldX)
@@ -1603,7 +1603,9 @@ void SceneSP3::renderMinimap(playMap* map)
 			continue;
 		if (go->dead == true)
 			continue;
-		if ((go->pos - player1->pos).Length() < 120)
+		if (go->radarVisible == false)
+			continue;
+		if ((go->pos - player1->pos).LengthSquared() < 14400)
 		{
 			int i = Math::RadianToDegree(atan2(go->pos.y - player1->pos.y, go->pos.x - player1->pos.x));
 			if (i < 0)
@@ -1623,7 +1625,7 @@ void SceneSP3::renderMinimap(playMap* map)
 				modelStack.PushMatrix();
 				modelStack.Translate((go->pos.x - player1->pos.x) / 15, (go->pos.y - player1->pos.y) / 15, 1);
 				modelStack.Translate(15, 10, 8);
-				modelStack.Scale(0.4f, 0.4f, 1);
+				modelStack.Scale(0.5f, 0.5f, 1);
 				RenderMesh(meshList[HUD_RADARDETECT], false);
 				modelStack.PopMatrix();
 			}
