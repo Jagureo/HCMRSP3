@@ -55,6 +55,9 @@ void SceneSP3::Init()
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP]);
 	testMap.setMapSize(20, 20);
+
+	//gameStates = states::s_Upgrade_Cars;
+	gameStates = states::s_Menu;
 }
 
 void SceneSP3::Reset()
@@ -434,7 +437,7 @@ void SceneSP3::CollisionMap(GameObject *go, GameObject *other, double dt)
 	case GameObject::MAP_ROCK:
 	{
 		float distanceSquared = ((go->pos + go->vel * dt) - (other->pos - other->vel * dt)).LengthSquared();
-		float combinedRadiusSquared = (go->scale.x / 3 + other->scale.x) * (go->scale.x / 3 + other->scale.x);
+		float combinedRadiusSquared = (go->scale.x / 17 + other->scale.x) * (go->scale.x / 17 + other->scale.x);
 		Vector3 relativeDisplacement = other->pos - go->pos;
 		if (distanceSquared < combinedRadiusSquared && go->vel.Dot(relativeDisplacement) > 0)
 		{
@@ -504,6 +507,8 @@ void SceneSP3::playerControl()
 				player1->rotationAngle += player1->playerCar.turnSpeed;
 		}
 		player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
+	
+		player1->vel += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, 0);
 	}
 	if (Application::IsKeyPressed('A'))
 	{
@@ -516,6 +521,8 @@ void SceneSP3::playerControl()
 				player1->rotationAngle -= player1->playerCar.turnSpeed;
 		}
 		player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
+	
+		player1->vel += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, 0);
 	}
 	if (player1->vel.Length() < player1->playerCar.topSpeed)
 	{
@@ -593,6 +600,7 @@ void SceneSP3::Update(double dt)
 
 		GameObject* testRock = new GameObject(GameObject::MAP_ROCK);
 		testRock->pos.Set(-25, 25, 1);
+		testRock->scale.Set(6, 6, 6);
 		testRock->fresh = true;
 		testRock->active = true;
 		testMap.addClusterProp(testRock);
@@ -601,6 +609,11 @@ void SceneSP3::Update(double dt)
 	{
 		player1->vel.SetZero();
 		gameStates = states::s_MapEditor;
+	}
+	if (Application::IsKeyPressed('Y'))
+	{
+		player1->vel.SetZero();
+		//gameStates = states::s_MapEditor;
 	}
 
 	if (Application::IsKeyPressed('9'))
@@ -683,95 +696,238 @@ void SceneSP3::Update(double dt)
 
 	//Mouse Section
 	static bool bLButtonState = false;
-	//if (!bLButtonState && Application::IsMousePressed(0))
-	//{
-	//	bLButtonState = true;
-	//	std::cout << "LBUTTON DOWN" << std::endl;
-	//	double x, y;
-	//	Application::GetCursorPos(&x, &y);
-	//	int w = Application::GetWindowWidth();
-	//	int h = Application::GetWindowHeight();
-	//	float worldX = x * m_worldWidth / w;
-	//	float worldY = (h - y) * m_worldHeight / h;
-	//	m_ghost->pos.Set(worldX, worldY, 0);
-	//	m_ghost->active = true;
-	//}
-	//else if (bLButtonState && !Application::IsMousePressed(0))
-	//{
-	//	bLButtonState = false;
-	//	std::cout << "LBUTTON UP" << std::endl;
+	if (!bLButtonState && Application::IsMousePressed(0))
+	{
+		bLButtonState = true;
+		std::cout << "LBUTTON DOWN" << std::endl;
+		double x, y;
+		Application::GetCursorPos(&x, &y);
+		int w = Application::GetWindowWidth();
+		int h = Application::GetWindowHeight();
+		float worldX = x * m_worldWidth / w;
+		float worldY = (h - y) * m_worldHeight / h;
+		m_ghost->pos.Set(worldX, worldY, 0);
+		m_ghost->active = true;
+	}
+	if (bLButtonState && !Application::IsMousePressed(0))
+	{
+		bLButtonState = false;
+		std::cout << "LBUTTON UP" << std::endl;
 
-	//	//Exercise 6: spawn small GO_BALL
-	//	double x, y;
-	//	Application::GetCursorPos(&x, &y);
-	//	int w = Application::GetWindowWidth();
-	//	int h = Application::GetWindowHeight();
-	//	float worldX = x * m_worldWidth / w;
-	//	float worldY = (h - y) * m_worldHeight / h;
-	//	m_ghost->active = false;
+		//Exercise 6: spawn small GO_BALL
+		double x, y;
+		Application::GetCursorPos(&x, &y);
+		int w = Application::GetWindowWidth();
+		int h = Application::GetWindowHeight();
+		float worldX = x * m_worldWidth / w;
+		float worldY = (h - y) * m_worldHeight / h;
+		m_ghost->active = false;
 
-	//	GameObject* ball = FetchGO();
-	//	ball->type = GameObject::GO_BALL;
-	//	Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
-	//	float radius = Math::Clamp(size.Length(), 1.f, 1.f);
-	//	ball->scale.Set(radius, radius, radius);
-	//	ball->pos = m_ghost->pos;
-	//	ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
-	//	ball->mass = radius;
-	//	ball->ballrotated = 0;
-	//	m_ghost->active = false;
+		//GameObject* ball = FetchGO();
+		//ball->type = GameObject::GO_BALL;
+		//Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
+		//float radius = Math::Clamp(size.Length(), 1.f, 1.f);
+		//ball->scale.Set(radius, radius, radius);
+		//ball->pos = m_ghost->pos;
+		////ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
+		//ball->mass = radius;
+		//ball->ballrotated = 0;
+		//m_ghost->active = false;
+		//TextFile* hi = new TextFile(TextFile::MAP);
+		//hi->SetData("ball", ball->pos.x, ball->pos.y, ball->scale.x);
+		//hi->SaveMapObj("test.txt");
+		//m_estimatedTime = -1;
+		if (gameStates == states::s_Upgrade)
+		{
+			if (worldX > 0.0f * m_worldWidth && worldX < 0.33073f * m_worldWidth)
+			{
+				if (worldY > 68.472f && worldY < 76.111f)
+				{
+					gameStates = states::s_Upgrade_Cars;
+				}
+				if (worldY > 56.111f && worldY < 63.75f)
+				{
+					gameStates = states::s_Upgrade_Tires;
+				}
+				if (worldY > 43.333f && worldY < 50.833f)
+				{
+					gameStates = states::s_Upgrade_Lasso;
+				}
+				if (worldY > 30.694f && worldY < 38.333f)
+				{
+					gameStates = states::s_Upgrade_Darts;
+				}
+			}
+		}
+		else if (gameStates == states::s_Menu)
+		{
+			if (worldX > 0.656f * m_worldWidth && worldX < 0.88047f * m_worldWidth)
+			{
+				if (worldY > 36.111 && worldY < 39.444f)
+				{
+					gameStates = states::s_LevelSelect;
+				}
+				if (worldY > 29.2f && worldY <  32.35f)
+				{
+					gameStates = states::s_Instructions;
+				}
+				if (worldY > 22 && worldY < 25.27f)
+				{
+					gameStates = states::s_Options;
+				}
+				if (worldY > 15.438f && worldY < 18.6f)
+				{
+					gameStates = states::s_Highscore;
+				}
+				if (worldY > 8 && worldY < 11.406f)
+				{
+					exit(0);
+				}
+			}
+		}
+		else if (gameStates == states::s_Instructions)
+		{
+			if (worldX > 0.035f * m_worldWidth && worldX < 0.14141f * m_worldWidth)
+			{
+				if (worldY > 3.0 && worldY < 9.0f)
+				{
+					gameStates = states::s_Menu;
+				}
+			}
+		}
+		else if (gameStates == states::s_LevelSelect)
+		{
+			if (worldX > 0.78854f * m_worldWidth && worldX < 0.99219f * m_worldWidth)
+			{
+				if (worldY > 1 && worldY < 11.6f)
+				{
+					gameStates = states::s_CustomLevelSelect;
+				}
+			}
+			if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
+			{
+				if (worldY > 1 && worldY < 11.6f)
+				{
+					gameStates = states::s_Menu;
+				}
+			}
+		}
+		else if (gameStates == states::s_CustomLevelSelect)
+		{
+			if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
+			{
+				if (worldY > 1 && worldY < 11.6f)
+				{
+					gameStates = states::s_LevelSelect;
+				}
+			}
 
-	//	m_estimatedTime = -1;
-	//}
-	//static bool bRButtonState = false;
-	//if (!bRButtonState && Application::IsMousePressed(1))
-	//{
-	//	bRButtonState = truecout
-	//	std::cout << "RBUTTON DOWN" << std::endl;
-	//	double x, y;
-	//	Application::GetCursorPos(&x, &y);
-	//	int w = Application::GetWindowWidth();
-	//	int h = Application::GetWindowHeight();
-	//	float worldX = x * m_worldWidth / w;
-	//	float worldY = (h - y) * m_worldHeight / h;
-	//	m_ghost->pos.Set(worldX, worldY, 0);
-	//}
-	//else if (bRButtonState && !Application::IsMousePressed(1))
-	//{
-	//	bRButtonState = false;
-	//	std::cout << "RBUTTON UP" << std::endl;
+		}
+	}
+	static bool pressedBack = false;
+	if (gameStates == states::s_CustomLevelSelect)
+	{
+		if (Application::IsKeyPressed(VK_BACK) && pressedBack == false)
+		{
+			pressedBack = true;
+			gameStates = states::s_LevelSelect;
+		}
+		else if (!Application::IsKeyPressed(VK_BACK) && pressedBack == true)
+		{
+			pressedBack = false;
+		}
+	}
+	if (gameStates == states::s_LevelSelect)
+	{
+		if (Application::IsKeyPressed(VK_BACK) && pressedBack == false)
+		{
+			pressedBack = true;
+			gameStates = states::s_Menu;
+		}
+		else if (!Application::IsKeyPressed(VK_BACK) && pressedBack == true)
+		{
+			pressedBack = false;
+		}
+	}
+	if (gameStates == states::s_Menu)
+	{
+		static bool arrowkeyUp = false;
+		static bool arrowkeyDown = false;
 
-	//	//Exercise 10: spawn large GO_BALL
-	//	double x, y;
-	//	Application::GetCursorPos(&x, &y);
-	//	int w = Application::GetWindowWidth();
-	//	int h = Application::GetWindowHeight();
-	//	float worldX = x * m_worldWidth / w;
-	//	float worldY = (h - y) * m_worldHeight / h;
+		if (arrowSelection > 0)
+		{
+			if (Application::IsKeyPressed(VK_UP) && arrowkeyUp == false)
+			{
+				arrowkeyUp = true;
+				arrowSelection--;
+			}
+			else if (!Application::IsKeyPressed(VK_UP) && arrowkeyUp == true)
+				arrowkeyUp = false;
+		}
+		else if (arrowSelection == 0)
+		{
+			if (Application::IsKeyPressed(VK_UP) && arrowkeyUp == false)
+			{
+				arrowkeyUp = true;
+				arrowSelection = 4;
+			}
+			else if (!Application::IsKeyPressed(VK_UP) && arrowkeyUp == true)
+				arrowkeyUp = false;
 
-	//	GameObject* ball = FetchGO();
-	//	ball->type = GameObject::GO_BALL;
-	//	ball->scale.Set(3.5f, 3.5f, 3.5f);
-	//	ball->pos = m_ghost->pos;
-	//	ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
-	//	ball->mass = 1.5f * 1.5f * 1.5f;
-	//	ball->ballrotated = 0;
-	//	m_ghost->active = false;
-	//}
+		}
 
-	//if (m_ghost->active)
-	//{
-	//	double x, y;
-	//	Application::GetCursorPos(&x, &y);
-	//	int w = Application::GetWindowWidth();
-	//	int h = Application::GetWindowHeight();
-	//	float worldX = x * m_worldWidth / w;
-	//	float worldY = (h - y) * m_worldHeight / h;
-	//	Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
-	//	float radius = Math::Clamp(size.Length(), 0.1f, 1.f);
-	//	m_ghost->scale.Set(radius, radius, 1.0f);
-	//}
-
+		if (arrowSelection < 4)
+		{
+			if (Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == false)
+			{
+				arrowkeyDown = true;
+				arrowSelection++;
+			}
+			else if (!Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == true)
+				arrowkeyDown = false;
+		}
+		else if (arrowSelection == 4)
+		{
+			if (Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == false)
+			{
+				arrowkeyDown = true;
+				arrowSelection = 0;
+			}
+			else if (!Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == true)
+				arrowkeyDown = false;
+		}
+		if (Application::IsKeyPressed(VK_RETURN))
+		{
+			switch (arrowSelection)
+			{
+			case 0:
+			{
+					  gameStates = states::s_LevelSelect;
+					  break;
+			}
+			case 1:
+			{
+					  gameStates = states::s_Instructions;
+					  break;
+			}
+			case 2:
+			{
+					  gameStates = states::s_Options;
+					  break;
+			}
+			case 3:
+			{
+					  gameStates = states::s_Highscore;
+					  break;
+			}
+			case 4:
+			{
+					  exit(0);
+					  break;
+			}
+			}
+		}
+	}
 	//Physics Simulation Section
 
 	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
@@ -934,71 +1090,72 @@ void SceneSP3::Update(double dt)
  		}
 	}
 
-	for (std::vector<enemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
-	{
-		enemy *go = (enemy *)*it;
-		if (go->getActive() == 1)
-		{
-
-			if (go->getNewSpawn() == 1)
-			{
-				go->setPos(go->getPos().x + mapPosition.x, go->getPos().y + mapPosition.y, 2);
-				go->setNewSpawn(false);
-			}
-			else
-			{
-				go->setPos(go->getPos().x + diffx, go->getPos().y + diffy, 2);
-			}
-			if ((go->getPos() - player1->pos).LengthSquared() < 2000 || go->getCaught() == 1)
-			{
-				go->runOff(player1->pos);
-			}
-			else
-			{
-				go->slowDown();
-			}
-			//std::cout << go->getPos() << std::endl;
-			go->updatePos(dt);
-			if (Dalasso->checkCaught(player1->pos, go->getPos(), 5) == 1 || go->getCaught() == 1)
-			{
-				go->setCaught(1);
-				if (Dalasso->caughtUpdate(player1->pos, go->getPos(), go->getActive()) == 1)
-				{
-					go->setCaught(0);
-					if (go->active == 0)
-					{
-						points++;
-						std::cout << "ANIMAL CAUGHT" << std::endl;
-					}
-				}
-				//std::cout << "hi" << std::endl;
-			}
-			
-		}
-		
-	}
-	Dalasso->updateLasso(player1->pos, dt);
-	
-	if (!bLButtonState && Application::IsMousePressed(0) && Dalasso->getLassoState() == 0 && gameStates != states::s_MapEditor)
-	{
-		bLButtonState = true;
-		std::cout << "LBUTTON DOWN" << std::endl;
-		double x, y;
-		Application::GetCursorPos(&x, &y);
-		int w = Application::GetWindowWidth();
-		int h = Application::GetWindowHeight();
-		float worldX = x * m_worldWidth / w;
-		float worldY = (h - y) * m_worldHeight / h;
-		//m_ghost->pos.Set(worldX, worldY, 0);
-		//m_ghost->active = true;
-		Dalasso->throwLasso(player1->pos, Vector3(worldX, worldY, 0));
-		
-	}
-	else
-	{
-		bLButtonState = false;
-	}
-	std::cout << Dalasso->getLassoState() << std::endl;
+	//for (std::vector<enemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+	//{
+	//	enemy *go = (enemy *)*it;
+	//	if (go->getActive() == 1)
+	//	{
+	//
+	//		if (go->getNewSpawn() == 1)
+	//		{
+	//			go->setPos(go->getPos().x + mapPosition.x, go->getPos().y + mapPosition.y, 2);
+	//			go->setNewSpawn(false);
+	//		}
+	//		else
+	//		{
+	//			go->setPos(go->getPos().x + diffx, go->getPos().y + diffy, 2);
+	//		}
+	//		if ((go->getPos() - player1->pos).LengthSquared() < 2000 || go->getCaught() == 1)
+	//		{
+	//			go->runOff(player1->pos);
+	//		}
+	//		else
+	//		{
+	//			go->slowDown();
+	//		}
+	//		//std::cout << go->getPos() << std::endl;
+	//		go->updatePos(dt);
+	//		if (Dalasso->checkCaught(player1->pos, go->getPos(), 5) == 1 || go->getCaught() == 1)
+	//		{
+	//			go->setCaught(1);
+	//			if (Dalasso->caughtUpdate(player1->pos, go->getPos(), go->getActive()) == 1)
+	//			{
+	//				go->setCaught(0);
+	//				if (go->active == 0)
+	//				{
+	//					points++;
+	//					std::cout << "ANIMAL CAUGHT" << std::endl;
+	//				}
+	//			}
+	//			//std::cout << "hi" << std::endl;
+	//		}
+	//		
+	//	}
+	//	
+	//}
+	//Dalasso->updateLasso(player1->pos, dt);
+	//
+	//if (!bLButtonState && Application::IsMousePressed(0) && Dalasso->getLassoState() == 0 && gameStates != states::s_MapEditor)
+	//{
+	//	bLButtonState = true;
+	//	std::cout << "LBUTTON DOWN" << std::endl;
+	//	double x, y;
+	//	Application::GetCursorPos(&x, &y);
+	//	int w = Application::GetWindowWidth();
+	//	int h = Application::GetWindowHeight();
+	//	float worldX = x * m_worldWidth / w;
+	//	float worldY = (h - y) * m_worldHeight / h;
+	//	//m_ghost->pos.Set(worldX, worldY, 0);
+	//	//m_ghost->active = true;
+	//	Dalasso->throwLasso(player1->pos, Vector3(worldX, worldY, 0));
+	//	cout << " LASSO THROWN MADAFAKA " << endl;
+	//	
+	//}
+	//else
+	//{
+	//	bLButtonState = false;
+	//}
+	//std::cout << Dalasso->getLassoState() << std::endl;
 
 }
 
@@ -1008,6 +1165,8 @@ void SceneSP3::mapEditorUpdate(double dt)
 {
 	static bool editName = false;
 	static bool firstDrag = false;
+
+	static bool bRButtonState = false;
 	if (testMode == false)
 	{
 		if (editName == true && nameType == false)
@@ -1052,6 +1211,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 			}
 		}
 		static bool bLButtonState = false;
+		static bool multipleSpawn = false;
 		if (dragObj == true)
 		{
 			double x, y;
@@ -1083,6 +1243,26 @@ void SceneSP3::mapEditorUpdate(double dt)
 				{
 					go->pos.y -= (int)(go->pos.y - mapPosition.y) % 10;
 				}
+			}
+
+			if (!bRButtonState && Application::IsMousePressed(1) && multipleSpawn == false)
+			{
+				bRButtonState = true;
+				std::cout << "RBUTTON DOWN NEW" << std::endl;
+				multipleSpawn = true;
+
+				GameObject* multi = new GameObject(go->type);
+				multi->pos.Set(go->pos.x, go->pos.y, 1);
+				multi->fresh = true;
+				multi->active = true;
+				multi->scale = go->scale;
+				testMap.forceAddSingleProp(multi);
+			}
+			else if (bRButtonState && !Application::IsMousePressed(1) && multipleSpawn == true)
+			{
+				bRButtonState = false;
+				std::cout << "RBUTTON UP" << std::endl;
+				multipleSpawn = false;
 			}
 		}
 		else if (!bLButtonState && Application::IsMousePressed(0))
@@ -1122,6 +1302,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 						dragObj = true;
 						GameObject* testWater = new GameObject(GameObject::MAP_ROCK);
 						testWater->pos.Set(worldX, worldY, 1);
+						testWater->scale.Set(6, 6, 6);
 						testWater->fresh = true;
 						testWater->active = true;
 						testMap.forceAddSingleProp(testWater);
@@ -1191,6 +1372,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 							newItem->pos.Set(worldX, worldY, 1);
 							newItem->fresh = true;
 							newItem->active = true;
+							newItem->scale = go->scale;
 							testMap.forceAddSingleProp(newItem);
 							break;
 						}
@@ -1243,7 +1425,6 @@ void SceneSP3::mapEditorUpdate(double dt)
 				deleteMode = 0;
 			}
 		}
-		static bool bRButtonState = false;
 
 		if (!bLButtonState && Application::IsMousePressed(1))
 		{
@@ -1383,7 +1564,7 @@ void SceneSP3::RenderGO(GameObject *go)
 		modelStack.Rotate(90, 1, 0, 0);
 		modelStack.Scale(go->scale.x / 10, go->scale.y / 5, go->scale.z / 2);
 		modelStack.Scale(2, 2.5, 3.5);
-		RenderMesh(meshList[GEO_JEEP], false);
+		RenderMesh(meshList[GEO_DISPLAY_CAR1], false);
 		modelStack.PopMatrix();
 		
 		break;
@@ -1461,8 +1642,18 @@ void SceneSP3::RenderProps(playMap* map)
 		{
 			glEnable(GL_DEPTH_TEST);
 			modelStack.PushMatrix();
+			if (player1->pos.y > go->pos.y)
+			{
+				go->pos.z = player1->pos.z + 5;
+				cout << "ABOVE";
+			}
+			else
+			{
+				go->pos.z = player1->pos.z - 5;
+				cout << "BELOW";
+			}
 			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z - 2);
-			modelStack.Scale(go->scale.x * 3, go->scale.y * 3, go->scale.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
 			RenderMesh(meshList[GEO_ROCK], true);
 			modelStack.PopMatrix();
 			glDisable(GL_DEPTH_TEST);
@@ -1521,7 +1712,7 @@ void SceneSP3::mapEditorRender()
 			posy -= (int)(posy - mapPosition.y) % 10;
 		}
 		modelStack.PushMatrix();
-		modelStack.Translate(posx, posy, -1);
+		modelStack.Translate(posx, posy, -6);
 		modelStack.Scale(55, 55, 1);
 		RenderMesh(meshList[HUD_GRIDLOCK], false);
 		modelStack.PopMatrix();
@@ -1549,7 +1740,7 @@ void SceneSP3::mapEditorRender()
 			glEnable(GL_DEPTH_TEST);
 			modelStack.PushMatrix();
 			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z - 2);
-			modelStack.Scale(go->scale.x * 3, go->scale.y * 3, go->scale.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
 			RenderMesh(meshList[GEO_ROCK], true);
 			modelStack.PopMatrix();
 			glDisable(GL_DEPTH_TEST);
@@ -1670,6 +1861,157 @@ void SceneSP3::renderSelection(float x1, float y1)
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
+void SceneSP3::renderMenu()
+{
+	if (gameStates == states::s_Menu)
+	{
+
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -3);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 0);
+		RenderMesh(meshList[GEO_MENU_BACKGROUND], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(140, 15, -2);
+		modelStack.Scale(33, 33, 0);
+		RenderMesh(meshList[GEO_MENU_SIGNBOARD], false);
+		modelStack.PopMatrix();
+
+		cout << "MENU " << endl;
+		modelStack.PushMatrix();
+		modelStack.Translate(118, 38 - (arrowSelection * 7), -1);
+		modelStack.Scale(3, 3, 0);
+		RenderMesh(meshList[GEO_MENU_ARROW], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(140, 36, 0);
+		modelStack.Scale(30, 20, 0);
+		RenderMesh(meshList[GEO_MENU_STARTGAME], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(140, 29, 1);
+		modelStack.Scale(30, 20, 0);
+		RenderMesh(meshList[GEO_MENU_INSTRUCTIONS], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(140, 22, 2);
+		modelStack.Scale(30, 20, 0);
+		RenderMesh(meshList[GEO_MENU_OPTIONS], false);
+		modelStack.PopMatrix();
+
+
+		modelStack.PushMatrix();
+		modelStack.Translate(140, 15, 3);
+		modelStack.Scale(30, 20, 0);
+		RenderMesh(meshList[GEO_MENU_HIGHSCORE], false);
+		modelStack.PopMatrix();
+
+
+		modelStack.PushMatrix();
+		modelStack.Translate(140, 8, 4);
+		modelStack.Scale(30, 20, 0);
+		RenderMesh(meshList[GEO_MENU_QUIT], false);
+		modelStack.PopMatrix();
+	}
+	if (gameStates == states::s_LevelSelect)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -3);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 0);
+		RenderMesh(meshList[GEO_LEVELSELECT], false);
+		modelStack.PopMatrix();
+
+	}
+	if (gameStates == states::s_CustomLevelSelect)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -3);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 0);
+		RenderMesh(meshList[GEO_LEVELSELECT_CUSTOM], false);
+		modelStack.PopMatrix();
+
+	}
+	if (gameStates == states::s_Instructions)
+	{
+		modelStack.PushMatrix();
+		//modelStack.Translate(140, 58, 4);
+		//modelStack.Scale(50, 20, 0);
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[GEO_MENU_INSTRUCTIONS_PAGE], false);
+		modelStack.PopMatrix();
+
+		if (Application::IsKeyPressed(VK_BACK))
+		{
+			gameStates = states::s_Menu;
+		}
+	}
+	if (gameStates == states::s_Upgrade)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[GEO_UPGRADE_BACKGROUND], false);
+		modelStack.PopMatrix();
+	}
+	if (gameStates == states::s_Upgrade_Cars)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -7);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[GEO_UPGRADE_UI_CARS], false);
+		modelStack.PopMatrix();
+
+		if (Application::IsKeyPressed(VK_BACK))
+		{
+			gameStates = states::s_Upgrade;
+		}
+	}
+	if (gameStates == states::s_Upgrade_Tires)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -5);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[GEO_UPGRADE_UI_TIRES], false);
+		modelStack.PopMatrix();
+
+		if (Application::IsKeyPressed(VK_BACK))
+		{
+			gameStates = states::s_Upgrade;
+		}
+	}
+	if (gameStates == states::s_Upgrade_Lasso)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -5);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[GEO_UPGRADE_UI_LASSO], false);
+		modelStack.PopMatrix();
+
+		if (Application::IsKeyPressed(VK_BACK))
+		{
+			gameStates = states::s_Upgrade;
+		}
+	}
+	if (gameStates == states::s_Upgrade_Darts)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -5);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[GEO_UPGRADE_UI_DARTS], false);
+		modelStack.PopMatrix();
+
+		if (Application::IsKeyPressed(VK_BACK))
+		{
+			gameStates = states::s_Upgrade;
+		}
+	}
+}
+
 void SceneSP3::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1713,14 +2055,14 @@ void SceneSP3::Render()
 	}
 
 	RenderLasso(Dalasso);
-	if (m_ghost->active)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(m_ghost->pos.x, m_ghost->pos.y, m_ghost->pos.z);
-		modelStack.Scale(m_ghost->scale.x, m_ghost->scale.y, m_ghost->scale.z);
-		RenderMesh(meshList[GEO_BALL], false);
-		modelStack.PopMatrix();
-	}
+	//if (m_ghost->active)
+	//{
+	//	modelStack.PushMatrix();
+	//	modelStack.Translate(m_ghost->pos.x, m_ghost->pos.y, m_ghost->pos.z);
+	//	modelStack.Scale(m_ghost->scale.x, m_ghost->scale.y, m_ghost->scale.z);
+	//	RenderMesh(meshList[GEO_BALL], false);
+	//	modelStack.PopMatrix();
+	//}
 
 	modelStack.PushMatrix();
 	modelStack.Translate(mapPosition.x, mapPosition.y, mapPosition.z - 9);
@@ -1728,7 +2070,11 @@ void SceneSP3::Render()
 	RenderMesh(testMap.getBackground(), false);
 	modelStack.PopMatrix();
 
-	RenderProps(&testMap);
+	if (gameStates != states::s_MapEditor)
+	{
+		renderMenu();
+	}
+	//RenderProps(&testMap);
 
 	if (gameStates == states::s_MapEditor)
 	{

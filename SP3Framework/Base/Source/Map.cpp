@@ -79,6 +79,7 @@ void playMap::addClusterProp(GameObject* newProp, int density)
 				go->pos.Set(newProp->pos.x + Math::RandFloatMinMax(-25.f, 25.f), newProp->pos.y + Math::RandFloatMinMax(-25.f, 25.f), Math::RandFloatMinMax(-1.f, 1.f));
 				go->fresh = true;
 				go->type = newProp->type;
+				go->scale = newProp->scale;
 				go->active = true;
 				go->dead = false;
 				posFound = true;
@@ -92,6 +93,7 @@ void playMap::addClusterProp(GameObject* newProp, int density)
 		{
 			cluster->pos.Set(newProp->pos.x + Math::RandFloatMinMax(-25.f, 25.f), newProp->pos.y + Math::RandFloatMinMax(-25.f, 25.f), Math::RandFloatMinMax(-1.f, 1.f));
 			cluster->fresh = true;
+			cluster->scale = newProp->scale;
 			cluster->active = true;
 			mapProps.push_back(cluster);
 			propCount++;

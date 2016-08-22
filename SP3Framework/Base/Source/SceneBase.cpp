@@ -137,8 +137,8 @@ void SceneBase::Init()
 	meshList[GEO_TREETOP]->textureID = LoadTGA("Image//treetop.tga");
 	meshList[GEO_ROCK] = MeshBuilder::GenerateQuad("rock", Color(1, 1, 1), 1.f);
 	meshList[GEO_ROCK]->textureID = LoadTGA("Image//rock.tga");
-	meshList[GEO_JEEP] = MeshBuilder::GenerateOBJ("GEO_JEEP", "Object//jurrassiccar.obj");
-	meshList[GEO_JEEP]->textureID = LoadTGA("Image//jeep.tga");
+	//meshList[GEO_JEEP] = MeshBuilder::GenerateOBJ("GEO_JEEP", "Object//jurrassiccar.obj");
+	//meshList[GEO_JEEP]->textureID = LoadTGA("Image//jeep.tga");
 	meshList[HUD_MAPEDITOR] = MeshBuilder::GenerateQuad("gui", Color(1, 1, 1), 1.f);
 	meshList[HUD_MAPEDITOR]->textureID = LoadTGA("Image//editorui.tga");
 	meshList[HUD_DELETEICON] = MeshBuilder::GenerateQuad("del", Color(1, 1, 1), 1.f);
@@ -154,7 +154,7 @@ void SceneBase::Init()
 
 	meshList[GEO_TESTENEMY] = MeshBuilder::GenerateSphere("enemy", Color(255, 144, 0), 10, 10, 1.f);
 
-	meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("Intro", Color(1, 1, 1), 2.f);
+	meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("Intro", Color(1, 1, 1), 1.f);
 	meshList[GEO_MENU_BACKGROUND]->textureID = LoadTGA("Image//IntroScreen.tga");
 	meshList[GEO_MENU_SIGNBOARD] = MeshBuilder::GenerateQuad("signboard", Color(1, 1, 1), 2.f);
 	meshList[GEO_MENU_SIGNBOARD]->textureID = LoadTGA("Image//noticeboard.tga");
@@ -162,12 +162,36 @@ void SceneBase::Init()
 	meshList[GEO_MENU_ARROW]->textureID = LoadTGA("Image//arrow.tga");
 	meshList[GEO_MENU_STARTGAME] = MeshBuilder::GenerateQuad("menu_startgame", Color(1, 1, 1), 2.f);
 	meshList[GEO_MENU_STARTGAME]->textureID = LoadTGA("Image//menu_StartGame.tga");
+	meshList[GEO_MENU_INSTRUCTIONS] = MeshBuilder::GenerateQuad("menu_instructions", Color(1, 1, 1), 2.f);
+	meshList[GEO_MENU_INSTRUCTIONS]->textureID = LoadTGA("Image//menu_Instructions.tga");
+	meshList[GEO_MENU_INSTRUCTIONS_PAGE] = MeshBuilder::GenerateQuad("menu_instructions_page", Color(1, 1, 1), 1.f);
+	meshList[GEO_MENU_INSTRUCTIONS_PAGE]->textureID = LoadTGA("Image//menu_Instructions_page.tga");
 	meshList[GEO_MENU_OPTIONS] = MeshBuilder::GenerateQuad("menu_options", Color(1, 1, 1), 2.f);
 	meshList[GEO_MENU_OPTIONS]->textureID = LoadTGA("Image//menu_Options.tga");
 	meshList[GEO_MENU_HIGHSCORE] = MeshBuilder::GenerateQuad("menu_highscore", Color(1, 1, 1), 2.f);
 	meshList[GEO_MENU_HIGHSCORE]->textureID = LoadTGA("Image//menu_Highscore.tga");
 	meshList[GEO_MENU_QUIT] = MeshBuilder::GenerateQuad("menu_quit", Color(1, 1, 1), 2.f);
 	meshList[GEO_MENU_QUIT]->textureID = LoadTGA("Image//menu_Quit.tga");
+
+	meshList[GEO_UPGRADE_BACKGROUND] = MeshBuilder::GenerateQuad("upgrade_background", Color(1, 1, 1), 1.f);
+	meshList[GEO_UPGRADE_BACKGROUND]->textureID = LoadTGA("Image//UpgradeScene.tga");
+	meshList[GEO_UPGRADE_UI_CARS] = MeshBuilder::GenerateQuad("upgrade_ui_cars", Color(1, 1, 1), 1.f);
+	meshList[GEO_UPGRADE_UI_CARS]->textureID = LoadTGA("Image//Upgrade_Cars.tga");
+	meshList[GEO_UPGRADE_UI_TIRES] = MeshBuilder::GenerateQuad("upgrade_ui_tires", Color(1, 1, 1), 1.f);
+	meshList[GEO_UPGRADE_UI_TIRES]->textureID = LoadTGA("Image//Upgrade_Tires.tga");
+	meshList[GEO_UPGRADE_UI_LASSO] = MeshBuilder::GenerateQuad("upgrade_ui_lasso", Color(1, 1, 1), 1.f);
+	meshList[GEO_UPGRADE_UI_LASSO]->textureID = LoadTGA("Image//Upgrade_Lasso.tga");
+	meshList[GEO_UPGRADE_UI_DARTS] = MeshBuilder::GenerateQuad("upgrade_ui_darts", Color(1, 1, 1), 1.f);
+	meshList[GEO_UPGRADE_UI_DARTS]->textureID = LoadTGA("Image//Upgrade_Darts.tga");
+
+	meshList[GEO_LEVELSELECT] = MeshBuilder::GenerateQuad("levelselect", Color(1, 1, 1), 1.f);
+	meshList[GEO_LEVELSELECT]->textureID = LoadTGA("Image//LevelSelection.tga");
+	meshList[GEO_LEVELSELECT_CUSTOM] = MeshBuilder::GenerateQuad("customlevelselect", Color(1, 1, 1), 1.f);
+	meshList[GEO_LEVELSELECT_CUSTOM]->textureID = LoadTGA("Image//CustomLevelSelection.tga");
+
+
+	meshList[GEO_DISPLAY_CAR1] = MeshBuilder::GenerateOBJ("display_car1", "Object//jurrassiccar.obj");
+	meshList[GEO_DISPLAY_CAR1]->textureID = LoadTGA("Image//jeep.tga");
 
 	meshList[GEO_ROPE] = MeshBuilder::GenerateCube("rope", Color(1, 1, 0), 1.f);
 

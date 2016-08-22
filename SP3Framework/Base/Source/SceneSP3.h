@@ -14,20 +14,20 @@
 using std::stoi;
 using std::ifstream;
 
-enum class states
-{
-	s_Menu,
-	s_Instructions,
-	s_MapEditor,
-	s_Options,
-	s_Tutorial,
-	s_Level2,
-	s_Level3,
-	s_LevelBoss,
-	s_Win,
-	s_Lose,
-	s_Highscore,
-};
+//enum class states
+//{
+//	s_Menu,
+//	s_Instructions,
+//	s_MapEditor,
+//	s_Options,
+//	s_Tutorial,
+//	s_Level2,
+//	s_Level3,
+//	s_LevelBoss,
+//	s_Win,
+//	s_Lose,
+//	s_Highscore,
+//};
 class SceneSP3 : public SceneBase
 {
 	enum class states
@@ -36,6 +36,13 @@ class SceneSP3 : public SceneBase
 		s_Instructions,
 		s_MapEditor,
 		s_Options,
+		s_LevelSelect,
+		s_CustomLevelSelect,
+		s_Upgrade,
+		s_Upgrade_Cars,
+		s_Upgrade_Tires,
+		s_Upgrade_Lasso,
+		s_Upgrade_Darts,
 		s_Tutorial,
 		s_Level2,
 		s_Level3,
@@ -78,6 +85,7 @@ public:
 	void mapEditorRender();
 	void renderSelection(float x1, float y1);
 	void renderMinimap(playMap* map);
+	void renderMenu();
 
 	void Reset();
 
