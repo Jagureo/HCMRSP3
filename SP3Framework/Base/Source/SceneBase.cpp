@@ -137,6 +137,8 @@ void SceneBase::Init()
 	meshList[GEO_TREETOP]->textureID = LoadTGA("Image//treetop.tga");
 	meshList[GEO_ROCK] = MeshBuilder::GenerateQuad("rock", Color(1, 1, 1), 1.f);
 	meshList[GEO_ROCK]->textureID = LoadTGA("Image//rock.tga");
+	meshList[GEO_JEEP] = MeshBuilder::GenerateOBJ("GEO_JEEP", "Object//jurrassiccar.obj");
+	meshList[GEO_JEEP]->textureID = LoadTGA("Image//jeep.tga");
 	meshList[HUD_MAPEDITOR] = MeshBuilder::GenerateQuad("gui", Color(1, 1, 1), 1.f);
 	meshList[HUD_MAPEDITOR]->textureID = LoadTGA("Image//editorui.tga");
 	meshList[HUD_DELETEICON] = MeshBuilder::GenerateQuad("del", Color(1, 1, 1), 1.f);

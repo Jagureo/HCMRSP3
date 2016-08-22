@@ -1349,14 +1349,25 @@ void SceneSP3::RenderGO(GameObject *go)
 
 		break;
 	case GameObject::GO_CAR:
+		//modelStack.PushMatrix();
+		//modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+		//modelStack.Rotate(go->rotationAngle, 0, 0, 1);
+		//modelStack.Rotate(180, 0, 0, 1);
+		//modelStack.Rotate(90, 1, 0, 0);
+		//modelStack.Scale(go->scale.x / 10, go->scale.y / 5, go->scale.z / 2);
+		//modelStack.Scale(2.5, 2.5, 2.5);
+		//RenderMesh(meshList[GEO_CUBE], false);
+		//modelStack.PopMatrix();
+
 		modelStack.PushMatrix();
 		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+		modelStack.Rotate(-10, 1, 0, 0);
 		modelStack.Rotate(go->rotationAngle, 0, 0, 1);
-		modelStack.Rotate(180, 0, 0, 1);
+		modelStack.Rotate(90, 0, 0, 1);
 		modelStack.Rotate(90, 1, 0, 0);
 		modelStack.Scale(go->scale.x / 10, go->scale.y / 5, go->scale.z / 2);
-		modelStack.Scale(2.5, 2.5, 2.5);
-		RenderMesh(meshList[GEO_CUBE], false);
+		modelStack.Scale(2, 2.5, 3.5);
+		RenderMesh(meshList[GEO_JEEP], false);
 		modelStack.PopMatrix();
 		
 		break;
