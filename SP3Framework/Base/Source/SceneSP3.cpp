@@ -51,13 +51,14 @@ void SceneSP3::Init()
 	testMode = false;
 	deleteMode = 0;
 	time = 0;
+	arrowSelection = 0;
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP]);
 	testMap.setMapSize(20, 20);
 
 	//gameStates = states::s_Upgrade_Cars;
-	gameStates = states::s_Menu;
+	gameStates = states::s_Tutorial;
 }
 
 void SceneSP3::Reset()
@@ -571,7 +572,8 @@ void SceneSP3::Update(double dt)
 
 	if (Application::IsKeyPressed('E'))
 	{
-		enemy* animal = newEnemy(Math::RandFloatMinMax(0,100),Math::RandFloatMinMax(0,100), 0);
+		enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0);
+		animal->setVel(Math::RandFloatMinMax(-5, 5), Math::RandFloatMinMax(-5, 5), 0);
 		enemyList.push_back(animal);
 	}
 
@@ -590,7 +592,7 @@ void SceneSP3::Update(double dt)
 		testMap.addSingleProp(testWater);
 
 		GameObject* testMud = new GameObject(GameObject::MAP_MUD);
-		testMud->pos.Set(-25 ,-25, 1);
+		testMud->pos.Set(-25, -25, 1);
 		testMud->fresh = true;
 		testMud->active = true;
 		testMap.addSingleProp(testMud);
@@ -621,11 +623,14 @@ void SceneSP3::Update(double dt)
 	{
 		m_speed += 0.1f;
 	}
+
 	if (gameStates != states::s_MapEditor)
 	{
 
 		playerControl();
 	}
+
+
 	if (gameStates == states::s_MapEditor)
 	{
 		mapEditorUpdate(dt);
@@ -689,446 +694,7 @@ void SceneSP3::Update(double dt)
 
 	//Mouse Section
 	static bool bLButtonState = false;
-	if (!bLButtonState && Application::IsMousePressed(0))
-	{
-		bLButtonState = true;
-		std::cout << "LBUTTON DOWN" << std::endl;
-		double x, y;
-		Application::GetCursorPos(&x, &y);
-		int w = Application::GetWindowWidth();
-		int h = Application::GetWindowHeight();
-		float worldX = x * m_worldWidth / w;
-		float worldY = (h - y) * m_worldHeight / h;
-		m_ghost->pos.Set(worldX, worldY, 0);
-		m_ghost->active = true;
-	}
-	if (bLButtonState && !Application::IsMousePressed(0))
-	{
-		bLButtonState = false;
-		std::cout << "LBUTTON UP" << std::endl;
-
-		//Exercise 6: spawn small GO_BALL
-		double x, y;
-		Application::GetCursorPos(&x, &y);
-		int w = Application::GetWindowWidth();
-		int h = Application::GetWindowHeight();
-		float worldX = x * m_worldWidth / w;
-		float worldY = (h - y) * m_worldHeight / h;
-		m_ghost->active = false;
-
-		//GameObject* ball = FetchGO();
-		//ball->type = GameObject::GO_BALL;
-		//Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
-		//float radius = Math::Clamp(size.Length(), 1.f, 1.f);
-		//ball->scale.Set(radius, radius, radius);
-		//ball->pos = m_ghost->pos;
-		////ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
-		//ball->mass = radius;
-		//ball->ballrotated = 0;
-		//m_ghost->active = false;
-		//TextFile* hi = new TextFile(TextFile::MAP);
-		//hi->SetData("ball", ball->pos.x, ball->pos.y, ball->scale.x);
-		//hi->SaveMapObj("test.txt");
-		//m_estimatedTime = -1;
-		if (gameStates == states::s_Upgrade)
-		{
-			if (worldX > 0.0f * m_worldWidth && worldX < 0.33073f * m_worldWidth)
-			{
-				if (worldY > 68.472f && worldY < 76.111f)
-				{
-					gameStates = states::s_Upgrade_Cars;
-				}
-				if (worldY > 56.111f && worldY < 63.75f)
-				{
-					gameStates = states::s_Upgrade_Tires;
-				}
-				if (worldY > 43.333f && worldY < 50.833f)
-				{
-					gameStates = states::s_Upgrade_Lasso;
-				}
-				if (worldY > 30.694f && worldY < 38.333f)
-				{
-					gameStates = states::s_Upgrade_Darts;
-				}
-			}
-		}
-		else if (gameStates == states::s_Menu)
-		{
-			if (worldX > 0.656f * m_worldWidth && worldX < 0.88047f * m_worldWidth)
-			{
-				if (worldY > 36.111 && worldY < 39.444f)
-				{
-					gameStates = states::s_LevelSelect;
-				}
-				if (worldY > 29.2f && worldY <  32.35f)
-				{
-					gameStates = states::s_Instructions;
-				}
-				if (worldY > 22 && worldY < 25.27f)
-				{
-					gameStates = states::s_Options;
-				}
-				if (worldY > 15.438f && worldY < 18.6f)
-				{
-					gameStates = states::s_Highscore;
-				}
-				if (worldY > 8 && worldY < 11.406f)
-				{
-					exit(0);
-				}
-			}
-		}
-		else if (gameStates == states::s_Instructions)
-		{
-			if (worldX > 0.035f * m_worldWidth && worldX < 0.14141f * m_worldWidth)
-			{
-				if (worldY > 3.0 && worldY < 9.0f)
-				{
-					gameStates = states::s_Menu;
-				}
-			}
-		}
-		else if (gameStates == states::s_LevelSelect)
-		{
-			if (worldX > 0.78854f * m_worldWidth && worldX < 0.99219f * m_worldWidth)
-			{
-				if (worldY > 1 && worldY < 11.6f)
-				{
-					gameStates = states::s_CustomLevelSelect;
-				}
-			}
-			if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
-			{
-				if (worldY > 1 && worldY < 11.6f)
-				{
-					gameStates = states::s_Menu;
-				}
-			}
-		}
-		else if (gameStates == states::s_CustomLevelSelect)
-		{
-			if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
-			{
-				if (worldY > 1 && worldY < 11.6f)
-				{
-					gameStates = states::s_LevelSelect;
-				}
-			}
-
-		}
-	}
-	static bool pressedBack = false;
-	if (gameStates == states::s_CustomLevelSelect)
-	{
-		if (Application::IsKeyPressed(VK_BACK) && pressedBack == false)
-		{
-			pressedBack = true;
-			gameStates = states::s_LevelSelect;
-		}
-		else if (!Application::IsKeyPressed(VK_BACK) && pressedBack == true)
-		{
-			pressedBack = false;
-		}
-	}
-	if (gameStates == states::s_LevelSelect)
-	{
-		if (Application::IsKeyPressed(VK_BACK) && pressedBack == false)
-		{
-			pressedBack = true;
-			gameStates = states::s_Menu;
-		}
-		else if (!Application::IsKeyPressed(VK_BACK) && pressedBack == true)
-		{
-			pressedBack = false;
-		}
-	}
-	if (gameStates == states::s_Menu)
-	{
-		static bool arrowkeyUp = false;
-		static bool arrowkeyDown = false;
-
-		if (arrowSelection > 0)
-		{
-			if (Application::IsKeyPressed(VK_UP) && arrowkeyUp == false)
-			{
-				arrowkeyUp = true;
-				arrowSelection--;
-			}
-			else if (!Application::IsKeyPressed(VK_UP) && arrowkeyUp == true)
-				arrowkeyUp = false;
-		}
-		else if (arrowSelection == 0)
-		{
-			if (Application::IsKeyPressed(VK_UP) && arrowkeyUp == false)
-			{
-				arrowkeyUp = true;
-				arrowSelection = 4;
-			}
-			else if (!Application::IsKeyPressed(VK_UP) && arrowkeyUp == true)
-				arrowkeyUp = false;
-
-		}
-
-		if (arrowSelection < 4)
-		{
-			if (Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == false)
-			{
-				arrowkeyDown = true;
-				arrowSelection++;
-			}
-			else if (!Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == true)
-				arrowkeyDown = false;
-		}
-		else if (arrowSelection == 4)
-		{
-			if (Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == false)
-			{
-				arrowkeyDown = true;
-				arrowSelection = 0;
-			}
-			else if (!Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == true)
-				arrowkeyDown = false;
-		}
-		if (Application::IsKeyPressed(VK_RETURN))
-		{
-			switch (arrowSelection)
-			{
-			case 0:
-			{
-					  gameStates = states::s_LevelSelect;
-					  break;
-			}
-			case 1:
-			{
-					  gameStates = states::s_Instructions;
-					  break;
-			}
-			case 2:
-			{
-					  gameStates = states::s_Options;
-					  break;
-			}
-			case 3:
-			{
-					  gameStates = states::s_Highscore;
-					  break;
-			}
-			case 4:
-			{
-					  exit(0);
-					  break;
-			}
-			}
-		}
-	}
-	//Physics Simulation Section
-
-	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
-	{
-		GameObject *go = (GameObject *)*it;
-		if (go->active)
-		{
-			go->pos += go->vel * m_speed * dt;
-
-			//Exercise 7: handle out of bound game objects
-
-			if (go->type == GameObject::GO_BALL)
-			{
-				if (go->pos.x > m_worldWidth - go->scale.x)
-				{
-					if (go->vel.x > 0)
-						go->vel.x = -go->vel.x;
-				}
-				else if (go->pos.x < 0 + go->scale.x)
-				{
-					if (go->vel.x < 0)
-						go->vel.x = -go->vel.x;
-				}
-				if (go->pos.x > m_worldWidth + go->scale.x || go->pos.x < 0 - go->scale.x)
-				{
-					go->active = false;
-					m_objectCount--;
-				}
-				if (go->pos.y > m_worldHeight - go->scale.y)
-				{
-					if (go->vel.y > 0)
-						go->vel.y = -go->vel.y;
-				}
-				else if (go->pos.y < 0 + go->scale.y)
-				{
-					if (go->vel.y < 0)
-						go->vel.y = -go->vel.y;
-				}
-				if (go->pos.y > m_worldHeight + go->scale.y || go->pos.y < 0 - go->scale.y)
-				{
-					go->active = false;
-					m_objectCount--;
-
-				}
-				if (go->vel.x != 0 || go->vel.y != 0)
-				{
-					go->vel *= 0.995;
-				}
-				if (go->vel.Length() > 110)
-				{
-					go->vel = go->vel.Normalized() * 40;
-				}
-				go->rotationAngle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
-				go->ballrotated += go->vel.Length() * (2 / go->scale.x);
-
-				
-			}
-			//Exercise 8a: handle collision between GO_BALL and GO_BALL using velocity swap
-
-			for (std::vector<GameObject *>::iterator it2 = it; it2 != m_goList.end(); ++it2)
-			{
-				GameObject *other = (GameObject*)*it2;
-				//if (other->type == GameObject::GO_BALL)
-				//	continue;
-				if (!other->active)
-					continue;
-
-				GameObject *goA = go, *goB = other;
-				if (go->type != GameObject::GO_BALL)
-				{
-					if (other->type != GameObject::GO_BALL)
-						continue;
-					goA = other;
-					goB = go;
-				}
-
-				if (CheckCollision3(goA, goB, dt))
-				{
-					//Exercise 8b: store values in auditing variables
-
-					CollisionResponse(goA, goB);
-
-					break;
-				}
-			}
-
-			
-
-			if (go->type == GameObject::GO_CAR)
-			{
-				if (!go->active)
-					continue;
-				if (go->pos.x > m_worldWidth)
-				{
-					//std::cout << go->pos << std::endl;
-					go->pos.x -= go->pos.x - m_worldWidth;
-				}
-				else if (go->pos.x < 0)
-				{
-					go->pos.x += 0 - go->pos.x;
-				}
-				if (go->pos.y > m_worldHeight)
-				{
-					go->pos.y -= go->pos.y - m_worldHeight;
-				}
-				else if (go->pos.y < 0)
-				{
-					go->pos.y += 0 - go->pos.y;
-				}
-				for (std::vector<GameObject *>::iterator it2 = m_goList.begin(); it2 != m_goList.end(); ++it2)
-				{
-					GameObject *other = (GameObject*)*it2;
-					if (other->type == GameObject::GO_POWERUP)
-					{
-						if (!other->active)
-							continue;
-						
-					}
-				}
-			}
-
-			if (go->type == GameObject::GO_PARTICLE)
-			{
-				go->scale *= 0.9f;
-				if (go->scale.x < 0.1f)
-				{
-					go->active = false;
-				}
-			}
-
-			//Exercise 10: handle collision using momentum swap instead
-
-			//Exercise 12: improve inner loop to prevent double collision
-
-			//Exercise 13: improve collision detection algorithm [solution to be given later] 
-		}
-	}
-
-	for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
-	{
-		GameObject *go = (GameObject *)*it;
-		if (go->active == false)
-			continue;
-
-		if (go->fresh)
-		{
-			go->pos += mapPosition;
-			go->fresh = false;
-		}
-		else
-		{
-			go->pos = Vector3(go->pos.x + diffx, go->pos.y + diffy, 1);
-		}
-			
-		if ((go->pos - player1->pos).Length() < 10)
-		{
-			if (go->active == false)
-				continue;
-			CollisionMap(player1, go, dt);
- 		}
-	}
-
-	//for (std::vector<enemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
-	//{
-	//	enemy *go = (enemy *)*it;
-	//	if (go->getActive() == 1)
-	//	{
-	//
-	//		if (go->getNewSpawn() == 1)
-	//		{
-	//			go->setPos(go->getPos().x + mapPosition.x, go->getPos().y + mapPosition.y, 2);
-	//			go->setNewSpawn(false);
-	//		}
-	//		else
-	//		{
-	//			go->setPos(go->getPos().x + diffx, go->getPos().y + diffy, 2);
-	//		}
-	//		if ((go->getPos() - player1->pos).LengthSquared() < 2000 || go->getCaught() == 1)
-	//		{
-	//			go->runOff(player1->pos);
-	//		}
-	//		else
-	//		{
-	//			go->slowDown();
-	//		}
-	//		//std::cout << go->getPos() << std::endl;
-	//		go->updatePos(dt);
-	//		if (Dalasso->checkCaught(player1->pos, go->getPos(), 5) == 1 || go->getCaught() == 1)
-	//		{
-	//			go->setCaught(1);
-	//			if (Dalasso->caughtUpdate(player1->pos, go->getPos(), go->getActive()) == 1)
-	//			{
-	//				go->setCaught(0);
-	//				if (go->active == 0)
-	//				{
-	//					points++;
-	//					std::cout << "ANIMAL CAUGHT" << std::endl;
-	//				}
-	//			}
-	//			//std::cout << "hi" << std::endl;
-	//		}
-	//		
-	//	}
-	//	
-	//}
-	//Dalasso->updateLasso(player1->pos, dt);
-	//
-	//if (!bLButtonState && Application::IsMousePressed(0) && Dalasso->getLassoState() == 0 && gameStates != states::s_MapEditor)
+	//if (!bLButtonState && Application::IsMousePressed(0))
 	//{
 	//	bLButtonState = true;
 	//	std::cout << "LBUTTON DOWN" << std::endl;
@@ -1138,20 +704,602 @@ void SceneSP3::Update(double dt)
 	//	int h = Application::GetWindowHeight();
 	//	float worldX = x * m_worldWidth / w;
 	//	float worldY = (h - y) * m_worldHeight / h;
-	//	//m_ghost->pos.Set(worldX, worldY, 0);
-	//	//m_ghost->active = true;
-	//	Dalasso->throwLasso(player1->pos, Vector3(worldX, worldY, 0));
-	//	cout << " LASSO THROWN MADAFAKA " << endl;
-	//	
+	//	m_ghost->pos.Set(worldX, worldY, 0);
+	//	m_ghost->active = true;
+	//
+
+	//	//bLButtonState = false;
+	//	//std::cout << "LBUTTON UP" << std::endl;
+
+	//	////Exercise 6: spawn small GO_BALL
+	//	//double x, y;
+	//	//Application::GetCursorPos(&x, &y);
+	//	//int w = Application::GetWindowWidth();
+	//	//int h = Application::GetWindowHeight();
+	//	//float worldX = x * m_worldWidth / w;
+	//	//float worldY = (h - y) * m_worldHeight / h;
+	//	//m_ghost->active = false;
+
+	//	//	GameObject* ball = FetchGO();
+	//	//	ball->type = GameObject::GO_BALL;
+	//	//	Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
+	//	//	float radius = Math::Clamp(size.Length(), 1.f, 1.f);
+	//	//	ball->scale.Set(radius, radius, radius);
+	//	//	ball->pos = m_ghost->pos;
+	//	//	ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
+	//	//	ball->mass = radius;
+	//	//	ball->ballrotated = 0;
+	//	//	m_ghost->active = false;
+	//	//TextFile* hi = new TextFile(TextFile::MAP);
+	//	//hi->SetData("ball", ball->pos.x, ball->pos.y, ball->scale.x);
+	//	//hi->SaveMapObj("test.txt");
+	//	//m_estimatedTime = -1;
+	//	if (gameStates == states::s_Upgrade)
+	//	{
+	//		if (worldX > 0.0f * m_worldWidth && worldX < 0.33073f * m_worldWidth)
+	//		{
+	//			if (worldY > 68.472f && worldY < 76.111f)
+	//			{
+	//				gameStates = states::s_Upgrade_Cars;
+	//			}
+	//			if (worldY > 56.111f && worldY < 63.75f)
+	//			{
+	//				gameStates = states::s_Upgrade_Tires;
+	//			}
+	//			if (worldY > 43.333f && worldY < 50.833f)
+	//			{
+	//				gameStates = states::s_Upgrade_Lasso;
+	//			}
+	//			if (worldY > 30.694f && worldY < 38.333f)
+	//			{
+	//				gameStates = states::s_Upgrade_Darts;
+	//			}
+	//		}
+	//		else if (gameStates == states::s_Menu)
+	//		{
+	//			if (worldX > 0.656f * m_worldWidth && worldX < 0.88047f * m_worldWidth)
+	//			{
+	//				if (worldY > 36.111 && worldY < 39.444f)
+	//				{
+	//					gameStates = states::s_LevelSelect;
+	//				}
+	//				if (worldY > 29.2f && worldY <  32.35f)
+	//				{
+	//					gameStates = states::s_Instructions;
+	//				}
+	//				if (worldY > 22 && worldY < 25.27f)
+	//				{
+	//					gameStates = states::s_Options;
+	//				}
+	//				if (worldY > 15.438f && worldY < 18.6f)
+	//				{
+	//					gameStates = states::s_Highscore;
+	//				}
+	//				if (worldY > 8 && worldY < 11.406f)
+	//				{
+	//					exit(0);
+	//				}
+	//			}
+	//		}
+	//		else if (gameStates == states::s_Instructions)
+	//		{
+	//			if (worldX > 0.035f * m_worldWidth && worldX < 0.14141f * m_worldWidth)
+	//			{
+	//				if (worldY > 3.0 && worldY < 9.0f)
+	//				{
+	//					gameStates = states::s_Menu;
+	//				}
+	//			}
+	//		}
+	//		else if (gameStates == states::s_LevelSelect)
+	//		{
+	//			if (worldX > 0.78854f * m_worldWidth && worldX < 0.99219f * m_worldWidth)
+	//			{
+	//				if (worldY > 1 && worldY < 11.6f)
+	//				{
+	//					gameStates = states::s_CustomLevelSelect;
+	//				}
+	//			}
+	//			if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
+	//			{
+	//				if (worldY > 1 && worldY < 11.6f)
+	//				{
+	//					gameStates = states::s_Menu;
+	//				}
+	//			}
+	//		}
+	//		else if (gameStates == states::s_CustomLevelSelect)
+	//		{
+	//			if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
+	//			{
+	//				if (worldY > 1 && worldY < 11.6f)
+	//				{
+	//					gameStates = states::s_LevelSelect;
+	//				}
+	//			}
+
+	//		}
+	//	}
 	//}
 	//else
 	//{
-	//	bLButtonState = false;
+	//	static bool bLButtonState = false;
 	//}
-	//std::cout << Dalasso->getLassoState() << std::endl;
+	if (gameStates != states::s_Tutorial ||
+		gameStates != states::s_Level2 ||
+		gameStates != states::s_Level3 ||
+		gameStates != states::s_LevelBoss)
+	{
+
+		if (bLButtonState && !Application::IsMousePressed(0))
+		{
+			bLButtonState = false;
+			std::cout << "LBUTTON UP" << std::endl;
+			//Exercise 6: spawn small GO_BALL
+			double x, y;
+			Application::GetCursorPos(&x, &y);
+			int w = Application::GetWindowWidth();
+			int h = Application::GetWindowHeight();
+			float worldX = x * m_worldWidth / w;
+			float worldY = (h - y) * m_worldHeight / h;
+			m_ghost->active = false;
+			//GameObject* ball = FetchGO();
+			//ball->type = GameObject::GO_BALL;
+			//Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
+			//float radius = Math::Clamp(size.Length(), 1.f, 1.f);
+			//ball->scale.Set(radius, radius, radius);
+			//ball->pos = m_ghost->pos;
+			////ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
+			//ball->mass = radius;
+			//ball->ballrotated = 0;
+			//m_ghost->active = false;
+			//TextFile* hi = new TextFile(TextFile::MAP);
+			//hi->SetData("ball", ball->pos.x, ball->pos.y, ball->scale.x);
+			//hi->SaveMapObj("test.txt");
+			//m_estimatedTime = -1;
+			if (gameStates == states::s_Upgrade)
+			{
+				if (worldX > 0.0f * m_worldWidth && worldX < 0.33073f * m_worldWidth)
+				{
+					if (worldY > 68.472f && worldY < 76.111f)
+					{
+						gameStates = states::s_Upgrade_Cars;
+					}
+					if (worldY > 56.111f && worldY < 63.75f)
+					{
+						gameStates = states::s_Upgrade_Tires;
+					}
+					if (worldY > 43.333f && worldY < 50.833f)
+					{
+						gameStates = states::s_Upgrade_Lasso;
+					}
+					if (worldY > 30.694f && worldY < 38.333f)
+					{
+						gameStates = states::s_Upgrade_Darts;
+					}
+				}
+			}
+			else if (gameStates == states::s_Menu)
+			{
+				if (worldX > 0.656f * m_worldWidth && worldX < 0.88047f * m_worldWidth)
+				{
+					if (worldY > 36.111 && worldY < 39.444f)
+					{
+						gameStates = states::s_LevelSelect;
+					}
+					if (worldY > 29.2f && worldY <  32.35f)
+					{
+						gameStates = states::s_Instructions;
+					}
+					if (worldY > 22 && worldY < 25.27f)
+					{
+						gameStates = states::s_Options;
+					}
+					if (worldY > 15.438f && worldY < 18.6f)
+					{
+						gameStates = states::s_Highscore;
+					}
+					if (worldY > 8 && worldY < 11.406f)
+					{
+						exit(0);
+					}
+				}
+			}
+			else if (gameStates == states::s_Instructions)
+			{
+				if (worldX > 0.035f * m_worldWidth && worldX < 0.14141f * m_worldWidth)
+				{
+					if (worldY > 3.0 && worldY < 9.0f)
+					{
+						gameStates = states::s_Menu;
+					}
+				}
+			}
+			else if (gameStates == states::s_LevelSelect)
+			{
+				if (worldX > 0.78854f * m_worldWidth && worldX < 0.99219f * m_worldWidth)
+				{
+					if (worldY > 1 && worldY < 11.6f)
+					{
+						gameStates = states::s_CustomLevelSelect;
+					}
+				}
+				if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
+				{
+					if (worldY > 1 && worldY < 11.6f)
+					{
+						gameStates = states::s_Menu;
+					}
+				}
+			}
+			else if (gameStates == states::s_CustomLevelSelect)
+			{
+				if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
+				{
+					if (worldY > 1 && worldY < 11.6f)
+					{
+						gameStates = states::s_LevelSelect;
+					}
+				}
+			}
+		}
+		if (!bLButtonState && Application::IsMousePressed(0))
+		{
+
+			bLButtonState = true;
+		}
+	}
+
+		static bool pressedBack = false;
+		if (gameStates == states::s_CustomLevelSelect)
+		{
+			if (Application::IsKeyPressed(VK_BACK) && pressedBack == false)
+			{
+				pressedBack = true;
+				gameStates = states::s_LevelSelect;
+			}
+			else if (!Application::IsKeyPressed(VK_BACK) && pressedBack == true)
+			{
+				pressedBack = false;
+			}
+		}
+		if (gameStates == states::s_LevelSelect)
+		{
+			if (Application::IsKeyPressed(VK_BACK) && pressedBack == false)
+			{
+				pressedBack = true;
+				gameStates = states::s_Menu;
+			}
+			else if (!Application::IsKeyPressed(VK_BACK) && pressedBack == true)
+			{
+				pressedBack = false;
+			}
+		}
+		if (gameStates == states::s_Menu)
+		{
+			static bool arrowkeyUp = false;
+			static bool arrowkeyDown = false;
+
+			if (arrowSelection > 0)
+			{
+				if (Application::IsKeyPressed(VK_UP) && arrowkeyUp == false)
+				{
+					arrowkeyUp = true;
+					arrowSelection--;
+				}
+				else if (!Application::IsKeyPressed(VK_UP) && arrowkeyUp == true)
+					arrowkeyUp = false;
+			}
+			else if (arrowSelection == 0)
+			{
+				if (Application::IsKeyPressed(VK_UP) && arrowkeyUp == false)
+				{
+					arrowkeyUp = true;
+					arrowSelection = 4;
+				}
+				else if (!Application::IsKeyPressed(VK_UP) && arrowkeyUp == true)
+					arrowkeyUp = false;
+
+			}
+
+			if (arrowSelection < 4)
+			{
+				if (Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == false)
+				{
+					arrowkeyDown = true;
+					arrowSelection++;
+				}
+				else if (!Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == true)
+					arrowkeyDown = false;
+			}
+			else if (arrowSelection == 4)
+			{
+				if (Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == false)
+				{
+					arrowkeyDown = true;
+					arrowSelection = 0;
+				}
+				else if (!Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == true)
+					arrowkeyDown = false;
+			}
+			if (Application::IsKeyPressed(VK_RETURN))
+			{
+				switch (arrowSelection)
+				{
+				case 0:
+				{
+						  gameStates = states::s_LevelSelect;
+						  break;
+				}
+				case 1:
+				{
+						  gameStates = states::s_Instructions;
+						  break;
+				}
+				case 2:
+				{
+						  gameStates = states::s_Options;
+						  break;
+				}
+				case 3:
+				{
+						  gameStates = states::s_Highscore;
+						  break;
+				}
+				case 4:
+				{
+						  exit(0);
+						  break;
+				}
+				}
+			}
+		}
+		//Physics Simulation Section
+
+		for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
+		{
+			GameObject *go = (GameObject *)*it;
+			if (go->active)
+			{
+				go->pos += go->vel * m_speed * dt;
+
+				//Exercise 7: handle out of bound game objects
+
+				if (go->type == GameObject::GO_BALL)
+				{
+					if (go->pos.x > m_worldWidth - go->scale.x)
+					{
+						if (go->vel.x > 0)
+							go->vel.x = -go->vel.x;
+					}
+					else if (go->pos.x < 0 + go->scale.x)
+					{
+						if (go->vel.x < 0)
+							go->vel.x = -go->vel.x;
+					}
+					if (go->pos.x > m_worldWidth + go->scale.x || go->pos.x < 0 - go->scale.x)
+					{
+						go->active = false;
+						m_objectCount--;
+					}
+					if (go->pos.y > m_worldHeight - go->scale.y)
+					{
+						if (go->vel.y > 0)
+							go->vel.y = -go->vel.y;
+					}
+					else if (go->pos.y < 0 + go->scale.y)
+					{
+						if (go->vel.y < 0)
+							go->vel.y = -go->vel.y;
+					}
+					if (go->pos.y > m_worldHeight + go->scale.y || go->pos.y < 0 - go->scale.y)
+					{
+						go->active = false;
+						m_objectCount--;
+
+					}
+					if (go->vel.x != 0 || go->vel.y != 0)
+					{
+						go->vel *= 0.995;
+					}
+					if (go->vel.Length() > 110)
+					{
+						go->vel = go->vel.Normalized() * 40;
+					}
+					go->rotationAngle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
+					go->ballrotated += go->vel.Length() * (2 / go->scale.x);
+
+
+				}
+				//Exercise 8a: handle collision between GO_BALL and GO_BALL using velocity swap
+
+				for (std::vector<GameObject *>::iterator it2 = it; it2 != m_goList.end(); ++it2)
+				{
+					GameObject *other = (GameObject*)*it2;
+					//if (other->type == GameObject::GO_BALL)
+					//	continue;
+					if (!other->active)
+						continue;
+
+					GameObject *goA = go, *goB = other;
+					if (go->type != GameObject::GO_BALL)
+					{
+						if (other->type != GameObject::GO_BALL)
+							continue;
+						goA = other;
+						goB = go;
+					}
+
+					if (CheckCollision3(goA, goB, dt))
+					{
+						//Exercise 8b: store values in auditing variables
+
+						CollisionResponse(goA, goB);
+
+						break;
+					}
+				}
+
+
+
+				if (go->type == GameObject::GO_CAR)
+				{
+					if (!go->active)
+						continue;
+					if (go->pos.x > m_worldWidth)
+					{
+						//std::cout << go->pos << std::endl;
+						go->pos.x -= go->pos.x - m_worldWidth;
+					}
+					else if (go->pos.x < 0)
+					{
+						go->pos.x += 0 - go->pos.x;
+					}
+					if (go->pos.y > m_worldHeight)
+					{
+						go->pos.y -= go->pos.y - m_worldHeight;
+					}
+					else if (go->pos.y < 0)
+					{
+						go->pos.y += 0 - go->pos.y;
+					}
+					for (std::vector<GameObject *>::iterator it2 = m_goList.begin(); it2 != m_goList.end(); ++it2)
+					{
+						GameObject *other = (GameObject*)*it2;
+						if (other->type == GameObject::GO_POWERUP)
+						{
+							if (!other->active)
+								continue;
+
+						}
+					}
+				}
+
+				if (go->type == GameObject::GO_PARTICLE)
+				{
+					go->scale *= 0.9f;
+					if (go->scale.x < 0.1f)
+					{
+						go->active = false;
+					}
+				}
+
+				//Exercise 10: handle collision using momentum swap instead
+
+				//Exercise 12: improve inner loop to prevent double collision
+
+				//Exercise 13: improve collision detection algorithm [solution to be given later] 
+			}
+		}
+
+		for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
+		{
+			GameObject *go = (GameObject *)*it;
+			if (go->active == false)
+				continue;
+
+			if (go->fresh)
+			{
+				go->pos += mapPosition;
+				go->fresh = false;
+			}
+			else
+			{
+				go->pos = Vector3(go->pos.x + diffx, go->pos.y + diffy, 1);
+			}
+
+			if ((go->pos - player1->pos).Length() < 10)
+			{
+				if (go->active == false)
+					continue;
+				CollisionMap(player1, go, dt);
+			}
+		}
+		if (gameStates == states::s_Tutorial ||
+			gameStates == states::s_Level2 ||
+			gameStates == states::s_Level3 ||
+			gameStates == states::s_LevelBoss)
+		{
+
+			for (std::vector<enemy*>::iterator itE = enemyList.begin(); itE != enemyList.end(); ++itE)
+			{
+				enemy *goE = (enemy *)*itE;
+				if (goE->getActive() == 1)
+				{
+
+					if (goE->getNewSpawn() == 1)
+					{
+						goE->setPos(goE->getPos().x + mapPosition.x, goE->getPos().y + mapPosition.y, 2);
+						goE->setNewSpawn(false);
+					}
+					else
+					{
+						goE->setPos(goE->getPos().x + diffx, goE->getPos().y + diffy, 2);
+
+						if ((goE->getPos() - player1->pos).LengthSquared() < 2000 || goE->getCaught() == 1)
+						{
+							goE->runOff(player1->pos);
+						}
+						else
+						{
+							goE->slowDown();
+						}
+
+						/*Vector3 temp = (goE->getVel() + goE->alignment(enemyList) + goE->cohesion(enemyList) + goE->seperation(enemyList));
+						goE->setVel(temp.x, temp.y, 0);*/
+
+
+						goE->updatePos(dt);
+						if (Dalasso->checkCaught(player1->pos, goE->getPos(), 5) == 1 || goE->getCaught() == 1)
+						{
+							goE->setCaught(1);
+							if (Dalasso->caughtUpdate(player1->pos, goE->getPos(), goE->getActive()) == 1)
+							{
+								goE->setCaught(0);
+								if (goE->active == 0)
+								{
+									points++;
+									std::cout << "ANIMAL CAUGHT" << std::endl;
+								}
+							}
+							//std::cout << "hi" << std::endl;
+						}
+					}
+
+				}
+
+			}
+			Dalasso->updateLasso(player1->pos, dt);
+		}
+		if (gameStates == states::s_Tutorial ||
+			gameStates == states::s_Level2 ||
+			gameStates == states::s_Level3 ||
+			gameStates == states::s_LevelBoss)
+		{
+			static bool bLButtonState = false;
+
+			if (!bLButtonState && Application::IsMousePressed(0) && Dalasso->getLassoState() == 0)
+			{
+				bLButtonState = true;
+				std::cout << "LBUTTON DOWN" << std::endl;
+				double x, y;
+				Application::GetCursorPos(&x, &y);
+				int w = Application::GetWindowWidth();
+				int h = Application::GetWindowHeight();
+				float worldX = x * m_worldWidth / w;
+				float worldY = (h - y) * m_worldHeight / h;
+				//m_ghost->pos.Set(worldX, worldY, 0);
+				//m_ghost->active = true;
+				Dalasso->throwLasso(player1->pos, Vector3(worldX, worldY, 0));
+
+			}
+			else
+			{
+				bLButtonState = false;
+			}
+		}
 
 }
-
 
 
 void SceneSP3::mapEditorUpdate(double dt)
@@ -1395,7 +1543,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 						}
 					}
 				}
-				cout << "Saving as: " << FileName << endl;
+				cout << "SAVING" << endl;
 			}
 			else
 			{
@@ -1491,11 +1639,12 @@ void SceneSP3::mapEditorUpdate(double dt)
 				deleteMode = 0;
 			}
 		}
+		static bool bRButtonState = false;
 
 		if (!bLButtonState && Application::IsMousePressed(1))
 		{
 			bRButtonState = true;
-			//std::cout << "RBUTTON DOWN" << std::endl;
+			std::cout << "RBUTTON DOWN" << std::endl;
 			double x, y;
 			Application::GetCursorPos(&x, &y);
 			int w = Application::GetWindowWidth();
