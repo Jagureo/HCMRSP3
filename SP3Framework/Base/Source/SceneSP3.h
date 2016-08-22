@@ -92,6 +92,11 @@ public:
 	void RenderProps(playMap* map);
 
 	void RenderLasso(lasso* lassoPos);
+
+	bool RenderMapFile();
+	bool MapExist(string FileName);
+
+	string FileName;
 protected:
 
 	GameObject* player1;

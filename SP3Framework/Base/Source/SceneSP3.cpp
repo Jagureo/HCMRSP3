@@ -10,7 +10,7 @@ SceneSP3::SceneSP3()
 SceneSP3::~SceneSP3()
 {
 }
-
+string NameofMap;
 void SceneSP3::Init()
 {
 	SceneBase::Init();
@@ -582,9 +582,6 @@ void SceneSP3::Update(double dt)
 		testTree->fresh = true;
 		testTree->active = true;
 		testMap.addClusterProp(testTree);
-		TextFile * hi = new TextFile(TextFile::CAR);
-		hi->SetData("tree", testTree->pos.x, testTree->pos.y, testTree->scale.x);
-		hi->WriteFile("carz.txt");
 
 		GameObject* testWater = new GameObject(GameObject::MAP_WATER);
 		testWater->pos.Set(25, 25, 1);
@@ -624,16 +621,12 @@ void SceneSP3::Update(double dt)
 	{
 		m_speed += 0.1f;
 	}
-
 	if (gameStates != states::s_MapEditor)
 	{
 
 		playerControl();
 	}
-
-
 	if (gameStates == states::s_MapEditor)
-
 	{
 		mapEditorUpdate(dt);
 	}
@@ -1350,15 +1343,66 @@ void SceneSP3::mapEditorUpdate(double dt)
 			}
 			else if (worldX > 0.9362068f * m_worldWidth && worldX < 0.9827586f * m_worldWidth && worldY > 88 && worldY < 96)
 			{
-				//save file
-				cout << "SAVING" << endl;
+				string FileName;
+				if (editName == false)
+				{
+					if (mapName == "")
+					{
+						cout << "No Name Entered" << endl;
+					}
+					else
+					{
+						TextFile* map = new TextFile(TextFile::MAP);
+						if (map->CreateMapFile(mapName, false) == "fail")
+						{
+							cout << "Map name already in use." << endl;
+						}
+						else
+						{
+							FileName = map->CreateMapFile(mapName, false);
+						}
+					}
+
+				}
+				for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
+				{
+					GameObject *go = (GameObject *)* it;
+					if (go->active)
+					{
+						if (go->type == GameObject::MAP_TREE)
+						{
+							TextFile *tree = new TextFile(TextFile::MAP);
+							tree->SetData("tree", go->pos.x, go->pos.y);
+							tree->WriteFile(FileName);
+						}
+						else if (go->type == GameObject::MAP_ROCK)
+						{
+							TextFile *rock = new TextFile(TextFile::MAP);
+							rock->SetData("rock", go->pos.x, go->pos.y);
+							rock->WriteFile(FileName);
+						}
+						else if (go->type == GameObject::MAP_WATER)
+						{
+							TextFile *water = new TextFile(TextFile::MAP);
+							water->SetData("water", go->pos.x, go->pos.y);
+							water->WriteFile(FileName);
+						}
+						else if (go->type == GameObject::MAP_MUD)
+						{
+							TextFile *mud = new TextFile(TextFile::MAP);
+							mud->SetData("mud", go->pos.x, go->pos.y);
+							mud->WriteFile(FileName);
+						}
+					}
+				}
+				cout << "Saving as: " << FileName << endl;
 			}
 			else
 			{
 				editName = false;
 				if (dragObj == false)
 				{
-					std::cout << "DRAGGING EXISTING";
+					std::cout << "DRAGGING EXISTING" << endl;
 					for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 					{
 						GameObject *go = (GameObject *)*it;
@@ -1374,11 +1418,32 @@ void SceneSP3::mapEditorUpdate(double dt)
 							newItem->active = true;
 							newItem->scale = go->scale;
 							testMap.forceAddSingleProp(newItem);
+
 							break;
 						}
 					}
 				}
 			}
+		}
+		static bool Loaded = false;
+		if (Application::IsKeyPressed('L') && !Loaded)
+		{
+			Loaded = true;
+			if (mapName == "")
+			{
+				cout << "No map name entered" << endl;
+			}
+			else
+			{
+				TextFile* map = new TextFile(TextFile::MAP);			
+
+					NameofMap = map->CreateMapFile(mapName, true);
+					RenderMapFile();
+			}
+		}
+		else if (!Application::IsKeyPressed('L') && Loaded)
+		{
+			Loaded = false;
 		}
 		if (bLButtonState && !Application::IsMousePressed(0))
 		{
@@ -1390,6 +1455,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 			float worldY = (h - y) * m_worldHeight / h;
 			bLButtonState = false;
 			dragObj = false;
+
 			if (deleteMode == 1)
 			{
 				deleteMode = 2;
@@ -1429,7 +1495,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 		if (!bLButtonState && Application::IsMousePressed(1))
 		{
 			bRButtonState = true;
-			std::cout << "RBUTTON DOWN" << std::endl;
+			//std::cout << "RBUTTON DOWN" << std::endl;
 			double x, y;
 			Application::GetCursorPos(&x, &y);
 			int w = Application::GetWindowWidth();
@@ -1488,7 +1554,18 @@ void SceneSP3::mapEditorUpdate(double dt)
 	}
 }
 
-
+bool SceneSP3::MapExist(string FileName)
+{
+	ifstream checkFile(FileName);
+	if (checkFile.good())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 
 	//corner
 	//wall = FetchGO();
@@ -1645,12 +1722,10 @@ void SceneSP3::RenderProps(playMap* map)
 			if (player1->pos.y > go->pos.y)
 			{
 				go->pos.z = player1->pos.z + 5;
-				cout << "ABOVE";
 			}
 			else
 			{
 				go->pos.z = player1->pos.z - 5;
-				cout << "BELOW";
 			}
 			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z - 2);
 			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
@@ -1860,7 +1935,68 @@ void SceneSP3::renderSelection(float x1, float y1)
 	modelStack.PopMatrix();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
+bool SceneSP3::RenderMapFile()
+{
+	int row = 0;
+	TextFile* map = new TextFile(TextFile::MAP);
+	row = map->getRows(NameofMap);
+	cout << row << endl;
+	for (int i = 1; i < row + 1; ++i)
+	{
+		map->LoadMap(NameofMap, i);
 
+		GameObject* obs;
+		string typeofobject = map->get_type();
+
+		if (map->get_type() == "tree")
+		{
+			obs = new GameObject(GameObject::MAP_TREE);
+			obs->pos.Set(map->get_x() - mapPosition.x, map->get_y() - mapPosition.y, 1);
+
+			obs->fresh = true;
+			obs->active = true;
+			obs->scale.Set(1, 1, 1);
+			testMap.forceAddSingleProp(obs);
+
+			cout << "tree added at: " << obs->pos.x << "," << obs->pos.y << endl;
+			cout << "map->get_y() = " << map->get_y() << "," << "mapPosition.y = " << mapPosition.y << endl;
+		}
+		else if (map->get_type() == "rock")
+		{
+			obs = new GameObject(GameObject::MAP_ROCK);
+			obs->pos.Set(map->get_x() - mapPosition.x, map->get_y() - mapPosition.y, 1);
+			obs->fresh = true;
+			obs->active = true;
+			obs->scale.Set(1, 1, 1);
+			testMap.forceAddSingleProp(obs);
+
+			cout << "rock added" << endl;
+		}
+		else if (map->get_type() == "water")
+		{
+			obs = new GameObject(GameObject::MAP_WATER);
+			obs->pos.Set(map->get_x() - mapPosition.x, map->get_y() - mapPosition.y, 1);
+			obs->fresh = true;
+			obs->active = true;
+			obs->scale.Set(1, 1, 1);
+			testMap.forceAddSingleProp(obs);
+
+			cout << "water added" << endl;
+		}
+		else if (map->get_type() == "mud")
+		{
+			obs = new GameObject(GameObject::MAP_MUD);
+			obs->pos.Set(map->get_x() - mapPosition.x, map->get_y() - mapPosition.y, 1);
+			obs->fresh = true;
+			obs->active = true;
+			obs->scale.Set(1, 1, 1);
+			testMap.forceAddSingleProp(obs);
+
+			cout << "mud added" << endl;
+		}
+	}
+	return true;
+}
 void SceneSP3::renderMenu()
 {
 	if (gameStates == states::s_Menu)
@@ -1878,7 +2014,6 @@ void SceneSP3::renderMenu()
 		RenderMesh(meshList[GEO_MENU_SIGNBOARD], false);
 		modelStack.PopMatrix();
 
-		cout << "MENU " << endl;
 		modelStack.PushMatrix();
 		modelStack.Translate(118, 38 - (arrowSelection * 7), -1);
 		modelStack.Scale(3, 3, 0);
@@ -2154,6 +2289,9 @@ void SceneSP3::Exit()
 {
 	SceneBase::Exit();
 	//Cleanup GameObjects
+	ofstream file;
+	file.open("tempsave.txt", ios::trunc);
+	file.close();
 	while (m_goList.size() > 0)
 	{
 		GameObject *go = m_goList.back();
