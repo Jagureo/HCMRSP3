@@ -46,7 +46,7 @@ void enemy::setCaught(bool input)
 
 void enemy::setPos(float x, float y, float z)
 {
-	position = Vector3(x,y,z);
+	position = Vector3(x, y, z);
 }
 
 Vector3 enemy::getVel()
@@ -114,7 +114,7 @@ void enemy::runOff(Vector3 playerPos)
 	}
 	else
 	{
-		vel.x += -((dir.Normalized()).x + Math::RandFloatMinMax(-10,10)) * 1.5;
+		vel.x += -((dir.Normalized()).x + Math::RandFloatMinMax(-10, 10)) * 1.5;
 		vel.y += -((dir.Normalized()).y + Math::RandFloatMinMax(-10, 10)) * 1.5;
 	}
 
@@ -156,5 +156,5 @@ void enemy::updatePos(float dt)
 
 enemy* newEnemy(float x, float y, float z)
 {
-	return new enemy(Vector3(x,y,z));
+	return new enemy(Vector3(x, y, z));
 }
