@@ -69,6 +69,7 @@ public:
 		GEO_JEEP,
 
 		GEO_TESTENEMY,
+
 		GEO_ROPE,
 
 		HUD_MAPEDITOR,

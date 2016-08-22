@@ -564,7 +564,7 @@ void SceneSP3::Update(double dt)
 
 	if (Application::IsKeyPressed('E'))
 	{
-		enemy* animal = newEnemy(30, 10, 0);
+		enemy* animal = newEnemy(Math::RandFloatMinMax(0,100),Math::RandFloatMinMax(0,100), 0);
 		enemyList.push_back(animal);
 	}
 
@@ -913,7 +913,7 @@ void SceneSP3::Update(double dt)
 	for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 	{
 		GameObject *go = (GameObject *)*it;
-		if (go->dead == true)
+		if (go->active == false)
 			continue;
 
 		if (go->fresh)
@@ -926,7 +926,7 @@ void SceneSP3::Update(double dt)
 			go->pos = Vector3(go->pos.x + diffx, go->pos.y + diffy, 1);
 		}
 			
-		if ((go->pos - player1->pos).LengthSquared() < 100)
+		if ((go->pos - player1->pos).Length() < 10)
 		{
 			if (go->active == false)
 				continue;
@@ -937,38 +937,48 @@ void SceneSP3::Update(double dt)
 	for (std::vector<enemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
 	{
 		enemy *go = (enemy *)*it;
-		if (go->getNewSpawn() == 1)
+		if (go->getActive() == 1)
 		{
-			go->setPos(go->getPos().x + mapPosition.x, go->getPos().y + mapPosition.y, 2);
-			go->setNewSpawn(false);
-		}
-		else
-		{
-			go->setPos(go->getPos().x + diffx, go->getPos().y + diffy, 2);
-		}
-		if ((go->getPos() - player1->pos).LengthSquared() < 2000)
-		{
-			go->runOff(player1->pos);
-		}
-		else
-		{
-			go->slowDown();
-		}
-		//std::cout << go->getPos() << std::endl;
-		if (Dalasso->checkCaught(player1->pos, go->getPos(), 5) == 1 || go->getCaught() == 1)
-		{
-			go->setCaught(1);
-			go->runOff(player1->pos);
-			if (Dalasso->caughtUpdate(player1->pos, go->getPos()) == 1)
+
+			if (go->getNewSpawn() == 1)
 			{
-				go->setCaught(0);
+				go->setPos(go->getPos().x + mapPosition.x, go->getPos().y + mapPosition.y, 2);
+				go->setNewSpawn(false);
 			}
-			//std::cout << "hi" << std::endl;
+			else
+			{
+				go->setPos(go->getPos().x + diffx, go->getPos().y + diffy, 2);
+			}
+			if ((go->getPos() - player1->pos).LengthSquared() < 2000 || go->getCaught() == 1)
+			{
+				go->runOff(player1->pos);
+			}
+			else
+			{
+				go->slowDown();
+			}
+			//std::cout << go->getPos() << std::endl;
+			go->updatePos(dt);
+			if (Dalasso->checkCaught(player1->pos, go->getPos(), 5) == 1 || go->getCaught() == 1)
+			{
+				go->setCaught(1);
+				if (Dalasso->caughtUpdate(player1->pos, go->getPos(), go->getActive()) == 1)
+				{
+					go->setCaught(0);
+					if (go->active == 0)
+					{
+						points++;
+						std::cout << "ANIMAL CAUGHT" << std::endl;
+					}
+				}
+				//std::cout << "hi" << std::endl;
+			}
+			
 		}
-		go->updatePos(dt);
 		
 	}
 	Dalasso->updateLasso(player1->pos, dt);
+	
 	if (!bLButtonState && Application::IsMousePressed(0) && Dalasso->getLassoState() == 0 && gameStates != states::s_MapEditor)
 	{
 		bLButtonState = true;
@@ -988,7 +998,7 @@ void SceneSP3::Update(double dt)
 	{
 		bLButtonState = false;
 	}
-	//std::cout << Dalasso->getLassoState() << std::endl;
+	std::cout << Dalasso->getLassoState() << std::endl;
 
 }
 
@@ -1310,11 +1320,27 @@ void SceneSP3::mapEditorUpdate(double dt)
 
 void SceneSP3::RenderLasso(lasso *go)
 {
-	modelStack.PushMatrix();
-	modelStack.Translate(go->getLassoPos().x, go->getLassoPos().y, 2);
-	modelStack.Scale(3, 3, 3);
-	RenderMesh(meshList[GEO_ENEMYBULLET], false);
-	modelStack.PopMatrix();
+	if (go->getLassoState() != 0)
+	{
+
+		modelStack.PushMatrix();
+		modelStack.Translate(go->getLassoPos().x, go->getLassoPos().y, 2);
+		modelStack.Scale(3, 3, 1);
+		RenderMesh(meshList[GEO_ENEMYBULLET], false);
+		modelStack.PopMatrix();
+
+		float yDist = go->getLassoPos().y - player1->pos.y;
+		float xDist = go->getLassoPos().x - player1->pos.x;
+		float angleDiff = Math::RadianToDegree(atan2(yDist, xDist));
+		
+
+		modelStack.PushMatrix();
+		modelStack.Translate((go->getLassoPos().x + player1->pos.x) / 2, (go->getLassoPos().y + player1->pos.y) / 2, 2);
+		modelStack.Rotate(angleDiff, 0 ,0, 1);
+		modelStack.Scale((go->getLassoPos() - player1->pos).Length(), .2, 1);
+		RenderMesh(meshList[GEO_ROPE], false);
+		modelStack.PopMatrix();
+	}
 }
 
 void SceneSP3::RenderGO(GameObject *go)
@@ -1349,16 +1375,6 @@ void SceneSP3::RenderGO(GameObject *go)
 
 		break;
 	case GameObject::GO_CAR:
-		//modelStack.PushMatrix();
-		//modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
-		//modelStack.Rotate(go->rotationAngle, 0, 0, 1);
-		//modelStack.Rotate(180, 0, 0, 1);
-		//modelStack.Rotate(90, 1, 0, 0);
-		//modelStack.Scale(go->scale.x / 10, go->scale.y / 5, go->scale.z / 2);
-		//modelStack.Scale(2.5, 2.5, 2.5);
-		//RenderMesh(meshList[GEO_CUBE], false);
-		//modelStack.PopMatrix();
-
 		modelStack.PushMatrix();
 		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
 		modelStack.Rotate(-10, 1, 0, 0);
@@ -1410,11 +1426,14 @@ void SceneSP3::RenderGO(GameObject *go)
 
 void SceneSP3::RenderEnemy(enemy *go)
 {
-	modelStack.PushMatrix();
-	modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z );
-	modelStack.Scale(3,3,3);
-	RenderMesh(meshList[GEO_ENEMY], true);
-	modelStack.PopMatrix();
+	if (go->getActive() == 1)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
+		modelStack.Scale(3, 3, 3);
+		RenderMesh(meshList[GEO_ENEMY], true);
+		modelStack.PopMatrix();
+	}
 }
 
 
@@ -1475,19 +1494,16 @@ void SceneSP3::mapEditorRender()
 	modelStack.Scale(testMap.getMapSize().x, testMap.getMapSize().y, 1);
 	RenderMesh(testMap.getBackground(), false);
 	modelStack.PopMatrix();
-
 	double x, y;
 	Application::GetCursorPos(&x, &y);
 	int w = Application::GetWindowWidth();
 	int h = Application::GetWindowHeight();
 	float worldX = x * m_worldWidth / w;
 	float worldY = (h - y) * m_worldHeight / h;
-
 	if (Application::IsKeyPressed(VK_LSHIFT))
 	{
 		int posx = worldX;
 		int posy = worldY;
-
 		if ((int)(posx - mapPosition.x) % 10 > 5)
 		{
 			posx += 10 - ((int)(posx - mapPosition.x) % 10);
@@ -1496,7 +1512,6 @@ void SceneSP3::mapEditorRender()
 		{
 			posx -= (int)(posx - mapPosition.x) % 10;
 		}
-
 		if ((int)(posy - mapPosition.y) % 10 > 5)
 		{
 			posy += 10 - ((int)(posy - mapPosition.y) % 10);
@@ -1505,16 +1520,13 @@ void SceneSP3::mapEditorRender()
 		{
 			posy -= (int)(posy - mapPosition.y) % 10;
 		}
-
 		modelStack.PushMatrix();
 		modelStack.Translate(posx, posy, -1);
 		modelStack.Scale(55, 55, 1);
 		RenderMesh(meshList[HUD_GRIDLOCK], false);
 		modelStack.PopMatrix();
 	}
-
 	glDisable(GL_DEPTH_TEST);
-
 	for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 	{
 		GameObject *go = (GameObject *)*it;
@@ -1559,7 +1571,6 @@ void SceneSP3::mapEditorRender()
 			modelStack.PopMatrix();
 		}
 	}
-
 	if (deleteMode > 0)
 	{
 		modelStack.PushMatrix();
@@ -1567,14 +1578,12 @@ void SceneSP3::mapEditorRender()
 		modelStack.Scale(3, 3, 1);
 		RenderMesh(meshList[HUD_DELETEICON], false);
 		modelStack.PopMatrix();
-
 		if (Application::IsMousePressed(0) && deleteMode > 1)
 		{
 			renderSelection(newMouseX, newMouseY);
 		}
 	}
 	glEnable(GL_DEPTH_TEST);
-
 	if (testMode == false)
 	{
 		modelStack.PushMatrix();
@@ -1582,7 +1591,6 @@ void SceneSP3::mapEditorRender()
 		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
 		RenderMesh(meshList[HUD_MAPEDITOR], false);
 		modelStack.PopMatrix();
-
 		RenderTextOnScreen(meshList[GEO_TEXT], mapName, Color(0, 1, 0), 3, 39, 54);
 	}
 	else
@@ -1592,7 +1600,6 @@ void SceneSP3::mapEditorRender()
 		modelStack.Scale(20, 20, 1);
 		RenderMesh(meshList[HUD_RADAR], false);
 		modelStack.PopMatrix();
-
 		modelStack.PushMatrix();
 		modelStack.Translate(15, 10, 9);
 		modelStack.Rotate(time, 0, 0, 1);
@@ -1600,11 +1607,9 @@ void SceneSP3::mapEditorRender()
 		modelStack.Translate(2.f, 0, 0);
 		RenderMesh(meshList[HUD_RADARLINE], false);
 		modelStack.PopMatrix();
-
 		renderMinimap(&testMap);
 	}
 }
-
 void SceneSP3::renderMinimap(playMap* map)
 {
 	for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
@@ -1629,7 +1634,7 @@ void SceneSP3::renderMinimap(playMap* map)
 				j += 100;
 				i -= 260;
 			}
-			
+
 			if (i < j && i > j - 100)
 			{
 				//cout << Math::RadianToDegree(atan2(go->pos.y - player1->pos.y, go->pos.x - player1->pos.x)) << endl;
@@ -1642,7 +1647,7 @@ void SceneSP3::renderMinimap(playMap* map)
 			}
 			else
 			{
-				
+
 			}
 		}
 	}
@@ -1780,6 +1785,11 @@ void SceneSP3::Render()
 	ss11.precision(5);
 	ss11 << "count: " << testMap.propCount;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss11.str(), Color(0, 1, 0), 3, 0, 6);
+
+	std::ostringstream ss22;
+	ss22.precision(5);
+	ss22 << "score: " << points;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss22.str(), Color(0, 1, 0), 3, 0, 9);
 
 	std::ostringstream ss;
 	ss.precision(5);

@@ -121,6 +121,8 @@ protected:
 	float diffy;
 	float time;
 
+	int points = 0;
+
 	//Auditing
 	float m1, m2;
 	Vector3 u1, u2, v1, v2;

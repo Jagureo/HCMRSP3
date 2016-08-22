@@ -17,6 +17,7 @@
 		~enemy();
 		Vector3 getPos();
 		Vector3 getVel();
+		bool getActive();
 		bool getNewSpawn();
 		bool getCaught();
 		void setNewSpawn(bool input);
@@ -25,6 +26,7 @@
 		void slowDown();
 		void setVel(float x, float y, float z);
 		void setPos(float x, float y, float z);
+		void setActive(bool input);
 		void updatePos(float dt);
 		enum ENEMY_TYPE
 		{
@@ -34,8 +36,10 @@
 			EN_TOTAL, //must be last
 		};
 		bool caught;
+		int strength;
 		Vector3 position;
 		Vector3 vel;
+		bool active;
 		bool newSpawn;
 	};
 
