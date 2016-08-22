@@ -1204,7 +1204,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 			}
 			if (deleteMode == 3)
 			{
-				for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end();)
+				for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 				{
 					GameObject *go = (GameObject *)*it;
 					if (go->pos.x > newMouseX && go->pos.x < worldX)
