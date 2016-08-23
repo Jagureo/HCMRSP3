@@ -499,6 +499,11 @@ void SceneSP3::playerControl()
 	}
 	if (Application::IsKeyPressed('D'))
 	{
+		player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
+		player1->rotationAngle += player1->playerCar.turnSpeed * 5;
+		player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
+		player1->rotationAngle -= player1->playerCar.turnSpeed * 5;
+
 		player1->rotationAngle -= player1->playerCar.turnSpeed;
 		if (player1->vel.Length() < 3)
 		{
@@ -508,11 +513,14 @@ void SceneSP3::playerControl()
 				player1->rotationAngle += player1->playerCar.turnSpeed;
 		}
 		player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
-	
-		player1->vel += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, 0);
 	}
 	if (Application::IsKeyPressed('A'))
 	{
+		player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
+		player1->rotationAngle -= player1->playerCar.turnSpeed * 5;
+		player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
+		player1->rotationAngle += player1->playerCar.turnSpeed * 5;
+
 		player1->rotationAngle += player1->playerCar.turnSpeed;
 		if (player1->vel.Length() < 3)
 		{
@@ -522,8 +530,6 @@ void SceneSP3::playerControl()
 				player1->rotationAngle -= player1->playerCar.turnSpeed;
 		}
 		player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
-	
-		player1->vel += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, 0);
 	}
 	if (player1->vel.Length() < player1->playerCar.topSpeed)
 	{
@@ -1868,14 +1874,14 @@ void SceneSP3::RenderProps(playMap* map)
 		{
 			glEnable(GL_DEPTH_TEST);
 			modelStack.PushMatrix();
-			if (player1->pos.y > go->pos.y)
-			{
-				go->pos.z = player1->pos.z + 5;
-			}
-			else
-			{
-				go->pos.z = player1->pos.z - 5;
-			}
+			//if (player1->pos.y > go->pos.y)
+			//{
+			//	go->pos.z = player1->pos.z + 5;
+			//}
+			//else
+			//{
+			//	go->pos.z = player1->pos.z - 5;
+			//}
 			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z - 2);
 			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
 			RenderMesh(meshList[GEO_ROCK], true);
@@ -2358,7 +2364,10 @@ void SceneSP3::Render()
 	{
 		renderMenu();
 	}
-	//RenderProps(&testMap);
+	if (gameStates == states::s_Tutorial || gameStates == states::s_Level2 || gameStates == states::s_Level3 || gameStates == states::s_LevelBoss)
+	{
+		RenderProps(&testMap);
+	}
 
 	if (gameStates == states::s_MapEditor)
 	{
