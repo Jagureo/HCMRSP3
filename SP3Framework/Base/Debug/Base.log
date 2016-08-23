@@ -1,7 +1,12 @@
-﻿Build started 22/8/2016 2:22:53 PM.
-     1>Project "C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Base\Base.vcxproj" on node 2 (Build target(s)).
+﻿Build started 23/8/2016 10:48:49 AM.
+     1>Project "C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Base\Base.vcxproj" on node 3 (Build target(s)).
      1>ClCompile:
-         D:\New folder\VC\bin\CL.exe /c /IC:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\\enemy /IC:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\\lasso /IC:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\/Common/Source /IC:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\/glew/include /IC:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\/glfw/include /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\SceneSP3.cpp
+         D:\New folder\VC\bin\CL.exe /c /IC:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\\enemy /IC:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\\lasso /IC:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\/Common/Source /IC:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\/glew/include /IC:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\/glfw/include /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\SceneSP3.cpp Source\TextFile.cpp
+         TextFile.cpp
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\textfile.cpp(15): warning C4244: 'return' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\textfile.cpp(19): warning C4244: 'return' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\textfile.cpp(188): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\textfile.cpp(192): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
          SceneSP3.cpp
      1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\enemy\enemy.h(41): warning C4251: 'enemy::position' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'enemy'
                  c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
@@ -13,44 +18,48 @@
                  c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
      1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.h(32): warning C4251: 'lasso::lassoVel' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'lasso'
                  c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(104): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(137): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(146): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(156): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(188): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(238): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(268): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(298): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(420): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(439): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(456): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(468): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(700): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(701): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(715): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(716): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(931): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(970): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1214): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1215): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1269): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1270): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1454): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1455): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1503): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1504): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1598): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1767): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1768): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1771): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1772): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1790): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1892): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1929): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1930): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(2018): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(2262): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(2263): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(105): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(138): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(147): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(157): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(189): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(239): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(269): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(299): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(421): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(440): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(457): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(469): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(854): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(855): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1094): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1133): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1281): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1301): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1318): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1319): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1390): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1391): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1445): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1446): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1622): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1623): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1672): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1673): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1767): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1936): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1937): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1940): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1941): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(1959): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(2061): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(2098): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(2099): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(2187): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(2434): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\scenesp3.cpp(2435): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+         Generating Code...
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\base\source\textfile.cpp(77): warning C4715: 'TextFile::SaveFile' : not all control paths return a value
        Link:
          D:\New folder\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Debug\Base.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Debug /LIBPATH:"C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\/glfw/lib-msvc100" /LIBPATH:C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\/glew/lib Common.lib winmm.lib opengl32.lib glu32.lib glew32.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Debug\Base.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Debug\Base.lib" /MACHINE:X86 Debug\Application.obj
          Debug\Camera.obj
@@ -81,4 +90,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.35
+Time Elapsed 00:00:01.69

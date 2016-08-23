@@ -1,0 +1,50 @@
+﻿Build started 23/8/2016 10:48:49 AM.
+     1>Project "C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\lasso\lasso.vcxproj" on node 3 (Build target(s)).
+     1>ClCompile:
+         D:\New folder\VC\bin\CL.exe /c /IC:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\/Common/Source /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D LASSO_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt lasso.cpp
+         lasso.cpp
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.h(29): warning C4251: 'lasso::lassoPos' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'lasso'
+                 c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.h(31): warning C4251: 'lasso::targetPos' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'lasso'
+                 c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.h(32): warning C4251: 'lasso::lassoVel' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'lasso'
+                 c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(4): warning C4273: 'lasso::lasso' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.h(16) : see previous definition of '{ctor}'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(9): warning C4273: 'lasso::~lasso' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.h(17) : see previous definition of '{dtor}'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(14): warning C4273: 'lasso::throwLasso' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.h(34) : see previous definition of 'throwLasso'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(25): warning C4273: 'lasso::updateLasso' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.h(37) : see previous definition of 'updateLasso'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(30): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(35): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(36): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(44): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(45): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(50): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(58): warning C4273: 'lasso::checkCaught' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.h(35) : see previous definition of 'checkCaught'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(69): warning C4273: 'lasso::caughtUpdate' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.h(36) : see previous definition of 'caughtUpdate'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(74): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(83): warning C4273: 'lasso::getLassoPos' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.h(39) : see previous definition of 'getLassoPos'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(88): warning C4273: 'lasso::getTargetPos' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.h(42) : see previous definition of 'getTargetPos'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(93): warning C4273: 'lasso::getLassoVel' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.h(41) : see previous definition of 'getLassoVel'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(98): warning C4273: 'lasso::getLassoState' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.h(40) : see previous definition of 'getLassoState'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(103): warning C4273: 'newLasso' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.h(47) : see previous definition of 'newLasso'
+     1>c:\users\beckham\desktop\hcmrsp3_19_8_2016\sp3framework\lasso\lasso.cpp(66): warning C4715: 'lasso::checkCaught' : not all control paths return a value
+       Link:
+         D:\New folder\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Debug\lasso.dll" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Debug\lasso.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Debug\lasso.lib" /MACHINE:X86 /DLL Debug\lasso.obj
+         C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Debug\Common.lib
+         lasso.vcxproj -> C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Debug\lasso.dll
+     1>Done Building Project "C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\lasso\lasso.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.75

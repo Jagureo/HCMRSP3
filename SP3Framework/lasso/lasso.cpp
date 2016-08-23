@@ -35,7 +35,7 @@ bool lasso::updateLasso(Vector3 playerPos, float dt)
 			lassoVel += (targetPos - lassoPos) * 0.1;
 			lassoPos += lassoVel * dt * 0.1;
 			currLassoRange = (lassoPos - playerPos).Length();
-			std::cout << currLassoRange << std::endl;
+			//std::cout << currLassoRange << std::endl;
 		}
 		
 	}
@@ -49,7 +49,7 @@ bool lasso::updateLasso(Vector3 playerPos, float dt)
 			currLassoState = READY;
 			lassoVel = (0,0,0);
 		}
-		std::cout << "cumming bak" << std::endl;
+		//std::cout << "cumming bak" << std::endl;
 	}
 
 	return false;

@@ -712,6 +712,7 @@ void SceneSP3::Update(double dt)
 	//	float worldY = (h - y) * m_worldHeight / h;
 	//	m_ghost->pos.Set(worldX, worldY, 0);
 	//	m_ghost->active = true;
+
 	//
 
 	//	//bLButtonState = false;
@@ -838,9 +839,13 @@ void SceneSP3::Update(double dt)
 	{
 
 		if (bLButtonState && !Application::IsMousePressed(0))
+
+			//}
+		if (bLButtonState && !Application::IsMousePressed(0))
 		{
 			bLButtonState = false;
 			std::cout << "LBUTTON UP" << std::endl;
+
 			//Exercise 6: spawn small GO_BALL
 			double x, y;
 			Application::GetCursorPos(&x, &y);
@@ -849,6 +854,7 @@ void SceneSP3::Update(double dt)
 			float worldX = x * m_worldWidth / w;
 			float worldY = (h - y) * m_worldHeight / h;
 			m_ghost->active = false;
+
 			//GameObject* ball = FetchGO();
 			//ball->type = GameObject::GO_BALL;
 			//Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
@@ -865,96 +871,114 @@ void SceneSP3::Update(double dt)
 			//m_estimatedTime = -1;
 			if (gameStates == states::s_Upgrade)
 			{
-				if (worldX > 0.0f * m_worldWidth && worldX < 0.33073f * m_worldWidth)
+				bLButtonState = false;
+				std::cout << "LBUTTON UP" << std::endl;
+				//GameObject* ball = FetchGO();
+				//ball->type = GameObject::GO_BALL;
+				//Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
+				//float radius = Math::Clamp(size.Length(), 1.f, 1.f);
+				//ball->scale.Set(radius, radius, radius);
+				//ball->pos = m_ghost->pos;
+				////ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
+				//ball->mass = radius;
+				//ball->ballrotated = 0;
+				//m_ghost->active = false;
+				//TextFile* hi = new TextFile(TextFile::MAP);
+				//hi->SetData("ball", ball->pos.x, ball->pos.y, ball->scale.x);
+				//hi->SaveMapObj("test.txt");
+				//m_estimatedTime = -1;
+				if (gameStates == states::s_Upgrade)
 				{
-					if (worldY > 68.472f && worldY < 76.111f)
+					if (worldX > 0.0f * m_worldWidth && worldX < 0.33073f * m_worldWidth)
 					{
-						gameStates = states::s_Upgrade_Cars;
+						if (worldY > 68.472f && worldY < 76.111f)
+						{
+							gameStates = states::s_Upgrade_Cars;
+						}
+						if (worldY > 56.111f && worldY < 63.75f)
+						{
+							gameStates = states::s_Upgrade_Tires;
+						}
+						if (worldY > 43.333f && worldY < 50.833f)
+						{
+							gameStates = states::s_Upgrade_Lasso;
+						}
+						if (worldY > 30.694f && worldY < 38.333f)
+						{
+							gameStates = states::s_Upgrade_Darts;
+						}
 					}
-					if (worldY > 56.111f && worldY < 63.75f)
+				}
+				else if (gameStates == states::s_Menu)
+				{
+					if (worldX > 0.656f * m_worldWidth && worldX < 0.88047f * m_worldWidth)
 					{
-						gameStates = states::s_Upgrade_Tires;
+						if (worldY > 36.111 && worldY < 39.444f)
+						{
+							gameStates = states::s_LevelSelect;
+						}
+						if (worldY > 29.2f && worldY <  32.35f)
+						{
+							gameStates = states::s_Instructions;
+						}
+						if (worldY > 22 && worldY < 25.27f)
+						{
+							gameStates = states::s_Options;
+						}
+						if (worldY > 15.438f && worldY < 18.6f)
+						{
+							gameStates = states::s_Highscore;
+						}
+						if (worldY > 8 && worldY < 11.406f)
+						{
+							exit(0);
+						}
 					}
-					if (worldY > 43.333f && worldY < 50.833f)
+				}
+				else if (gameStates == states::s_Instructions)
+				{
+					if (worldX > 0.035f * m_worldWidth && worldX < 0.14141f * m_worldWidth)
 					{
-						gameStates = states::s_Upgrade_Lasso;
+						if (worldY > 3.0 && worldY < 9.0f)
+						{
+							gameStates = states::s_Menu;
+						}
 					}
-					if (worldY > 30.694f && worldY < 38.333f)
+				}
+				else if (gameStates == states::s_LevelSelect)
+				{
+					if (worldX > 0.78854f * m_worldWidth && worldX < 0.99219f * m_worldWidth)
 					{
-						gameStates = states::s_Upgrade_Darts;
+						if (worldY > 1 && worldY < 11.6f)
+						{
+							gameStates = states::s_CustomLevelSelect;
+						}
+					}
+					if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
+					{
+						if (worldY > 1 && worldY < 11.6f)
+						{
+							gameStates = states::s_Menu;
+						}
+					}
+				}
+				else if (gameStates == states::s_CustomLevelSelect)
+				{
+					if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
+					{
+						if (worldY > 1 && worldY < 11.6f)
+						{
+							gameStates = states::s_LevelSelect;
+						}
 					}
 				}
 			}
-			else if (gameStates == states::s_Menu)
+			if (!bLButtonState && Application::IsMousePressed(0))
 			{
-				if (worldX > 0.656f * m_worldWidth && worldX < 0.88047f * m_worldWidth)
-				{
-					if (worldY > 36.111 && worldY < 39.444f)
-					{
-						gameStates = states::s_LevelSelect;
-					}
-					if (worldY > 29.2f && worldY <  32.35f)
-					{
-						gameStates = states::s_Instructions;
-					}
-					if (worldY > 22 && worldY < 25.27f)
-					{
-						gameStates = states::s_Options;
-					}
-					if (worldY > 15.438f && worldY < 18.6f)
-					{
-						gameStates = states::s_Highscore;
-					}
-					if (worldY > 8 && worldY < 11.406f)
-					{
-						exit(0);
-					}
-				}
-			}
-			else if (gameStates == states::s_Instructions)
-			{
-				if (worldX > 0.035f * m_worldWidth && worldX < 0.14141f * m_worldWidth)
-				{
-					if (worldY > 3.0 && worldY < 9.0f)
-					{
-						gameStates = states::s_Menu;
-					}
-				}
-			}
-			else if (gameStates == states::s_LevelSelect)
-			{
-				if (worldX > 0.78854f * m_worldWidth && worldX < 0.99219f * m_worldWidth)
-				{
-					if (worldY > 1 && worldY < 11.6f)
-					{
-						gameStates = states::s_CustomLevelSelect;
-					}
-				}
-				if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
-				{
-					if (worldY > 1 && worldY < 11.6f)
-					{
-						gameStates = states::s_Menu;
-					}
-				}
-			}
-			else if (gameStates == states::s_CustomLevelSelect)
-			{
-				if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
-				{
-					if (worldY > 1 && worldY < 11.6f)
-					{
-						gameStates = states::s_LevelSelect;
-					}
-				}
-			}
-		}
-		if (!bLButtonState && Application::IsMousePressed(0))
-		{
 
-			bLButtonState = true;
+				bLButtonState = true;
+			}
 		}
-	}
 
 		static bool pressedBack = false;
 		if (gameStates == states::s_CustomLevelSelect)
@@ -1145,15 +1169,13 @@ void SceneSP3::Update(double dt)
 						break;
 					}
 				}
-
-
-
 				if (go->type == GameObject::GO_CAR)
 				{
 					if (!go->active)
 						continue;
 					if (go->pos.x > m_worldWidth)
 					{
+
 						//std::cout << go->pos << std::endl;
 						go->pos.x -= go->pos.x - m_worldWidth;
 					}
@@ -1178,6 +1200,7 @@ void SceneSP3::Update(double dt)
 								continue;
 
 						}
+
 					}
 				}
 
@@ -1297,16 +1320,15 @@ void SceneSP3::Update(double dt)
 				//m_ghost->pos.Set(worldX, worldY, 0);
 				//m_ghost->active = true;
 				Dalasso->throwLasso(player1->pos, Vector3(worldX, worldY, 0));
-
 			}
 			else
 			{
 				bLButtonState = false;
 			}
 		}
-
+		//std::cout << Dalasso->getLassoState() << std::endl;
+	}
 }
-
 
 void SceneSP3::mapEditorUpdate(double dt)
 {
@@ -1507,16 +1529,8 @@ void SceneSP3::mapEditorUpdate(double dt)
 					else
 					{
 						TextFile* map = new TextFile(TextFile::MAP);
-						if (map->CreateMapFile(mapName, false) == "fail")
-						{
-							cout << "Map name already in use." << endl;
-						}
-						else
-						{
 							FileName = map->CreateMapFile(mapName, false);
-						}
 					}
-
 				}
 				for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 				{
@@ -2122,7 +2136,7 @@ bool SceneSP3::RenderMapFile()
 			obs->pos.Set(map->get_x() - mapPosition.x, map->get_y() - mapPosition.y, 1);
 			obs->fresh = true;
 			obs->active = true;
-			obs->scale.Set(1, 1, 1);
+			obs->scale.Set(6, 6 ,6);
 			testMap.forceAddSingleProp(obs);
 
 			cout << "rock added" << endl;

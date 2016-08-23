@@ -79,15 +79,16 @@ string TextFile::CreateMapFile(const string MapName, bool Loading)
 {
 	string FileName = MapName + ".txt";
 	string linetext;
-	fstream MapFile(FileName);
-	if (MapFile.good() == true)  // if file exists
+	fstream MapFile;
+
+	if (!Loading) //overwrite save file
 	{
-		if (!Loading)
-		{
-			return "fail";
-		}
+		MapFile.open(FileName, ios_base::out); // create text file
 	}
-	MapFile.open(FileName); // create text file
+	else
+	{
+		MapFile.open(FileName);
+	}
 	return FileName;
 
 }
