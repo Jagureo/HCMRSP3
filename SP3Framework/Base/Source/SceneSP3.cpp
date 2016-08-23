@@ -499,29 +499,42 @@ void SceneSP3::playerControl()
 	}
 	if (Application::IsKeyPressed('D'))
 	{
-		player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
-		player1->rotationAngle += player1->playerCar.turnSpeed * 5;
-		player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
-		player1->rotationAngle -= player1->playerCar.turnSpeed * 5;
-
+		player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
+		//player1->rotationAngle += player1->playerCar.turnSpeed * 3;
 		player1->rotationAngle -= player1->playerCar.turnSpeed;
+		//player1->rotationAngle -= player1->playerCar.turnSpeed * 3;
+		//player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
+		//player1->rotationAngle += player1->playerCar.turnSpeed * 3;
+		//player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
+		//player1->rotationAngle -= player1->playerCar.turnSpeed * 3;
+
+		//player1->rotationAngle -= player1->playerCar.turnSpeed;
 		if (player1->vel.Length() < 3)
 		{
 			if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
+			{
 				player1->rotationAngle += 1 / player1->vel.Length();
+			}
 			else
+			{
 				player1->rotationAngle += player1->playerCar.turnSpeed;
+			}
+				
 		}
+		player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
+
 		player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
 	}
 	if (Application::IsKeyPressed('A'))
 	{
-		player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
-		player1->rotationAngle -= player1->playerCar.turnSpeed * 5;
-		player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
-		player1->rotationAngle += player1->playerCar.turnSpeed * 5;
-
+		player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
 		player1->rotationAngle += player1->playerCar.turnSpeed;
+		//player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
+		//player1->rotationAngle -= player1->playerCar.turnSpeed * 3;
+		//player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
+		//player1->rotationAngle += player1->playerCar.turnSpeed * 3;
+
+		//player1->rotationAngle += player1->playerCar.turnSpeed;
 		if (player1->vel.Length() < 3)
 		{
 			if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
@@ -529,6 +542,8 @@ void SceneSP3::playerControl()
 			else
 				player1->rotationAngle -= player1->playerCar.turnSpeed;
 		}
+		player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
+
 		player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
 	}
 	if (player1->vel.Length() < player1->playerCar.topSpeed)
@@ -712,7 +727,6 @@ void SceneSP3::Update(double dt)
 	//	float worldY = (h - y) * m_worldHeight / h;
 	//	m_ghost->pos.Set(worldX, worldY, 0);
 	//	m_ghost->active = true;
-
 	//
 
 	//	//bLButtonState = false;
@@ -839,13 +853,9 @@ void SceneSP3::Update(double dt)
 	{
 
 		if (bLButtonState && !Application::IsMousePressed(0))
-
-			//}
-		if (bLButtonState && !Application::IsMousePressed(0))
 		{
 			bLButtonState = false;
 			std::cout << "LBUTTON UP" << std::endl;
-
 			//Exercise 6: spawn small GO_BALL
 			double x, y;
 			Application::GetCursorPos(&x, &y);
@@ -854,7 +864,6 @@ void SceneSP3::Update(double dt)
 			float worldX = x * m_worldWidth / w;
 			float worldY = (h - y) * m_worldHeight / h;
 			m_ghost->active = false;
-
 			//GameObject* ball = FetchGO();
 			//ball->type = GameObject::GO_BALL;
 			//Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
@@ -871,114 +880,96 @@ void SceneSP3::Update(double dt)
 			//m_estimatedTime = -1;
 			if (gameStates == states::s_Upgrade)
 			{
-				bLButtonState = false;
-				std::cout << "LBUTTON UP" << std::endl;
-				//GameObject* ball = FetchGO();
-				//ball->type = GameObject::GO_BALL;
-				//Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
-				//float radius = Math::Clamp(size.Length(), 1.f, 1.f);
-				//ball->scale.Set(radius, radius, radius);
-				//ball->pos = m_ghost->pos;
-				////ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
-				//ball->mass = radius;
-				//ball->ballrotated = 0;
-				//m_ghost->active = false;
-				//TextFile* hi = new TextFile(TextFile::MAP);
-				//hi->SetData("ball", ball->pos.x, ball->pos.y, ball->scale.x);
-				//hi->SaveMapObj("test.txt");
-				//m_estimatedTime = -1;
-				if (gameStates == states::s_Upgrade)
+				if (worldX > 0.0f * m_worldWidth && worldX < 0.33073f * m_worldWidth)
 				{
-					if (worldX > 0.0f * m_worldWidth && worldX < 0.33073f * m_worldWidth)
+					if (worldY > 68.472f && worldY < 76.111f)
 					{
-						if (worldY > 68.472f && worldY < 76.111f)
-						{
-							gameStates = states::s_Upgrade_Cars;
-						}
-						if (worldY > 56.111f && worldY < 63.75f)
-						{
-							gameStates = states::s_Upgrade_Tires;
-						}
-						if (worldY > 43.333f && worldY < 50.833f)
-						{
-							gameStates = states::s_Upgrade_Lasso;
-						}
-						if (worldY > 30.694f && worldY < 38.333f)
-						{
-							gameStates = states::s_Upgrade_Darts;
-						}
+						gameStates = states::s_Upgrade_Cars;
 					}
-				}
-				else if (gameStates == states::s_Menu)
-				{
-					if (worldX > 0.656f * m_worldWidth && worldX < 0.88047f * m_worldWidth)
+					if (worldY > 56.111f && worldY < 63.75f)
 					{
-						if (worldY > 36.111 && worldY < 39.444f)
-						{
-							gameStates = states::s_LevelSelect;
-						}
-						if (worldY > 29.2f && worldY <  32.35f)
-						{
-							gameStates = states::s_Instructions;
-						}
-						if (worldY > 22 && worldY < 25.27f)
-						{
-							gameStates = states::s_Options;
-						}
-						if (worldY > 15.438f && worldY < 18.6f)
-						{
-							gameStates = states::s_Highscore;
-						}
-						if (worldY > 8 && worldY < 11.406f)
-						{
-							exit(0);
-						}
+						gameStates = states::s_Upgrade_Tires;
 					}
-				}
-				else if (gameStates == states::s_Instructions)
-				{
-					if (worldX > 0.035f * m_worldWidth && worldX < 0.14141f * m_worldWidth)
+					if (worldY > 43.333f && worldY < 50.833f)
 					{
-						if (worldY > 3.0 && worldY < 9.0f)
-						{
-							gameStates = states::s_Menu;
-						}
+						gameStates = states::s_Upgrade_Lasso;
 					}
-				}
-				else if (gameStates == states::s_LevelSelect)
-				{
-					if (worldX > 0.78854f * m_worldWidth && worldX < 0.99219f * m_worldWidth)
+					if (worldY > 30.694f && worldY < 38.333f)
 					{
-						if (worldY > 1 && worldY < 11.6f)
-						{
-							gameStates = states::s_CustomLevelSelect;
-						}
-					}
-					if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
-					{
-						if (worldY > 1 && worldY < 11.6f)
-						{
-							gameStates = states::s_Menu;
-						}
-					}
-				}
-				else if (gameStates == states::s_CustomLevelSelect)
-				{
-					if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
-					{
-						if (worldY > 1 && worldY < 11.6f)
-						{
-							gameStates = states::s_LevelSelect;
-						}
+						gameStates = states::s_Upgrade_Darts;
 					}
 				}
 			}
-			if (!bLButtonState && Application::IsMousePressed(0))
+			else if (gameStates == states::s_Menu)
 			{
-
-				bLButtonState = true;
+				if (worldX > 0.656f * m_worldWidth && worldX < 0.88047f * m_worldWidth)
+				{
+					if (worldY > 36.111 && worldY < 39.444f)
+					{
+						gameStates = states::s_LevelSelect;
+					}
+					if (worldY > 29.2f && worldY <  32.35f)
+					{
+						gameStates = states::s_Instructions;
+					}
+					if (worldY > 22 && worldY < 25.27f)
+					{
+						gameStates = states::s_Options;
+					}
+					if (worldY > 15.438f && worldY < 18.6f)
+					{
+						gameStates = states::s_Highscore;
+					}
+					if (worldY > 8 && worldY < 11.406f)
+					{
+						exit(0);
+					}
+				}
+			}
+			else if (gameStates == states::s_Instructions)
+			{
+				if (worldX > 0.035f * m_worldWidth && worldX < 0.14141f * m_worldWidth)
+				{
+					if (worldY > 3.0 && worldY < 9.0f)
+					{
+						gameStates = states::s_Menu;
+					}
+				}
+			}
+			else if (gameStates == states::s_LevelSelect)
+			{
+				if (worldX > 0.78854f * m_worldWidth && worldX < 0.99219f * m_worldWidth)
+				{
+					if (worldY > 1 && worldY < 11.6f)
+					{
+						gameStates = states::s_CustomLevelSelect;
+					}
+				}
+				if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
+				{
+					if (worldY > 1 && worldY < 11.6f)
+					{
+						gameStates = states::s_Menu;
+					}
+				}
+			}
+			else if (gameStates == states::s_CustomLevelSelect)
+			{
+				if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
+				{
+					if (worldY > 1 && worldY < 11.6f)
+					{
+						gameStates = states::s_LevelSelect;
+					}
+				}
 			}
 		}
+		if (!bLButtonState && Application::IsMousePressed(0))
+		{
+
+			bLButtonState = true;
+		}
+	}
 
 		static bool pressedBack = false;
 		if (gameStates == states::s_CustomLevelSelect)
@@ -1169,13 +1160,15 @@ void SceneSP3::Update(double dt)
 						break;
 					}
 				}
+
+
+
 				if (go->type == GameObject::GO_CAR)
 				{
 					if (!go->active)
 						continue;
 					if (go->pos.x > m_worldWidth)
 					{
-
 						//std::cout << go->pos << std::endl;
 						go->pos.x -= go->pos.x - m_worldWidth;
 					}
@@ -1200,7 +1193,6 @@ void SceneSP3::Update(double dt)
 								continue;
 
 						}
-
 					}
 				}
 
@@ -1224,7 +1216,7 @@ void SceneSP3::Update(double dt)
 		for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 		{
 			GameObject *go = (GameObject *)*it;
-			if (go->active == false)
+			if (go->dead == true)
 				continue;
 
 			if (go->fresh)
@@ -1320,15 +1312,16 @@ void SceneSP3::Update(double dt)
 				//m_ghost->pos.Set(worldX, worldY, 0);
 				//m_ghost->active = true;
 				Dalasso->throwLasso(player1->pos, Vector3(worldX, worldY, 0));
+
 			}
 			else
 			{
 				bLButtonState = false;
 			}
 		}
-		//std::cout << Dalasso->getLassoState() << std::endl;
-	}
+
 }
+
 
 void SceneSP3::mapEditorUpdate(double dt)
 {
@@ -1350,7 +1343,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 				for (int i = 0; i < 26; i++)
 				{
 					unsigned short key = 65 + i;
-					if ((GetAsyncKeyState(key) & 0x8001) != 0 && mapName.length() < 10)
+					if ((GetAsyncKeyState(key) & 0x8001) != 0 && mapName.length() < 9)
 					{
 						nameType = true;
 						std::ostringstream ss;
@@ -1529,8 +1522,16 @@ void SceneSP3::mapEditorUpdate(double dt)
 					else
 					{
 						TextFile* map = new TextFile(TextFile::MAP);
+						if (map->CreateMapFile(mapName, false) == "fail")
+						{
+							cout << "Map name already in use." << endl;
+						}
+						else
+						{
 							FileName = map->CreateMapFile(mapName, false);
+						}
 					}
+
 				}
 				for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 				{
@@ -2044,6 +2045,15 @@ void SceneSP3::mapEditorRender()
 		modelStack.PopMatrix();
 		renderMinimap(&testMap);
 	}
+
+	if (Application::IsKeyPressed('U') && testMode == false)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 9);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[HUD_MAPEDITOR2], false);
+		modelStack.PopMatrix();
+	}
 }
 void SceneSP3::renderMinimap(playMap* map)
 {
@@ -2077,7 +2087,24 @@ void SceneSP3::renderMinimap(playMap* map)
 				modelStack.Translate((go->pos.x - player1->pos.x) / 15, (go->pos.y - player1->pos.y) / 15, 1);
 				modelStack.Translate(15, 10, 8);
 				modelStack.Scale(0.5f, 0.5f, 1);
-				RenderMesh(meshList[HUD_RADARDETECT], false);
+				switch (go->type)
+				{
+				case GameObject::MAP_ROCK:
+				{
+											 RenderMesh(meshList[GEO_ROCK], false);
+											 break;
+				}
+				case GameObject::MAP_TREE:
+				{
+											 RenderMesh(meshList[GEO_TREETOP], false);
+											 break;
+				}
+				default:
+				{
+						   RenderMesh(meshList[HUD_RADARDETECT], false);
+						   break;
+				}
+				}
 				modelStack.PopMatrix();
 			}
 			else
@@ -2136,7 +2163,7 @@ bool SceneSP3::RenderMapFile()
 			obs->pos.Set(map->get_x() - mapPosition.x, map->get_y() - mapPosition.y, 1);
 			obs->fresh = true;
 			obs->active = true;
-			obs->scale.Set(6, 6 ,6);
+			obs->scale.Set(1, 1, 1);
 			testMap.forceAddSingleProp(obs);
 
 			cout << "rock added" << endl;
