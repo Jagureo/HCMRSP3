@@ -39,10 +39,18 @@ class SceneSP3 : public SceneBase
 		s_LevelSelect,
 		s_CustomLevelSelect,
 		s_Upgrade,
-		s_Upgrade_Cars,
-		s_Upgrade_Tires,
-		s_Upgrade_Lasso,
-		s_Upgrade_Darts,
+		s_Upgrade_Cars1,
+		s_Upgrade_Cars2,
+		s_Upgrade_Cars3,
+		s_Upgrade_Tires1,
+		s_Upgrade_Tires2,
+		s_Upgrade_Tires3,
+		s_Upgrade_Lasso1,
+		s_Upgrade_Lasso2,
+		s_Upgrade_Lasso3,
+		s_Upgrade_Darts1,
+		s_Upgrade_Darts2,
+		s_Upgrade_Darts3,
 		s_Tutorial,
 		s_Level2,
 		s_Level3,
@@ -59,6 +67,9 @@ class SceneSP3 : public SceneBase
 
 	states gameStates;
 	int arrowSelection;
+	float rotateDisplayX;
+	float rotateDisplayY;
+
 public:
 	SceneSP3();
 	~SceneSP3();
