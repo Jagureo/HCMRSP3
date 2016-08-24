@@ -62,7 +62,7 @@ void SceneSP3::Init()
 	testMap.setMapSize(20, 20);
 
 	//gameStates = states::s_Upgrade_Cars;
-	gameStates = states::s_Upgrade_Cars1;
+	gameStates = states::s_Menu;
 }
 
 void SceneSP3::Reset()
