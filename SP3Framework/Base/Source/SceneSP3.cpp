@@ -54,15 +54,32 @@ void SceneSP3::Init()
 	deleteMode = 0;
 	time = 0;
 	arrowSelection = 0;
-	rotateDisplayX = 0;
-	rotateDisplayY = 0;
+	objective = (0, 0, 0);
+	updateObjective = 0;
+	leader = NULL;
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP]);
 	testMap.setMapSize(20, 20);
 
-	 gameStates = states::s_Upgrade_Cars1;
-	//gameStates = states::s_Menu;
+	//gameStates = states::s_Upgrade_Cars;
+	gameStates = states::s_Tutorial;
+
+	for (int i = 0; i < 7; ++i)
+	{
+		enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 0);
+		animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+		animal->setLeader(0);
+		enemyList.push_back(animal);
+	}
+
+	for (int i = 0; i < 3; ++i)
+	{
+		enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 1);
+		animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+		animal->setLeader(0);
+		enemyList.push_back(animal);
+	}
 }
 
 void SceneSP3::Reset()
@@ -595,11 +612,35 @@ void SceneSP3::Update(double dt)
 
 	//std::cout<<zebra->getPos()<<std::endl;
 
-	if (Application::IsKeyPressed('E'))
+
+	if (updateObjective == 0)
 	{
-		enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0);
-		animal->setVel(Math::RandFloatMinMax(-5, 5), Math::RandFloatMinMax(-5, 5), 0);
+		objective += mapPosition;
+		updateObjective = 1;
+	}
+	else
+	{
+		objective.x += diffx;
+		objective.y += diffy;
+	}
+
+	if (Application::IsKeyPressed('1'))
+	{
+
+		enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 0);
+		animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+		animal->setLeader(0);
 		enemyList.push_back(animal);
+
+	}
+	if (Application::IsKeyPressed('2'))
+	{
+
+		enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 1);
+		animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+		animal->setLeader(0);
+		enemyList.push_back(animal);
+
 	}
 
 	if (Application::IsKeyPressed('R'))
@@ -860,7 +901,6 @@ void SceneSP3::Update(double dt)
 		{
 			bLButtonState = false;
 			std::cout << "LBUTTON UP" << std::endl;
-
 			//Exercise 6: spawn small GO_BALL
 			double x, y;
 			Application::GetCursorPos(&x, &y);
@@ -869,7 +909,6 @@ void SceneSP3::Update(double dt)
 			float worldX = x * m_worldWidth / w;
 			float worldY = (h - y) * m_worldHeight / h;
 			m_ghost->active = false;
-
 			//GameObject* ball = FetchGO();
 			//ball->type = GameObject::GO_BALL;
 			//Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
@@ -890,25 +929,25 @@ void SceneSP3::Update(double dt)
 				{
 					if (worldY > 68.472f && worldY < 76.111f)
 					{
-						gameStates = states::s_Upgrade_Cars1;
+						gameStates = states::s_Upgrade_Cars;
 					}
 					if (worldY > 56.111f && worldY < 63.75f)
 					{
-						gameStates = states::s_Upgrade_Tires1;
+						gameStates = states::s_Upgrade_Tires;
 					}
 					if (worldY > 43.333f && worldY < 50.833f)
 					{
-						gameStates = states::s_Upgrade_Lasso1;
+						gameStates = states::s_Upgrade_Lasso;
 					}
 					if (worldY > 30.694f && worldY < 38.333f)
 					{
-						gameStates = states::s_Upgrade_Darts1;
+						gameStates = states::s_Upgrade_Darts;
 					}
 				}
 			}
 			else if (gameStates == states::s_Menu)
 			{
-				if (worldX > 0.695f * m_worldWidth && worldX < 0.805f * m_worldWidth)
+				if (worldX > 0.656f * m_worldWidth && worldX < 0.88047f * m_worldWidth)
 				{
 					if (worldY > 36.111 && worldY < 39.444f)
 					{
@@ -968,27 +1007,6 @@ void SceneSP3::Update(double dt)
 						gameStates = states::s_LevelSelect;
 					}
 				}
-
-			}
-			else if (gameStates == states::s_Upgrade_Cars1)
-			{
-				if (worldX > 0.232f * m_worldWidth && worldX < 0.3777f * m_worldWidth)
-				{
-					if (worldY > 13.16f && worldY < 24.5f)
-					{
-						gameStates = states::s_Upgrade_Cars2;
-					}
-				}
-			}
-			else if (gameStates == states::s_Upgrade_Cars2)
-			{
-				if (worldX > 0.054f * m_worldWidth && worldX < 0.20f * m_worldWidth)
-				{
-					if (worldY > 13.16f && worldY < 24.5f)
-					{
-						gameStates = states::s_Upgrade_Cars1;
-					}
-				}
 			}
 		}
 		if (!bLButtonState && Application::IsMousePressed(0))
@@ -1021,25 +1039,6 @@ void SceneSP3::Update(double dt)
 			else if (!Application::IsKeyPressed(VK_BACK) && pressedBack == true)
 			{
 				pressedBack = false;
-			}
-		}
-		if (gameStates == states::s_Upgrade_Cars1 || gameStates == states::s_Upgrade_Cars2 || gameStates == states::s_Upgrade_Cars3)
-		{
-			if (Application::IsKeyPressed(VK_LEFT))
-			{
-				rotateDisplayX -= 5 * dt;
-			}
-			if (Application::IsKeyPressed(VK_RIGHT))
-			{
-				rotateDisplayX += 5 * dt;
-			}
-			if (Application::IsKeyPressed(VK_UP))
-			{
-				rotateDisplayY -= 5 * dt;
-			}
-			if (Application::IsKeyPressed(VK_DOWN))
-			{
-				rotateDisplayY += 5 * dt;
 			}
 		}
 		if (gameStates == states::s_Menu)
@@ -1287,6 +1286,38 @@ void SceneSP3::Update(double dt)
 			gameStates == states::s_Level3 ||
 			gameStates == states::s_LevelBoss)
 		{
+			/*if (leader != NULL)
+			{
+			std::cout << (leader->getPos() - player1->pos).Length() << std::endl;
+			leader->setLeader(0);
+			}*/
+			for (std::vector<enemy*>::iterator itE2 = enemyList.begin(); itE2 != enemyList.end(); ++itE2)
+			{
+				enemy *goE2 = (enemy *)*itE2;
+				if (goE2->getActive() == 1)
+				{
+
+					if (leader == NULL && (goE2->getPos() - player1->pos).Length() < 30)
+					{
+						leader = goE2;
+						//leader->setLeader(1);
+					}
+					else if (leader != NULL)
+					{
+						if ((goE2->getPos() - player1->pos).Length() < (leader->getPos() - player1->pos).Length() && (goE2->getPos() - player1->pos).Length() < 30)
+						{
+							leader->setLeader(0);
+							leader = goE2;
+							leader->setLeader(1);
+						}
+					}
+					if ((goE2->getPos() - player1->pos).Length() < 30)
+					{
+
+					}
+				}
+
+			}
 
 			for (std::vector<enemy*>::iterator itE = enemyList.begin(); itE != enemyList.end(); ++itE)
 			{
@@ -1294,49 +1325,74 @@ void SceneSP3::Update(double dt)
 				if (goE->getActive() == 1)
 				{
 
-					if (goE->getNewSpawn() == 1)
+					if (goE->getActive() == 1)
 					{
-						goE->setPos(goE->getPos().x + mapPosition.x, goE->getPos().y + mapPosition.y, 2);
-						goE->setNewSpawn(false);
-					}
-					else
-					{
-						goE->setPos(goE->getPos().x + diffx, goE->getPos().y + diffy, 2);
 
-						if ((goE->getPos() - player1->pos).LengthSquared() < 2000 || goE->getCaught() == 1)
+						if (goE->getNewSpawn() == 1)
 						{
-							goE->runOff(player1->pos);
+							goE->setPos(goE->getPos().x + mapPosition.x, goE->getPos().y + mapPosition.y, 2);
+							goE->setNewSpawn(false);
 						}
 						else
 						{
-							goE->slowDown();
-						}
+							goE->setPos(goE->getPos().x + diffx, goE->getPos().y + diffy, 2);
 
-						/*Vector3 temp = (goE->getVel() + goE->alignment(enemyList) + goE->cohesion(enemyList) + goE->seperation(enemyList));
-						goE->setVel(temp.x, temp.y, 0);*/
-
-
-						goE->updatePos(dt);
-						if (Dalasso->checkCaught(player1->pos, goE->getPos(), 5) == 1 || goE->getCaught() == 1)
-						{
-							goE->setCaught(1);
-							if (Dalasso->caughtUpdate(player1->pos, goE->getPos(), goE->getActive()) == 1)
+							if ((goE->getPos() - player1->pos).Length() < 30 && player1->engine != 0)
 							{
-								goE->setCaught(0);
-								if (goE->active == 0)
+								if (leader == NULL)
 								{
-									points++;
-									std::cout << "ANIMAL CAUGHT" << std::endl;
+									leader = goE;
+
+								}
+								goE->runOff(player1->pos, enemyList, leader);
+								goE->increaseRunLonger(3);
+							}
+							else if (goE->getRunLonger() > 0 || goE->getCaught() == 1)
+							{
+								goE->runOff(player1->pos, enemyList, leader);
+								goE->increaseRunLonger(-1);
+							}
+							else
+							{
+								goE->slowDown(enemyList, objective);
+								if (goE->getPos().x > objective.x - 10 && goE->getPos().x < objective.x + 10 && goE->getPos().y > objective.y - 10 && goE->getPos().y < objective.y + 10 && goE->leader == 0)
+								{
+									goE->setActive(false);
+									points--;
 								}
 							}
-							//std::cout << "hi" << std::endl;
+
+							goE->checkCollision(enemyList);
+
+
+							goE->updatePos(dt);
+							if (Dalasso->checkCaught(player1->pos, goE->getPos(), 5) == 1 || goE->getCaught() == 1)
+							{
+								goE->setCaught(1);
+								if (Dalasso->caughtUpdate(player1->pos, goE->getPos(), goE->getActive()) == 1)
+								{
+									goE->setCaught(0);
+									if (goE->active == 0)
+									{
+										points++;
+										//std::cout << "ANIMAL CAUGHT" << std::endl;
+									}
+								}
+								//std::cout << "hi" << std::endl;
+							}
 						}
 					}
 
 				}
 
+
 			}
 			Dalasso->updateLasso(player1->pos, dt);
+			/*if (furthestAlerted != NULL)
+			{
+			furthestAlerted->setLeader(1);
+			}*/
+
 		}
 		if (gameStates == states::s_Tutorial ||
 			gameStates == states::s_Level2 ||
@@ -1838,6 +1894,15 @@ bool SceneSP3::MapExist(string FileName)
 	}
 }
 
+	//corner
+	//wall = FetchGO();
+	//wall->type = GameObject::GO_WALL
+	//wall->pos.Set(112.5f, 88, 1);
+	//wall->normal = Vector3(0.5f, 0.5f, 0).Normalized();
+	//wall->active = true;
+	//wall->scale.Set(2, 6, 1);
+	//wall->rotationAngle = 45;
+
 void SceneSP3::RenderLasso(lasso *go)
 {
 	if (go->getLassoState() != 0)
@@ -1946,15 +2011,34 @@ void SceneSP3::RenderGO(GameObject *go)
 
 void SceneSP3::RenderEnemy(enemy *go)
 {
-	if (go->getActive() == 1)
+	if (go->getActive() == 1 && go->getType() == 0)
 	{
+		float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
 		modelStack.PushMatrix();
 		modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
+		modelStack.Rotate(angle, 0, 0, 1);
 		modelStack.Scale(3, 3, 3);
 		RenderMesh(meshList[GEO_ENEMY], true);
 		modelStack.PopMatrix();
 	}
+	else if (go->getActive() == 1 && go->getType() == 1)
+	{
+		float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
+		modelStack.PushMatrix();
+		modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
+		modelStack.Rotate(angle, 0, 0, 1);
+		modelStack.Scale(3, 3, 3);
+		RenderMesh(meshList[GEO_SHIP], true);
+		modelStack.PopMatrix();
+	}
+
+	modelStack.PushMatrix();
+	modelStack.Translate(objective.x, objective.y, objective.z);
+	modelStack.Scale(5, 5, 3);
+	RenderMesh(meshList[GEO_SHIP], true);
+	modelStack.PopMatrix();
 }
+
 
 void SceneSP3::RenderProps(playMap* map)
 {
@@ -2381,7 +2465,7 @@ void SceneSP3::renderMenu()
 		RenderMesh(meshList[GEO_UPGRADE_BACKGROUND], false);
 		modelStack.PopMatrix();
 	}
-	if (gameStates == states::s_Upgrade_Cars1 || gameStates == states::s_Upgrade_Cars2 || gameStates == states::s_Upgrade_Cars3)
+	if (gameStates == states::s_Upgrade_Cars)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -7);
@@ -2394,7 +2478,7 @@ void SceneSP3::renderMenu()
 			gameStates = states::s_Upgrade;
 		}
 	}
-	if (gameStates == states::s_Upgrade_Tires1 || gameStates == states::s_Upgrade_Tires2 || gameStates == states::s_Upgrade_Tires3)
+	if (gameStates == states::s_Upgrade_Tires)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -5);
@@ -2407,7 +2491,7 @@ void SceneSP3::renderMenu()
 			gameStates = states::s_Upgrade;
 		}
 	}
-	if (gameStates == states::s_Upgrade_Lasso1 || gameStates == states::s_Upgrade_Lasso2 || gameStates == states::s_Upgrade_Lasso3)
+	if (gameStates == states::s_Upgrade_Lasso)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -5);
@@ -2420,7 +2504,7 @@ void SceneSP3::renderMenu()
 			gameStates = states::s_Upgrade;
 		}
 	}
-	if (gameStates == states::s_Upgrade_Darts1 || gameStates == states::s_Upgrade_Darts2 || gameStates == states::s_Upgrade_Darts3)
+	if (gameStates == states::s_Upgrade_Darts)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -5);
@@ -2445,7 +2529,7 @@ void SceneSP3::Render()
 
 	// Projection matrix : Orthographic Projection
 	Mtx44 projection;
-	projection.SetToOrtho(0, m_worldWidth, 0, m_worldHeight, -40, 10);
+	projection.SetToOrtho(0, m_worldWidth, 0, m_worldHeight, -10, 10);
 	//projection.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	projectionStack.LoadMatrix(projection);
 
@@ -2501,26 +2585,7 @@ void SceneSP3::Render()
 	{
 		RenderProps(&testMap);
 	}
-	if (gameStates == states::s_Upgrade_Cars1)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.400, 2);
-		modelStack.Rotate(rotateDisplayY + 40, 1, 0, 0);
-		modelStack.Rotate(rotateDisplayX - 45, 0, 1, 0);
-		modelStack.Scale(10, 10, 10);
-		RenderMesh(meshList[GEO_DISPLAY_CAR1], false);
-		modelStack.PopMatrix();
-	}
-	if (gameStates == states::s_Upgrade_Cars2)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.400, 2);
-		modelStack.Rotate(rotateDisplayY + 40, 1, 0, 0);
-		modelStack.Rotate(rotateDisplayX + 45, 0, 1, 0);
-		modelStack.Scale(15, 15, 15);
-		RenderMesh(meshList[GEO_DISPLAY_CAR2], false);
-		modelStack.PopMatrix();
-	}
+
 	if (gameStates == states::s_MapEditor)
 	{
 		/*if (testMode == true)
@@ -2595,21 +2660,6 @@ void SceneSP3::Render()
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Collision", Color(0, 1, 0), 3, 0, 0);
 }
 
-void SceneSP3::SetEvent(int eventtype)
-{
-	switch (eventtype)
-	{
-	case 1:
-		//insert flood 
-		break;
-	case 2:
-		//insert earthquake
-		break;
-	case 3:
-		//insert something
-		break;
-	}
-}
 void SceneSP3::Exit()
 {
 	SceneBase::Exit();

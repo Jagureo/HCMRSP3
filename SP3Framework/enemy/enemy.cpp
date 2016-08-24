@@ -1,13 +1,31 @@
 #include "enemy.h"
 
-enemy::enemy(Vector3 pos)
+enemy::enemy(Vector3 pos, int eType)
 {
+	
 	position = pos;
 	newSpawn = 1;
 	caught = 0;
 	strength = 100;
 	active = 1;
+	running = 0;
 	runLonger = 0;
+	stamina = 300;
+
+	if (eType == 0)
+	{
+		strength = 100;
+		stamina = 500;
+		speed = 2;
+		type = EN_ZEBRA;
+	}
+	else if (eType == 1)
+	{
+		strength = 300;
+		stamina = 300;
+		speed = 1;
+		type = EN_RHINO;
+	}
 }
 
 enemy::~enemy()
@@ -25,6 +43,16 @@ bool enemy::getCaught()
 	return caught;
 }
 
+int enemy::getRunLonger()
+{
+	return runLonger;
+}
+
+int enemy::getType()
+{
+	return type;
+}
+
 bool enemy::getActive()
 {
 	return active;
@@ -38,6 +66,15 @@ bool enemy::getNewSpawn()
 void enemy::setNewSpawn(bool input)
 {
 	newSpawn = input;
+}
+
+void enemy::increaseRunLonger(int input)
+{
+	runLonger += input;
+	if (runLonger < 0)
+	{
+		runLonger = 0;
+	}
 }
 
 void enemy::setCaught(bool input)
@@ -60,39 +97,47 @@ void enemy::setVel(float x, float y, float z)
 	vel.Set(x, y, z);
 }
 
-void enemy::runOff(Vector3 playerPos)
+void enemy::setActive(bool input)
 {
-	//vel = -(playerPos - position) * (playerPos - position);
+	active = input;
+}
 
-	//vel.x += -(1 / (playerPos.x - position.x)) * 1;
+void enemy::setLeader(bool input)
+{
+	leader = input;
+}
 
-	//vel.y += -(1 / (playerPos.y - position.y)) * 1;
-	//
-	///*if (vel.x > -3)
-	//{
-	//	vel.x -= (1 / -(playerPos.x - position.x)) * 1;
-	//}
-	//if (vel.y > -3)
-	//{
-	//	vel.y -= (1 / -(playerPos.y - position.y)) * 1;
-	//}*/
-	//if (vel.x > 100)
-	//{
-	//	vel.x = 100;
-	//}
-	//if (vel.x < -100)
-	//{
-	//	vel.x = -100;
-	//}
-	//if (vel.y > 100)
-	//{
-	//	vel.y = 100;
-	//}
-	//if (vel.y < -100)
-	//{
-	//	vel.y = -100;
-	//}
+void enemy::checkCollision(std::vector<enemy*> enemyVector)
+{
+	for (std::vector<enemy*>::iterator itE = enemyVector.begin(); itE != enemyVector.end(); ++itE)
+	{
+		enemy *goE = (enemy *)*itE;
+		if (position.x > goE->getPos().x - 10 && position.x < goE->getPos().x + 10 && position.y > goE->getPos().y - 10 && position.y < goE->getPos().y + 10 && goE->active == 1)
+		{
+			float distanceSquared = (position - goE->getPos()).LengthSquared();
+			float yDist = goE->getPos().y - position.y;
+			float xDist = goE->getPos().x - position.x;
+			float angleDiff = atan2(yDist, xDist);
+			Vector3 dir;
+			dir.x += (distanceSquared * cos(angleDiff));
+			dir.y += (distanceSquared * sin(angleDiff));
+			if (!dir.IsZero())
+			{
+				dir.Normalize();
+			}
+			else
+			{
+				dir.Set(1, 0, 0);
+			}
+			goE->vel += dir.Normalized() * (2 + speed);
+			vel += -(dir.Normalized()) * (2 + speed);
+		}
+	}
+}
 
+void enemy::runOff(Vector3 playerPos, std::vector<enemy*> enemyVector, enemy* leader1)
+{
+	running = 1;
 	float distanceSquared = (position - playerPos).LengthSquared();
 	float yDist = playerPos.y - position.y;
 	float xDist = playerPos.x - position.x;
@@ -108,45 +153,74 @@ void enemy::runOff(Vector3 playerPos)
 	{
 		dir.Set(1, 0, 0);
 	}
-	if (caught == 0)
+	if (stamina > 0)
 	{
-
-		vel += -(dir.Normalized()) * 1;
-	}
-	else
-	{
-		vel.x += -((dir.Normalized()).x + Math::RandFloatMinMax(-10,10)) * 1.5;
-		vel.y += -((dir.Normalized()).y + Math::RandFloatMinMax(-10, 10)) * 1.5;
-	}
-	runLonger++;
-}
-
-void enemy::slowDown()
-{
-	if (runLonger > 0)
-	{
-		runLonger--;
-	}
-	else
-	{
-
-		float distanceSquared = (position - (0,0,0)).LengthSquared();
-		float yDist = - position.y;
-		float xDist = - position.x;
-		float angleDiff = atan2(yDist, xDist);
-		Vector3 dir;
-		dir.x += (distanceSquared * cos(angleDiff));
-		dir.y += (distanceSquared * sin(angleDiff));
-		if (!dir.IsZero())
+		if (caught == 1 )
 		{
-			dir.Normalize();
+			vel.x += -((dir.Normalized()).x + Math::RandFloatMinMax(-10, 10)) * 3;
+			vel.y += -((dir.Normalized()).y + Math::RandFloatMinMax(-10, 10)) * 3;
+		}
+		else if (leader == 1)
+		{
+			vel.x += -((dir.Normalized()).x) * 3;
+			vel.y += -((dir.Normalized()).y) * 3;
 		}
 		else
 		{
-			dir.Set(1, 0, 0);
+			//vel += -(dir.Normalized()) * 3;
+			vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1)) * (3 + speed);
+			vel.z = 0;
 		}
-		vel += -(dir.Normalized()) * 1;
+		stamina--;
 	}
+	else
+	{
+		if (leader == 1)
+		{
+			vel.x += -((dir.Normalized()).x) * (2 + speed);
+			vel.y += -((dir.Normalized()).y) * (2 + speed);
+			
+		}
+		else
+		{
+			vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1)* (1 + speed));
+			vel.z = 0;
+		}
+	}
+	
+	if (stamina < 0)
+	{
+		stamina = 0;
+	}
+	
+	
+}
+
+void enemy::slowDown(std::vector<enemy*> enemyVector, Vector3 objective)
+{
+	running = 0;
+	stamina+= 5;
+	if (stamina > 300)
+	{
+		stamina = 300;
+	}
+			float distanceSquared = (position - objective).LengthSquared();
+			float yDist = objective.y - position.y;
+			float xDist = objective.x - position.x;
+			float angleDiff = atan2(yDist, xDist);
+			Vector3 dir;
+			dir.x += (distanceSquared * cos(angleDiff));
+			dir.y += (distanceSquared * sin(angleDiff));
+			if (!dir.IsZero())
+			{
+				dir.Normalize();
+			}
+			else
+			{
+				dir.Set(1, 0, 0);
+			}
+			vel += (dir.Normalized()* (speed));
+
 
 }
 
@@ -163,25 +237,56 @@ void enemy::updatePos(float dt)
 	{
 		active = 0;
 	}
-	if (vel.x > 50)
+	if (running == 1 && stamina > 0)
 	{
-		vel.x = 50;
+
+		if (vel.x > 100)
+		{
+			vel.x = 100;
+		}
+		else if (vel.x < -100)
+		{
+			vel.x = -100;
+		}
+		if (vel.y < -100)
+		{
+			vel.y = -100;
+		}
+		else if (vel.y > 100)
+		{
+			vel.y = 100;
+		}
+		if (vel.z != 0)
+		{
+			vel.z = 0;
+		}
 	}
-	else if (vel.x < -50)
+	else
 	{
-		vel.x = -50;
-	}
-	if (vel.y < -50)
-	{
-		vel.y = -50;
-	}
-	else if (vel.y > 50)
-	{
-		vel.y = 50;
+		if (vel.x > 50)
+		{
+			vel.x = 50;
+		}
+		else if (vel.x < -50)
+		{
+			vel.x = -50;
+		}
+		if (vel.y < -50)
+		{
+			vel.y = -50;
+		}
+		else if (vel.y > 50)
+		{
+			vel.y = 50;
+		}
+		if (vel.z != 0)
+		{
+			vel.z = 0;
+		}
 	}
 }
 
-Vector3 enemy::cohesion( std::vector<enemy*> enemyVector)
+Vector3 enemy::cohesion(std::vector<enemy*> enemyVector, enemy* leaderI)
 {
 	Vector3 forceVector = (0,0,0);
 	Vector3 centerOfMass = (0, 0, 0);
@@ -189,7 +294,7 @@ Vector3 enemy::cohesion( std::vector<enemy*> enemyVector)
 
 	for (int i = 0; i < enemyVector.size(); ++i)
 	{
-		if (enemyVector[i]->getPos() != position && enemyVector[i]->newSpawn == 0)
+		if (enemyVector[i]->getPos() != leaderI->position && enemyVector[i]->newSpawn == 0)
 		{
 			centerOfMass += enemyVector[i]->getPos();
 			neighbour++;
@@ -202,45 +307,45 @@ Vector3 enemy::cohesion( std::vector<enemy*> enemyVector)
 		centerOfMass.y /= neighbour;
 		//centerOfMass.z /= neighbour;
 
-		forceVector = centerOfMass - position;
+		forceVector = centerOfMass - leaderI->position;
 
 		forceVector = forceVector.Normalize();
 	}
 	return forceVector;
 }
 
-Vector3 enemy::seperation(std::vector<enemy*> enemyVector)
+Vector3 enemy::seperation(std::vector<enemy*> enemyVector, enemy* leaderI)
 {
 	Vector3 forceVector = (0, 0, 0);
 
 
 	for (int i = 0; i < enemyVector.size(); ++i)
 	{
-		if (enemyVector[i]->getPos() != position && enemyVector[i]->newSpawn == 0)
+		if (enemyVector[i]->getPos() != leaderI->position && enemyVector[i]->newSpawn == 0)
 		{
-			float distanceSquared = (position - enemyVector[i]->getPos()).LengthSquared();
-			if (distanceSquared < 1000)
+			float distanceSquared = (leaderI->position - enemyVector[i]->getPos()).LengthSquared();
+			if (distanceSquared < 300)
 			{
-				Vector3 headingVector = enemyVector[i]->getPos() - position;
-				float scale = headingVector.Length() / sqrt(1000);
+				Vector3 headingVector = enemyVector[i]->getPos() - leaderI->position;
+				float scale = headingVector.Length() / sqrt(300);
 				forceVector = headingVector.Normalize();
-				headingVector.x /= scale;
-				headingVector.y /= scale;
+				forceVector.x /= scale;
+				forceVector.y /= scale;
 			}
 		}
 	}
 	return forceVector;
 }
-Vector3 enemy::alignment(std::vector<enemy*> enemyVector)
+Vector3 enemy::alignment(std::vector<enemy*> enemyVector, enemy* leaderI)
 {
 	Vector3 forceVector = (0, 0, 0);
 	int neighbour = 0;
 
 	for (int i = 0; i < enemyVector.size(); ++i)
 	{
-		if (enemyVector[i]->getPos() != position && vel != (0, 0, 0) && enemyVector[i]->getVel() != (0, 0, 0) && enemyVector[i]->newSpawn == 0)
+		if (enemyVector[i]->getPos() != leaderI->position && vel != (0, 0, 0) && enemyVector[i]->getVel() != (0, 0, 0) && enemyVector[i]->newSpawn == 0)
 		{
-			if ((enemyVector[i]->getPos() - position).Length() < 300)
+			if ((enemyVector[i]->getPos() - leaderI->position).Length() < 1000)
 			{
 				forceVector += enemyVector[i]->getVel();
 				neighbour++;
@@ -258,7 +363,7 @@ Vector3 enemy::alignment(std::vector<enemy*> enemyVector)
 }
 
 
-enemy* newEnemy(float x, float y, float z)
+enemy* newEnemy(float x, float y, float z, int type)
 {
-	return new enemy(Vector3(x,y,z));
+	return new enemy(Vector3(x,y,z), type);
 }
