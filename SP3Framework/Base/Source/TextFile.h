@@ -36,11 +36,20 @@ public:
 	//void SetData(string type,float x, float y, float scale);
 	bool SaveFile(const string File1, const string File2);
 
+	int get_stamina();
+	int get_speed();
+	int get_strength();
+
+	bool GetAnimalStat(string name);
 	TextFile(FileType ftype = ANIMAL);
 	~TextFile();
 private:
 	float x;
 	float y;
 	string type;
+
+	int stamina;
+	int speed;
+	int strength;
 };
 #endif

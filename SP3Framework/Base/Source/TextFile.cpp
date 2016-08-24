@@ -196,3 +196,62 @@ bool TextFile::RemoveMapObj(const string FileName, float x, float y)
 	}
 	return true;
 }
+int TextFile::get_stamina()
+{
+	return stamina;
+}
+int TextFile::get_speed()
+{
+	return speed;
+}
+int TextFile::get_strength()
+{
+	return strength;
+}
+bool TextFile::GetAnimalStat(string name)
+{
+	fstream File;
+	File.open("AnimalStats.txt");
+	
+	if (File.is_open())
+	{
+		string line;
+		while (getline(File, line))
+		{
+			size_t pos = line.find(",");
+			size_t temp = 0;
+			size_t length = pos;
+			for (int i = 0; i < 4; i++)
+			{
+				string hold = line.substr(temp, length);
+				temp = pos + 1;
+				pos = line.find(",", temp);
+
+				length = pos - temp;
+
+				if (i == 0)
+				{
+					if (hold != name)
+					{
+						continue;
+					}
+				}
+				if (i == 1)
+				{
+					stamina = stoi(hold);
+				}
+				if (i == 2)
+				{
+					speed = stoi(hold);
+				}
+				if (i == 3)
+				{
+					strength = stoi(hold);
+				}
+			}
+			cout << name << "," << stamina << "," << speed << "," << strength << endl;
+			return true;
+		}
+	}
+	return false;
+}

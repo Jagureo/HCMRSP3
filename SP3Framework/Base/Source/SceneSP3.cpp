@@ -689,7 +689,17 @@ void SceneSP3::Update(double dt)
 	{
 		m_speed += 0.1f;
 	}
-
+	static bool hi = false;
+	if (Application::IsKeyPressed('7') && hi == false)
+	{
+		hi = true;
+		TextFile* animal = new TextFile(TextFile::ANIMAL);
+		animal->GetAnimalStat("Zebra");
+	}
+	if (hi && !Application::IsKeyPressed('7'))
+	{
+		hi = false;
+	}
 	if (gameStates != states::s_MapEditor)
 	{
 
