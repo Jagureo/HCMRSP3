@@ -49,6 +49,8 @@ void SceneSP3::Init()
 	diffx = 0;
 	diffy = 0;
 	testMode = false;
+	panel2 = false;
+	panel2x = 15;
 	deleteMode = 0;
 	time = 0;
 	arrowSelection = 0;
@@ -1449,53 +1451,66 @@ void SceneSP3::mapEditorUpdate(double dt)
 				{
 					if (dragObj == false)
 					{
-						dragObj = true;
-						GameObject* testWater = new GameObject(GameObject::MAP_TREE);
-						testWater->pos.Set(worldX, worldY, 1);
-						testWater->fresh = true;
-						testWater->active = true;
-						testMap.forceAddSingleProp(testWater);
+						if (panel2 == false)
+						{
+							dragObj = true;
+							GameObject* testWater = new GameObject(GameObject::MAP_TREE);
+							testWater->pos.Set(worldX, worldY, 1);
+							testWater->fresh = true;
+							testWater->active = true;
+							testMap.forceAddSingleProp(testWater);
+						}
 					}
 				}
 				else if (worldY > 57 && worldY < 67)
 				{
 					if (dragObj == false)
 					{
-						dragObj = true;
-						GameObject* testWater = new GameObject(GameObject::MAP_ROCK);
-						testWater->pos.Set(worldX, worldY, 1);
-						testWater->scale.Set(6, 6, 6);
-						testWater->fresh = true;
-						testWater->active = true;
-						testMap.forceAddSingleProp(testWater);
+						if (panel2 == false)
+						{
+							dragObj = true;
+							GameObject* testWater = new GameObject(GameObject::MAP_ROCK);
+							testWater->pos.Set(worldX, worldY, 1);
+							testWater->scale.Set(6, 6, 6);
+							testWater->fresh = true;
+							testWater->active = true;
+							testMap.forceAddSingleProp(testWater);
+						}
 					}
 				}
 				else if (worldY > 44 && worldY < 54)
 				{
 					if (dragObj == false)
 					{
-						dragObj = true;
-						GameObject* testWater = new GameObject(GameObject::MAP_WATER);
-						testWater->pos.Set(worldX, worldY, 1);
-						testWater->fresh = true;
-						testWater->active = true;
-						testMap.forceAddSingleProp(testWater);
+						if (panel2 == false)
+						{
+							dragObj = true;
+							GameObject* testWater = new GameObject(GameObject::MAP_WATER);
+							testWater->pos.Set(worldX, worldY, 1);
+							testWater->fresh = true;
+							testWater->active = true;
+							testMap.forceAddSingleProp(testWater);
+						}
 					}
 				}
 				else if (worldY > 30 && worldY < 40)
 				{
 					if (dragObj == false)
 					{
-						dragObj = true;
-						GameObject* testWater = new GameObject(GameObject::MAP_MUD);
-						testWater->pos.Set(worldX, worldY, 1);
-						testWater->fresh = true;
-						testWater->active = true;
-						testMap.forceAddSingleProp(testWater);
+						if (panel2 == false)
+						{
+							dragObj = true;
+							GameObject* testWater = new GameObject(GameObject::MAP_MUD);
+							testWater->pos.Set(worldX, worldY, 1);
+							testWater->fresh = true;
+							testWater->active = true;
+							testMap.forceAddSingleProp(testWater);
+						}
 					}
 				}
 				else if (worldY > 16 && worldY < 26)
 				{
+					panel2 = !panel2;
 				}
 				else if (worldY > 4 && worldY < 14)
 				{
@@ -1506,9 +1521,29 @@ void SceneSP3::mapEditorUpdate(double dt)
 					dragObj = false;
 				}
 			}
-			if (worldX > 0.454236f * m_worldWidth && worldX < 0.9103448f * m_worldWidth && worldY > 87 && worldY < 97)
+			if (worldX > 0.454236f * m_worldWidth && worldX < 0.8412931f * m_worldWidth && worldY > 87 && worldY < 97)
 			{
 				editName = true;
+			}
+			else if (worldX > 0.8625f * m_worldWidth && worldX < 0.918f * m_worldWidth && worldY > 87 && worldY < 97)
+			{
+				for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
+				{
+					GameObject *go = (GameObject *)* it;
+					go->active = false;
+					go->dead = true;
+				}
+				if (mapName == "")
+				{
+					cout << "No map name entered" << endl;
+				}
+				else
+				{
+					TextFile* map = new TextFile(TextFile::MAP);
+
+					NameofMap = map->CreateMapFile(mapName, true);
+					RenderMapFile();
+				}
 			}
 			else if (worldX > 0.9362068f * m_worldWidth && worldX < 0.9827586f * m_worldWidth && worldY > 88 && worldY < 96)
 			{
@@ -1541,25 +1576,25 @@ void SceneSP3::mapEditorUpdate(double dt)
 						if (go->type == GameObject::MAP_TREE)
 						{
 							TextFile *tree = new TextFile(TextFile::MAP);
-							tree->SetData("tree", go->pos.x, go->pos.y);
+							tree->SetData("tree", go->pos.x - mapPosition.x, go->pos.y - mapPosition.y);
 							tree->WriteFile(FileName);
 						}
 						else if (go->type == GameObject::MAP_ROCK)
 						{
 							TextFile *rock = new TextFile(TextFile::MAP);
-							rock->SetData("rock", go->pos.x, go->pos.y);
+							rock->SetData("rock", go->pos.x - mapPosition.x, go->pos.y - mapPosition.y);
 							rock->WriteFile(FileName);
 						}
 						else if (go->type == GameObject::MAP_WATER)
 						{
 							TextFile *water = new TextFile(TextFile::MAP);
-							water->SetData("water", go->pos.x, go->pos.y);
+							water->SetData("water", go->pos.x - mapPosition.x, go->pos.y - mapPosition.y);
 							water->WriteFile(FileName);
 						}
 						else if (go->type == GameObject::MAP_MUD)
 						{
 							TextFile *mud = new TextFile(TextFile::MAP);
-							mud->SetData("mud", go->pos.x, go->pos.y);
+							mud->SetData("mud", go->pos.x - mapPosition.x, go->pos.y - mapPosition.y);
 							mud->WriteFile(FileName);
 						}
 					}
@@ -1703,6 +1738,28 @@ void SceneSP3::mapEditorUpdate(double dt)
 				{
 					go->dead = true;
 				}
+			}
+		}
+		if (panel2)
+		{
+			if (panel2x > 0)
+			{
+				panel2x--;
+			}
+			else
+			{
+				panel2x = 0;
+			}
+		}
+		else
+		{
+			if (panel2x < 15)
+			{
+				panel2x++;
+			}
+			else
+			{
+				panel2x = 15;
 			}
 		}
 	}
@@ -2046,10 +2103,10 @@ void SceneSP3::mapEditorRender()
 		renderMinimap(&testMap);
 	}
 
-	if (Application::IsKeyPressed('U') && testMode == false)
+	if (testMode == false)
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 9);
+		modelStack.Translate(m_worldWidth / 2 + panel2x, m_worldHeight / 2, 9);
 		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
 		RenderMesh(meshList[HUD_MAPEDITOR2], false);
 		modelStack.PopMatrix();
@@ -2147,7 +2204,8 @@ bool SceneSP3::RenderMapFile()
 		if (map->get_type() == "tree")
 		{
 			obs = new GameObject(GameObject::MAP_TREE);
-			obs->pos.Set(map->get_x() - mapPosition.x, map->get_y() - mapPosition.y, 1);
+			obs->pos.Set(map->get_x(), map->get_y(), 1);
+			cout << obs->pos << endl;
 
 			obs->fresh = true;
 			obs->active = true;
@@ -2473,7 +2531,7 @@ void SceneSP3::Render()
 
 	std::ostringstream ss;
 	ss.precision(5);
-	ss << "Pos: " << worldX << ", " << worldY;
+	ss << "Pos: " << worldX / m_worldWidth << ", " << worldY;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
 
 	std::ostringstream ssz;

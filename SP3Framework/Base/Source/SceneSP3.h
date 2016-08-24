@@ -127,6 +127,8 @@ protected:
 	bool dragObj;
 	bool testMode;
 	int deleteMode;
+	bool panel2;
+	int panel2x;
 
 	float newMouseX;
 	float newMouseY;
