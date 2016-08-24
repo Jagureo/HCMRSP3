@@ -1794,15 +1794,6 @@ bool SceneSP3::MapExist(string FileName)
 	}
 }
 
-	//corner
-	//wall = FetchGO();
-	//wall->type = GameObject::GO_WALL
-	//wall->pos.Set(112.5f, 88, 1);
-	//wall->normal = Vector3(0.5f, 0.5f, 0).Normalized();
-	//wall->active = true;
-	//wall->scale.Set(2, 6, 1);
-	//wall->rotationAngle = 45;
-
 void SceneSP3::RenderLasso(lasso *go)
 {
 	if (go->getLassoState() != 0)
@@ -1920,7 +1911,6 @@ void SceneSP3::RenderEnemy(enemy *go)
 		modelStack.PopMatrix();
 	}
 }
-
 
 void SceneSP3::RenderProps(playMap* map)
 {
@@ -2542,6 +2532,21 @@ void SceneSP3::Render()
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Collision", Color(0, 1, 0), 3, 0, 0);
 }
 
+void SceneSP3::SetEvent(int eventtype)
+{
+	switch (eventtype)
+	{
+	case 1:
+		//insert flood 
+		break;
+	case 2:
+		//insert earthquake
+		break;
+	case 3:
+		//insert something
+		break;
+	}
+}
 void SceneSP3::Exit()
 {
 	SceneBase::Exit();

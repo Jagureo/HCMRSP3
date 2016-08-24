@@ -1,13 +1,70 @@
-﻿Build started 23/8/2016 10:48:49 AM.
-     1>Project "C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\enemy\enemy.vcxproj" on node 2 (Build target(s)).
-     1>Link:
-         D:\New folder\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Debug\enemy.dll" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Debug\enemy.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Debug\enemy.lib" /MACHINE:X86 /DLL Debug\enemy.obj
-         C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Debug\Common.lib
-         LINK : C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Debug\enemy.dll not found or not built by the last incremental link; performing full link
-            Creating library C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Debug\enemy.lib and object C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Debug\enemy.exp
-         enemy.vcxproj -> C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\Debug\enemy.dll
-     1>Done Building Project "C:\Users\Beckham\Desktop\HCMRSP3_19_8_2016\SP3Framework\enemy\enemy.vcxproj" (Build target(s)).
+﻿Build started 24/8/2016 10:58:13 AM.
+     1>Project "C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\enemy\enemy.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         D:\New folder\VC\bin\CL.exe /c /IC:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\/Common/Source /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D ENEMY_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt enemy.cpp
+         enemy.cpp
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(41): warning C4251: 'enemy::position' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'enemy'
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(42): warning C4251: 'enemy::vel' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'enemy'
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(4): warning C4273: 'enemy::enemy' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(17) : see previous definition of '{ctor}'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(14): warning C4273: 'enemy::~enemy' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(18) : see previous definition of '{dtor}'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(19): warning C4273: 'enemy::getPos' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(19) : see previous definition of 'getPos'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(24): warning C4273: 'enemy::getCaught' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(23) : see previous definition of 'getCaught'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(25): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(29): warning C4273: 'enemy::getActive' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(21) : see previous definition of 'getActive'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(34): warning C4273: 'enemy::getNewSpawn' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(22) : see previous definition of 'getNewSpawn'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(39): warning C4273: 'enemy::setNewSpawn' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(24) : see previous definition of 'setNewSpawn'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(44): warning C4273: 'enemy::setCaught' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(25) : see previous definition of 'setCaught'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(49): warning C4273: 'enemy::setPos' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(29) : see previous definition of 'setPos'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(54): warning C4273: 'enemy::getVel' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(20) : see previous definition of 'getVel'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(59): warning C4273: 'enemy::setVel' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(28) : see previous definition of 'setVel'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(64): warning C4273: 'enemy::runOff' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(26) : see previous definition of 'runOff'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(118): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(119): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(125): warning C4273: 'enemy::slowDown' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(27) : see previous definition of 'slowDown'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(133): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(156): warning C4273: 'enemy::updatePos' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(31) : see previous definition of 'updatePos'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(157): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(185): warning C4273: 'enemy::cohesion' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(47) : see previous definition of 'cohesion'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(186): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(187): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(190): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(213): warning C4273: 'enemy::seperation' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(48) : see previous definition of 'seperation'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(214): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(217): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(225): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(235): warning C4273: 'enemy::alignment' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(49) : see previous definition of 'alignment'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(236): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(239): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(241): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.cpp(262): warning C4273: 'newEnemy' : inconsistent dll linkage
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(52) : see previous definition of 'newEnemy'
+       Link:
+         D:\New folder\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug\enemy.dll" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug\enemy.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug\enemy.lib" /MACHINE:X86 /DLL Debug\enemy.obj
+         C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug\Common.lib
+         LINK : C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug\enemy.dll not found or not built by the last incremental link; performing full link
+            Creating library C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug\enemy.lib and object C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug\enemy.exp
+         enemy.vcxproj -> C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug\enemy.dll
+     1>Done Building Project "C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\enemy\enemy.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.46
+Time Elapsed 00:00:00.72

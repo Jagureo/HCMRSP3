@@ -14,20 +14,6 @@
 using std::stoi;
 using std::ifstream;
 
-//enum class states
-//{
-//	s_Menu,
-//	s_Instructions,
-//	s_MapEditor,
-//	s_Options,
-//	s_Tutorial,
-//	s_Level2,
-//	s_Level3,
-//	s_LevelBoss,
-//	s_Win,
-//	s_Lose,
-//	s_Highscore,
-//};
 class SceneSP3 : public SceneBase
 {
 	enum class states
@@ -96,6 +82,7 @@ public:
 	bool RenderMapFile();
 	bool MapExist(string FileName);
 
+	void SetEvent(int eventtype);
 	string FileName;
 protected:
 
