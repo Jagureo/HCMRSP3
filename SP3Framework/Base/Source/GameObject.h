@@ -31,6 +31,10 @@ struct GameObject
 		MAP_ROCK,
 		MAP_WATER,
 		MAP_MUD,
+		MAP_LION,
+		MAP_ZEBRA,
+		MAP_RHINO,
+		MAP_HUMAN,
 
 		GO_TOTAL, //must be last
 	};

@@ -1614,6 +1614,16 @@ void SceneSP3::mapEditorUpdate(double dt)
 							testWater->active = true;
 							testMap.forceAddSingleProp(testWater);
 						}
+						else
+						{
+							dragObj = true;
+							GameObject* testWater = new GameObject(GameObject::MAP_LION);
+							testWater->pos.Set(worldX, worldY, 1);
+							testWater->scale.Set(6, 6, 6);
+							testWater->fresh = true;
+							testWater->active = true;
+							testMap.forceAddSingleProp(testWater);
+						}
 					}
 				}
 				else if (worldY > 57 && worldY < 67)
@@ -1630,6 +1640,16 @@ void SceneSP3::mapEditorUpdate(double dt)
 							testWater->active = true;
 							testMap.forceAddSingleProp(testWater);
 						}
+						else
+						{
+							dragObj = true;
+							GameObject* testWater = new GameObject(GameObject::MAP_ZEBRA);
+							testWater->pos.Set(worldX, worldY, 1);
+							testWater->scale.Set(7, 6, 6);
+							testWater->fresh = true;
+							testWater->active = true;
+							testMap.forceAddSingleProp(testWater);
+						}
 					}
 				}
 				else if (worldY > 44 && worldY < 54)
@@ -1641,6 +1661,17 @@ void SceneSP3::mapEditorUpdate(double dt)
 							dragObj = true;
 							GameObject* testWater = new GameObject(GameObject::MAP_WATER);
 							testWater->pos.Set(worldX, worldY, 1);
+							testWater->scale.Set(6, 6, 6);
+							testWater->fresh = true;
+							testWater->active = true;
+							testMap.forceAddSingleProp(testWater);
+						}
+						else
+						{
+							dragObj = true;
+							GameObject* testWater = new GameObject(GameObject::MAP_RHINO);
+							testWater->pos.Set(worldX, worldY, 1);
+							testWater->scale.Set(9, 6, 6);
 							testWater->fresh = true;
 							testWater->active = true;
 							testMap.forceAddSingleProp(testWater);
@@ -1656,6 +1687,16 @@ void SceneSP3::mapEditorUpdate(double dt)
 							dragObj = true;
 							GameObject* testWater = new GameObject(GameObject::MAP_MUD);
 							testWater->pos.Set(worldX, worldY, 1);
+							testWater->fresh = true;
+							testWater->active = true;
+							testMap.forceAddSingleProp(testWater);
+						}
+						else
+						{
+							dragObj = true;
+							GameObject* testWater = new GameObject(GameObject::MAP_HUMAN);
+							testWater->pos.Set(worldX, worldY, 1);
+							testWater->scale.Set(3, 6, 6);
 							testWater->fresh = true;
 							testWater->active = true;
 							testMap.forceAddSingleProp(testWater);
@@ -2148,6 +2189,38 @@ void SceneSP3::RenderProps(playMap* map)
 			RenderMesh(meshList[GEO_CUBE], true);
 			modelStack.PopMatrix();
 		}
+		else if (go->type == GameObject::MAP_LION)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_LION], true);
+			modelStack.PopMatrix();
+		}
+		else if (go->type == GameObject::MAP_ZEBRA)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_ZEBRA], true);
+			modelStack.PopMatrix();
+		}
+		else if (go->type == GameObject::MAP_RHINO)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_RHINO], true);
+			modelStack.PopMatrix();
+		}
+		else if (go->type == GameObject::MAP_HUMAN)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_HUMAN], true);
+			modelStack.PopMatrix();
+		}
 	}
 	glEnable(GL_DEPTH_TEST);
 }
@@ -2233,6 +2306,38 @@ void SceneSP3::mapEditorRender()
 			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
 			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
 			RenderMesh(meshList[GEO_CUBE], true);
+			modelStack.PopMatrix();
+		}
+		else if (go->type == GameObject::MAP_LION)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_LION], true);
+			modelStack.PopMatrix();
+		}
+		else if (go->type == GameObject::MAP_ZEBRA)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_ZEBRA], true);
+			modelStack.PopMatrix();
+		}
+		else if (go->type == GameObject::MAP_RHINO)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_RHINO], true);
+			modelStack.PopMatrix();
+		}
+		else if (go->type == GameObject::MAP_HUMAN)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_HUMAN], true);
 			modelStack.PopMatrix();
 		}
 	}
@@ -2325,7 +2430,47 @@ void SceneSP3::renderMinimap(playMap* map)
 				}
 				case GameObject::MAP_TREE:
 				{
-											 RenderMesh(meshList[GEO_TREETOP], false);
+											 modelStack.PushMatrix();
+											 modelStack.Rotate(90, 1, 0, 0);
+											 RenderMesh(meshList[HUD_RADARDETECT], false);
+											 modelStack.PopMatrix();
+											 //RenderMesh(meshList[GEO_TREETOP], false);
+											 break;
+				}
+				case GameObject::MAP_LION:
+				{
+											 modelStack.PushMatrix();
+											 modelStack.Rotate(90, 1, 0, 0);
+											 RenderMesh(meshList[HUD_RADARENEMY], false);
+											 modelStack.PopMatrix();
+											 //RenderMesh(meshList[GEO_LION], false);
+											 break;
+				}
+				case GameObject::MAP_ZEBRA:
+				{
+											  modelStack.PushMatrix();
+											  modelStack.Rotate(90, 1, 0, 0);
+											  RenderMesh(meshList[HUD_RADARENEMY], false);
+											  modelStack.PopMatrix();
+											 //RenderMesh(meshList[GEO_ZEBRA], false);
+											 break;
+				}
+				case GameObject::MAP_RHINO:
+				{
+											  modelStack.PushMatrix();
+											  modelStack.Rotate(90, 1, 0, 0);
+											  RenderMesh(meshList[HUD_RADARENEMY], false);
+											  modelStack.PopMatrix();
+											 //RenderMesh(meshList[GEO_RHINO], false);
+											 break;
+				}
+				case GameObject::MAP_HUMAN:
+				{
+											  modelStack.PushMatrix();
+											  modelStack.Rotate(90, 1, 0, 0);
+											  RenderMesh(meshList[HUD_RADARENEMY], false);
+											  modelStack.PopMatrix();
+											 //RenderMesh(meshList[GEO_HUMAN], false);
 											 break;
 				}
 				default:

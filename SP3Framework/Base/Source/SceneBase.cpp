@@ -137,6 +137,15 @@ void SceneBase::Init()
 	meshList[GEO_TREETOP]->textureID = LoadTGA("Image//treetop.tga");
 	meshList[GEO_ROCK] = MeshBuilder::GenerateQuad("rock", Color(1, 1, 1), 1.f);
 	meshList[GEO_ROCK]->textureID = LoadTGA("Image//rock.tga");
+
+	meshList[GEO_LION] = MeshBuilder::GenerateQuad("lion", Color(1, 1, 1), 1.f);
+	meshList[GEO_LION]->textureID = LoadTGA("Image//animal_lion.tga");
+	meshList[GEO_ZEBRA] = MeshBuilder::GenerateQuad("zebra", Color(1, 1, 1), 1.f);
+	meshList[GEO_ZEBRA]->textureID = LoadTGA("Image//animal_zebra.tga");
+	meshList[GEO_RHINO] = MeshBuilder::GenerateQuad("rhino", Color(1, 1, 1), 1.f);
+	meshList[GEO_RHINO]->textureID = LoadTGA("Image//animal_rhino.tga");
+	meshList[GEO_HUMAN] = MeshBuilder::GenerateQuad("human", Color(1, 1, 1), 1.f);
+	meshList[GEO_HUMAN]->textureID = LoadTGA("Image//animal_human.tga");
 	//meshList[GEO_JEEP] = MeshBuilder::GenerateOBJ("GEO_JEEP", "Object//jurrassiccar.obj");
 	//meshList[GEO_JEEP]->textureID = LoadTGA("Image//jeep.tga");
 	meshList[HUD_MAPEDITOR] = MeshBuilder::GenerateQuad("gui", Color(1, 1, 1), 1.f);
@@ -151,7 +160,8 @@ void SceneBase::Init()
 	meshList[HUD_RADAR] = MeshBuilder::GenerateQuad("radar", Color(1, 1, 1), 1.f);
 	meshList[HUD_RADAR]->textureID = LoadTGA("Image//radar.tga");
 	meshList[HUD_RADARLINE] = MeshBuilder::GenerateCube("radarline", Color(0, 1, 0), 4.f);
-	meshList[HUD_RADARDETECT] = MeshBuilder::GenerateQuad("detect", Color(0, 1, 0), 1.f);
+	meshList[HUD_RADARDETECT] = MeshBuilder::GenerateCircle("detect", Color(0, 1, 0));
+	meshList[HUD_RADARENEMY] = MeshBuilder::GenerateCircle("detectene", Color(1, 0, 0));
 	//meshList[HUD_RADARDETECT]->textureID = LoadTGA("Image//yellow-orange-bubble-clip-art.tga");
 
 	meshList[GEO_TESTENEMY] = MeshBuilder::GenerateSphere("enemy", Color(255, 144, 0), 10, 10, 1.f);
