@@ -66,6 +66,7 @@ public:
 		GEO_TESTMAP,
 		GEO_TREETOP,
 		GEO_ROCK,
+		GEO_MUD,
 		GEO_LION,
 		GEO_ZEBRA,
 		GEO_RHINO,

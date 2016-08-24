@@ -478,7 +478,7 @@ void SceneSP3::CollisionMap(GameObject *go, GameObject *other, double dt)
 	case GameObject::MAP_WATER:
 	{
 			float distanceSquared = ((go->pos + go->vel * dt) - (other->pos - other->vel * dt)).LengthSquared();
-			float combinedRadiusSquared = (go->scale.x / 3 + other->scale.x) * (go->scale.x / 3 + other->scale.x);
+			float combinedRadiusSquared = (go->scale.x + other->scale.x) * (go->scale.x + other->scale.x);
 			Vector3 relativeDisplacement = other->pos - go->pos;
 			if (distanceSquared < combinedRadiusSquared && go->vel.Dot(relativeDisplacement) > 0)
 			{
@@ -2175,18 +2175,21 @@ void SceneSP3::RenderProps(playMap* map)
 		}
 		else if (go->type == GameObject::MAP_WATER)
 		{
+			glEnable(GL_DEPTH_TEST);
 			modelStack.PushMatrix();
-			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z - 2);
 			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
 			RenderMesh(meshList[GEO_ICE], true);
 			modelStack.PopMatrix();
+			glDisable(GL_DEPTH_TEST);
 		}
 		else if (go->type == GameObject::MAP_MUD)
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Rotate(90, 1, 0, 0);
 			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
-			RenderMesh(meshList[GEO_CUBE], true);
+			RenderMesh(meshList[GEO_MUD], true);
 			modelStack.PopMatrix();
 		}
 		else if (go->type == GameObject::MAP_LION)
@@ -2294,18 +2297,22 @@ void SceneSP3::mapEditorRender()
 		}
 		else if (go->type == GameObject::MAP_WATER)
 		{
+			glEnable(GL_DEPTH_TEST);
 			modelStack.PushMatrix();
-			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z - 2);
+			modelStack.Rotate(90, 1, 0, 0);
 			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
 			RenderMesh(meshList[GEO_ICE], true);
 			modelStack.PopMatrix();
+			glDisable(GL_DEPTH_TEST);
 		}
 		else if (go->type == GameObject::MAP_MUD)
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Rotate(90, 1, 0, 0);
 			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
-			RenderMesh(meshList[GEO_CUBE], true);
+			RenderMesh(meshList[GEO_MUD], true);
 			modelStack.PopMatrix();
 		}
 		else if (go->type == GameObject::MAP_LION)

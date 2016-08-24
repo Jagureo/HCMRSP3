@@ -103,7 +103,7 @@ void SceneBase::Init()
 	}
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 	meshList[GEO_BALL] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 1), 10, 10, 1.f);
-	meshList[GEO_ICE] = MeshBuilder::GenerateSphere("ball", Color(0.5f, 0.5f, 1), 10, 10, 1.f);
+	meshList[GEO_ICE] = MeshBuilder::GenerateCircle("detect", Color(0.5f, 0.5f, 1));
 	meshList[GEO_SOCC] = MeshBuilder::GenerateOBJ("GEO_BALL", "Object//ball1.obj");
 	meshList[GEO_SOCC]->textureID = LoadTGA("Image//ballUV.tga");
 	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 1, 1), 4.f);
@@ -137,6 +137,7 @@ void SceneBase::Init()
 	meshList[GEO_TREETOP]->textureID = LoadTGA("Image//treetop.tga");
 	meshList[GEO_ROCK] = MeshBuilder::GenerateQuad("rock", Color(1, 1, 1), 1.f);
 	meshList[GEO_ROCK]->textureID = LoadTGA("Image//rock.tga");
+	meshList[GEO_MUD] = MeshBuilder::GenerateCircle("mud", Color(0.51f, 0.219f,0.101f));
 
 	meshList[GEO_LION] = MeshBuilder::GenerateQuad("lion", Color(1, 1, 1), 1.f);
 	meshList[GEO_LION]->textureID = LoadTGA("Image//animal_lion.tga");
