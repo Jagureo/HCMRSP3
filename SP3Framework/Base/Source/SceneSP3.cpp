@@ -61,7 +61,7 @@ void SceneSP3::Init()
 	testMap.setBackground(meshList[GEO_TESTMAP]);
 	testMap.setMapSize(20, 20);
 
-	gameStates = states::s_Upgrade_Cars1;
+	 gameStates = states::s_Upgrade_Cars1;
 	//gameStates = states::s_Menu;
 }
 
