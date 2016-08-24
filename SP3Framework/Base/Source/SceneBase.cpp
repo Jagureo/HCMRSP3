@@ -194,6 +194,8 @@ void SceneBase::Init()
 
 	meshList[GEO_DISPLAY_CAR1] = MeshBuilder::GenerateOBJ("display_car1", "Object//jurrassiccar.obj");
 	meshList[GEO_DISPLAY_CAR1]->textureID = LoadTGA("Image//jeep.tga");
+	meshList[GEO_DISPLAY_CAR2] = MeshBuilder::GenerateOBJ("display_car2", "Object//jeep2.obj");
+	meshList[GEO_DISPLAY_CAR2]->textureID = LoadTGA("Image//jeep2.tga");
 
 	meshList[GEO_ROPE] = MeshBuilder::GenerateCube("rope", Color(1, 1, 0), 1.f);
 

@@ -54,13 +54,15 @@ void SceneSP3::Init()
 	deleteMode = 0;
 	time = 0;
 	arrowSelection = 0;
+	rotateDisplayX = 0;
+	rotateDisplayY = 0;
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP]);
 	testMap.setMapSize(20, 20);
 
 	//gameStates = states::s_Upgrade_Cars;
-	gameStates = states::s_Tutorial;
+	gameStates = states::s_Upgrade_Cars1;
 }
 
 void SceneSP3::Reset()
@@ -858,6 +860,7 @@ void SceneSP3::Update(double dt)
 		{
 			bLButtonState = false;
 			std::cout << "LBUTTON UP" << std::endl;
+
 			//Exercise 6: spawn small GO_BALL
 			double x, y;
 			Application::GetCursorPos(&x, &y);
@@ -866,6 +869,7 @@ void SceneSP3::Update(double dt)
 			float worldX = x * m_worldWidth / w;
 			float worldY = (h - y) * m_worldHeight / h;
 			m_ghost->active = false;
+
 			//GameObject* ball = FetchGO();
 			//ball->type = GameObject::GO_BALL;
 			//Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
@@ -886,25 +890,25 @@ void SceneSP3::Update(double dt)
 				{
 					if (worldY > 68.472f && worldY < 76.111f)
 					{
-						gameStates = states::s_Upgrade_Cars;
+						gameStates = states::s_Upgrade_Cars1;
 					}
 					if (worldY > 56.111f && worldY < 63.75f)
 					{
-						gameStates = states::s_Upgrade_Tires;
+						gameStates = states::s_Upgrade_Tires1;
 					}
 					if (worldY > 43.333f && worldY < 50.833f)
 					{
-						gameStates = states::s_Upgrade_Lasso;
+						gameStates = states::s_Upgrade_Lasso1;
 					}
 					if (worldY > 30.694f && worldY < 38.333f)
 					{
-						gameStates = states::s_Upgrade_Darts;
+						gameStates = states::s_Upgrade_Darts1;
 					}
 				}
 			}
 			else if (gameStates == states::s_Menu)
 			{
-				if (worldX > 0.656f * m_worldWidth && worldX < 0.88047f * m_worldWidth)
+				if (worldX > 0.695f * m_worldWidth && worldX < 0.805f * m_worldWidth)
 				{
 					if (worldY > 36.111 && worldY < 39.444f)
 					{
@@ -964,6 +968,27 @@ void SceneSP3::Update(double dt)
 						gameStates = states::s_LevelSelect;
 					}
 				}
+
+			}
+			else if (gameStates == states::s_Upgrade_Cars1)
+			{
+				if (worldX > 0.232f * m_worldWidth && worldX < 0.3777f * m_worldWidth)
+				{
+					if (worldY > 13.16f && worldY < 24.5f)
+					{
+						gameStates = states::s_Upgrade_Cars2;
+					}
+				}
+			}
+			else if (gameStates == states::s_Upgrade_Cars2)
+			{
+				if (worldX > 0.054f * m_worldWidth && worldX < 0.20f * m_worldWidth)
+				{
+					if (worldY > 13.16f && worldY < 24.5f)
+					{
+						gameStates = states::s_Upgrade_Cars1;
+					}
+				}
 			}
 		}
 		if (!bLButtonState && Application::IsMousePressed(0))
@@ -996,6 +1021,25 @@ void SceneSP3::Update(double dt)
 			else if (!Application::IsKeyPressed(VK_BACK) && pressedBack == true)
 			{
 				pressedBack = false;
+			}
+		}
+		if (gameStates == states::s_Upgrade_Cars1 || gameStates == states::s_Upgrade_Cars2 || gameStates == states::s_Upgrade_Cars3)
+		{
+			if (Application::IsKeyPressed(VK_LEFT))
+			{
+				rotateDisplayX -= 5 * dt;
+			}
+			if (Application::IsKeyPressed(VK_RIGHT))
+			{
+				rotateDisplayX += 5 * dt;
+			}
+			if (Application::IsKeyPressed(VK_UP))
+			{
+				rotateDisplayY -= 5 * dt;
+			}
+			if (Application::IsKeyPressed(VK_DOWN))
+			{
+				rotateDisplayY += 5 * dt;
 			}
 		}
 		if (gameStates == states::s_Menu)
@@ -2337,7 +2381,7 @@ void SceneSP3::renderMenu()
 		RenderMesh(meshList[GEO_UPGRADE_BACKGROUND], false);
 		modelStack.PopMatrix();
 	}
-	if (gameStates == states::s_Upgrade_Cars)
+	if (gameStates == states::s_Upgrade_Cars1 || gameStates == states::s_Upgrade_Cars2 || gameStates == states::s_Upgrade_Cars3)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -7);
@@ -2350,7 +2394,7 @@ void SceneSP3::renderMenu()
 			gameStates = states::s_Upgrade;
 		}
 	}
-	if (gameStates == states::s_Upgrade_Tires)
+	if (gameStates == states::s_Upgrade_Tires1 || gameStates == states::s_Upgrade_Tires2 || gameStates == states::s_Upgrade_Tires3)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -5);
@@ -2363,7 +2407,7 @@ void SceneSP3::renderMenu()
 			gameStates = states::s_Upgrade;
 		}
 	}
-	if (gameStates == states::s_Upgrade_Lasso)
+	if (gameStates == states::s_Upgrade_Lasso1 || gameStates == states::s_Upgrade_Lasso2 || gameStates == states::s_Upgrade_Lasso3)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -5);
@@ -2376,7 +2420,7 @@ void SceneSP3::renderMenu()
 			gameStates = states::s_Upgrade;
 		}
 	}
-	if (gameStates == states::s_Upgrade_Darts)
+	if (gameStates == states::s_Upgrade_Darts1 || gameStates == states::s_Upgrade_Darts2 || gameStates == states::s_Upgrade_Darts3)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -5);
@@ -2401,7 +2445,7 @@ void SceneSP3::Render()
 
 	// Projection matrix : Orthographic Projection
 	Mtx44 projection;
-	projection.SetToOrtho(0, m_worldWidth, 0, m_worldHeight, -10, 10);
+	projection.SetToOrtho(0, m_worldWidth, 0, m_worldHeight, -40, 10);
 	//projection.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	projectionStack.LoadMatrix(projection);
 
@@ -2457,7 +2501,26 @@ void SceneSP3::Render()
 	{
 		RenderProps(&testMap);
 	}
-
+	if (gameStates == states::s_Upgrade_Cars1)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.400, 2);
+		modelStack.Rotate(rotateDisplayY + 40, 1, 0, 0);
+		modelStack.Rotate(rotateDisplayX - 45, 0, 1, 0);
+		modelStack.Scale(10, 10, 10);
+		RenderMesh(meshList[GEO_DISPLAY_CAR1], false);
+		modelStack.PopMatrix();
+	}
+	if (gameStates == states::s_Upgrade_Cars2)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.400, 2);
+		modelStack.Rotate(rotateDisplayY + 40, 1, 0, 0);
+		modelStack.Rotate(rotateDisplayX + 45, 0, 1, 0);
+		modelStack.Scale(15, 15, 15);
+		RenderMesh(meshList[GEO_DISPLAY_CAR2], false);
+		modelStack.PopMatrix();
+	}
 	if (gameStates == states::s_MapEditor)
 	{
 		/*if (testMode == true)
