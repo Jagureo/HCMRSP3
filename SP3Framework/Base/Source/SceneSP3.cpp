@@ -65,8 +65,8 @@ void SceneSP3::Init()
 	testMap.setBackground(meshList[GEO_TESTMAP]);
 	testMap.setMapSize(20, 20);
 
-	gameStates = states::s_Upgrade_Cars1;
-	//gameStates = states::s_Tutorial;
+	//gameStates = states::s_Upgrade_Cars1;
+	gameStates = states::s_Tutorial;
 
 	animalStat = new TextFile(TextFile::ANIMAL);
 
@@ -1427,18 +1427,25 @@ void SceneSP3::Update(double dt)
 				enemyList.push_back(animal);
 			}
 
+			if (Application::IsKeyPressed('4'))
+			{
+				animalStat->GetAnimalStat("Human");
+				enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 3, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+				animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+				animal->setLeader(0);
+				enemyList.push_back(animal);
+			}
+
 			
 
 			for (std::vector<enemy*>::iterator itE2 = enemyList.begin(); itE2 != enemyList.end(); ++itE2)
 			{
 				enemy *goE2 = (enemy *)*itE2;
-				if (goE2->getActive() == 1)
+				if (goE2->getActive() == 1 && goE2->getType() != 3)
 				{
-
 					if (leader == NULL && (goE2->getPos() - player1->pos).Length() < 30)
 					{
 						leader = goE2;
-						//leader->setLeader(1);
 					}
 					else if (leader != NULL)
 					{
@@ -1449,20 +1456,19 @@ void SceneSP3::Update(double dt)
 							leader->setLeader(1);
 						}
 					}
-					if ((goE2->getPos() - player1->pos).Length() < 30)
+					/*if ((goE2->getPos() - player1->pos).Length() < 30)
 					{
 
-					}
+					}*/
 				}
 
 			}
 
 
-
 			for (std::vector<enemy*>::iterator itE = enemyList.begin(); itE != enemyList.end(); ++itE)
 			{
 				enemy *goE = (enemy *)*itE;
-					if (goE->getActive() == 1)
+				if (goE->getActive() == 1 )
 					{
 
 						if (goE->getNewSpawn() == 1)
@@ -1473,37 +1479,40 @@ void SceneSP3::Update(double dt)
 						else
 						{
 							goE->setPos(goE->getPos().x + diffx, goE->getPos().y + diffy, 2);
-
-							if ((goE->getPos() - player1->pos).Length() < 30 && player1->engine != 0)
+							if (goE->getType() != 3)
 							{
-								if (leader == NULL)
-								{
-									leader = goE;
 
-								}
-								goE->runOff(player1->pos, enemyList, leader);
-								goE->increaseRunLonger(3);
-							}
-							else if (goE->getRunLonger() > 0 || goE->getCaught() == 1)
-							{
-								goE->runOff(player1->pos, enemyList, leader);
-								if (goE->getCaught() == 1)
+								if ((goE->getPos() - player1->pos).Length() < 30 && player1->engine != 0)
 								{
+									if (leader == NULL)
+									{
+										leader = goE;
+
+									}
+									goE->runOff(player1->pos, enemyList, leader);
 									goE->increaseRunLonger(3);
-									player1->vel += (0.0001 * goE->getStrength()) * goE->getVel();
+								}
+								else if (goE->getRunLonger() > 0 || goE->getCaught() == 1)
+								{
+									goE->runOff(player1->pos, enemyList, leader);
+									if (goE->getCaught() == 1)
+									{
+										goE->increaseRunLonger(3);
+										player1->vel += (0.0001 * goE->getStrength()) * goE->getVel();
+									}
+									else
+									{
+										goE->increaseRunLonger(-1);
+									}
 								}
 								else
 								{
-									goE->increaseRunLonger(-1);
-								}
-							}
-							else
-							{
-								goE->slowDown(enemyList, objective);
-								if (goE->getPos().x > objective.x - 10 && goE->getPos().x < objective.x + 10 && goE->getPos().y > objective.y - 10 && goE->getPos().y < objective.y + 10 /*&& goE->leader == 0*/)
-								{
-									goE->setActive(false);
-									points--;
+									goE->slowDown(enemyList, objective);
+									if (goE->getPos().x > objective.x - 10 && goE->getPos().x < objective.x + 10 && goE->getPos().y > objective.y - 10 && goE->getPos().y < objective.y + 10 /*&& goE->leader == 0*/)
+									{
+										goE->setActive(false);
+										points--;
+									}
 								}
 							}
 
@@ -1514,7 +1523,15 @@ void SceneSP3::Update(double dt)
 								if (goE->getStrength() <= 0)
 								{
 									goE->setActive(false);
-									points--;
+									if (goE->getType() != 3)
+									{
+										points--;
+									}
+									else
+									{
+										points -= 3;
+									}
+									
 								}
 								else
 								{
@@ -1545,6 +1562,10 @@ void SceneSP3::Update(double dt)
 										else if (goE->getType() == 2)
 										{
 											points += 5;
+										}
+										else if (goE->getType() == 3)
+										{
+											points -= 3;
 										}
 										//std::cout << "ANIMAL CAUGHT" << std::endl;
 									}
@@ -2289,6 +2310,16 @@ void SceneSP3::RenderEnemy(enemy *go)
 		//modelStack.Rotate(angle, 0, 0, 1);
 		modelStack.Scale(7, 7, 3);
 		RenderMesh(meshList[GEO_LION], true);
+		modelStack.PopMatrix();
+	}
+	else if (go->getActive() == 1 && go->getType() == 3)
+	{
+		float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
+		modelStack.PushMatrix();
+		modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
+		//modelStack.Rotate(angle, 0, 0, 1);
+		modelStack.Scale(7, 7, 3);
+		RenderMesh(meshList[GEO_HUMAN], true);
 		modelStack.PopMatrix();
 	}
 

@@ -40,6 +40,7 @@
 			EN_ZEBRA,
 			EN_RHINO,
 			EN_LION,
+			EN_HUMAN,
 			EN_TOTAL, //must be last
 		};
 		ENEMY_TYPE type;

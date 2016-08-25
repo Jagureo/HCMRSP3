@@ -103,7 +103,7 @@ void SceneBase::Init()
 	}
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 	meshList[GEO_BALL] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 1), 10, 10, 1.f);
-	meshList[GEO_ICE] = MeshBuilder::GenerateCircle("detect", Color(0.5f, 0.5f, 1));
+	//meshList[GEO_ICE] = MeshBuilder::GenerateCircle("ice", Color(0.5f, 0.5f, 1));
 	meshList[GEO_SOCC] = MeshBuilder::GenerateOBJ("GEO_BALL", "Object//ball1.obj");
 	meshList[GEO_SOCC]->textureID = LoadTGA("Image//ballUV.tga");
 	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 1, 1), 4.f);
@@ -167,7 +167,7 @@ void SceneBase::Init()
 	meshList[HUD_RADARLINE] = MeshBuilder::GenerateCube("radarline", Color(0, 1, 0), 4.f);
 	meshList[HUD_RADARDETECT] = MeshBuilder::GenerateCircle("detect", Color(0, 1, 0));
 	meshList[HUD_RADARENEMY] = MeshBuilder::GenerateCircle("detectene", Color(1, 0, 0));
-	//meshList[HUD_RADARDETECT]->textureID = LoadTGA("Image//yellow-orange-bubble-clip-art.tga");
+	meshList[HUD_RADARDETECT]->textureID = LoadTGA("Image//yellow-orange-bubble-clip-art.tga");
 
 	meshList[GEO_TESTENEMY] = MeshBuilder::GenerateSphere("enemy", Color(255, 144, 0), 10, 10, 1.f);
 
@@ -232,14 +232,14 @@ void SceneBase::Init()
 void SceneBase::Update(double dt)
 {
 	//Keyboard Section
-	if(Application::IsKeyPressed('1'))
+	/*if(Application::IsKeyPressed('1'))
 		glEnable(GL_CULL_FACE);
 	if(Application::IsKeyPressed('2'))
 		glDisable(GL_CULL_FACE);
 	if(Application::IsKeyPressed('3'))
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	if(Application::IsKeyPressed('4'))
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);*/
 	
 	fps = (float)(1.f / dt);
 }

@@ -27,6 +27,12 @@ enemy::enemy(Vector3 pos, int eType, float getSta, float getSpd, float getStr)
 
 		
 	}
+	else if (eType == 3)
+	{
+		type = EN_HUMAN;
+
+
+	}
 	stamina = getSta;
 	speed = getSpd + Math::RandFloatMinMax(-0.5, 0.5);
 	strength = getStr;
