@@ -208,6 +208,9 @@ void SceneBase::Init()
 	meshList[GEO_DISPLAY_CAR2] = MeshBuilder::GenerateOBJ("display_car2", "Object//jeep2.obj");
 	meshList[GEO_DISPLAY_CAR2]->textureID = LoadTGA("Image//jeep2.tga");
 
+	meshList[GEO_LOSE_SCENE] = MeshBuilder::GenerateQuad("loseScreen", Color(1, 1, 1), 1.f);
+	meshList[GEO_LOSE_SCENE]->textureID = LoadTGA("Image//loseScreen.tga");
+
 	meshList[GEO_ROPE] = MeshBuilder::GenerateCube("rope", Color(1, 1, 0), 1.f);
 
 	bLightEnabled = false;

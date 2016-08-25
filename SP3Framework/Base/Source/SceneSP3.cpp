@@ -58,6 +58,7 @@ void SceneSP3::Init()
 	rotateDisplayY = 0;
 	objective = (0, 0, 0);
 	updateObjective = 0;
+	fuelAmount = 100.0f;
 	leader = NULL;
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
@@ -715,14 +716,21 @@ void SceneSP3::Update(double dt)
 	}
 	if (gameStates != states::s_MapEditor)
 	{
-
 		playerControl();
+		if (Application::IsKeyPressed('W') || (Application::IsKeyPressed('S')))
+		{
+			fuelAmount -= dt;
+		}
 	}
 
 
 	if (gameStates == states::s_MapEditor)
 	{
 		mapEditorUpdate(dt);
+	}
+	if (fuelAmount <= 0.0f)
+	{
+		gameStates = states::s_Lose;
 	}
 	//else
 	//{
@@ -1085,6 +1093,14 @@ void SceneSP3::Update(double dt)
 			else if (!Application::IsKeyPressed(VK_BACK) && pressedBack == true)
 			{
 				pressedBack = false;
+			}
+		}
+		if (gameStates == states::s_Lose)
+		{
+			if (Application::IsKeyPressed(VK_BACK))
+			{
+				gameStates = states::s_Menu;
+				fuelAmount = 100.0f;
 			}
 		}
 		if (gameStates == states::s_Upgrade_Cars1 || gameStates == states::s_Upgrade_Cars2 || gameStates == states::s_Upgrade_Cars3)
@@ -2755,6 +2771,17 @@ void SceneSP3::renderMenu()
 			gameStates = states::s_Upgrade;
 		}
 	}
+	if (gameStates == states::s_Lose)
+	{
+		modelStack.PushMatrix();
+		//modelStack.Translate(140, 58, 4);
+		//modelStack.Scale(50, 20, 0);
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[GEO_LOSE_SCENE], false);
+		modelStack.PopMatrix();
+
+	}
 }
 
 void SceneSP3::Render()
@@ -2908,6 +2935,11 @@ void SceneSP3::Render()
 	ss.precision(5);
 	ss << "Pos: " << worldX / m_worldWidth << ", " << worldY;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
+
+	std::ostringstream ss3;
+	ss3.precision(5);
+	ss3 << "Fuel: " << fuelAmount;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 12);
 
 	std::ostringstream ssz;
 	ssz.precision(5);

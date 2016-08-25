@@ -55,6 +55,7 @@ class SceneSP3 : public SceneBase
 	int arrowSelection;
 	float rotateDisplayX;
 	float rotateDisplayY;
+	float fuelAmount;
 
 public:
 	SceneSP3();
