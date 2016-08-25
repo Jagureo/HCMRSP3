@@ -120,6 +120,7 @@ protected:
 	float m_estimatedTime;
 	GameObject *m_ghost;
 	int m_objectCount;
+	bool driftMode;
 
 	string mapName;
 	bool nameType;

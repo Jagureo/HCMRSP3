@@ -200,6 +200,7 @@ void enemy::runOff(Vector3 playerPos, std::vector<enemy*> enemyVector, enemy* le
 		}
 	}
 	
+	
 	if (stamina < 0)
 	{
 		stamina = 0;
@@ -231,9 +232,8 @@ void enemy::slowDown(std::vector<enemy*> enemyVector, Vector3 objective)
 			{
 				dir.Set(1, 0, 0);
 			}
-			vel += (dir.Normalized()* (speed));
-
-
+			(dir.Normalized() * (speed));
+			vel += (dir.Normalized() * (speed));
 }
 
 

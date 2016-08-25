@@ -136,7 +136,7 @@ void playMap::optimize()
 			if ((go->pos - other->pos).LengthSquared() < 15.f)
 			{
 				go->radarVisible = false;
-				if ((go->pos - other->pos).LengthSquared() < 5.f)
+				if ((go->pos - other->pos).LengthSquared() < go->scale.x)
 				{
 					go->active = false;
 					go->dead = true;

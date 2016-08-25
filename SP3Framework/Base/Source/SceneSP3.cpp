@@ -500,12 +500,12 @@ void SceneSP3::CollisionMap(GameObject *go, GameObject *other, double dt)
 	case GameObject::MAP_MUD:
 	{
 			float distanceSquared = ((go->pos + go->vel * dt) - (other->pos - other->vel * dt)).LengthSquared();
-			float combinedRadiusSquared = (go->scale.x / 3 + other->scale.x) * (go->scale.x / 3 + other->scale.x);
+			float combinedRadiusSquared = (go->scale.x + other->scale.x) * (go->scale.x + other->scale.x);
 			Vector3 relativeDisplacement = other->pos - go->pos;
 			if (distanceSquared < combinedRadiusSquared && go->vel.Dot(relativeDisplacement) > 0)
 			{
 				friction = 0.99f;
-				go->vel *= 0.98f;
+				go->vel *= 0.97f;
 			}
 			break;
 	}
@@ -530,9 +530,25 @@ void SceneSP3::playerControl()
 	{
 		player1->engine = player1->playerCar.engine;
 	}
+	if (Application::IsKeyPressed(VK_LSHIFT))
+	{
+		driftMode = true;
+	}
+	else
+	{
+		driftMode = false;
+	}
 	if (Application::IsKeyPressed('D'))
 	{
-		player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
+		if (driftMode)
+		{
+			player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
+
+		}
+		else
+		{
+			player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
+		}
 		//player1->rotationAngle += player1->playerCar.turnSpeed * 3;
 		player1->rotationAngle -= player1->playerCar.turnSpeed;
 		//player1->rotationAngle -= player1->playerCar.turnSpeed * 3;
@@ -554,13 +570,31 @@ void SceneSP3::playerControl()
 			}
 				
 		}
-		player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
+		else if (driftMode)
+		{
+			player1->rotationAngle += player1->playerCar.turnSpeed / 5;
+		}
+		if (driftMode)
+		{
+			player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
+		}
+		else
+		{
+			player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
+		}
 
 		player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
 	}
 	if (Application::IsKeyPressed('A'))
 	{
-		player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
+		if (driftMode)
+		{
+			player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
+		}
+		else
+		{
+			player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
+		}
 		player1->rotationAngle += player1->playerCar.turnSpeed;
 		//player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
 		//player1->rotationAngle -= player1->playerCar.turnSpeed * 3;
@@ -575,7 +609,18 @@ void SceneSP3::playerControl()
 			else
 				player1->rotationAngle -= player1->playerCar.turnSpeed;
 		}
-		player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
+		else if (driftMode)
+		{
+			player1->rotationAngle -= player1->playerCar.turnSpeed / 5;
+		}
+		if (driftMode)
+		{
+			player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
+		}
+		else
+		{
+			player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
+		}
 
 		player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
 	}
@@ -600,6 +645,10 @@ void SceneSP3::playerControl()
 	if (player1->vel.x != 0 || player1->vel.y != 0)
 	{
 		player1->vel = player1->vel * friction;
+		if (driftMode)
+		{
+			player1->vel = player1->vel * 0.98f;
+		}
 	}
 }
 
@@ -671,6 +720,7 @@ void SceneSP3::Update(double dt)
 
 		GameObject* testMud = new GameObject(GameObject::MAP_MUD);
 		testMud->pos.Set(-25, -25, 1);
+		testMud->scale.Set(4, 4, 4);
 		testMud->fresh = true;
 		testMud->active = true;
 		testMap.addSingleProp(testMud);
@@ -1397,6 +1447,8 @@ void SceneSP3::Update(double dt)
 				enemyList.push_back(animal);
 			}
 
+			
+
 			for (std::vector<enemy*>::iterator itE2 = enemyList.begin(); itE2 != enemyList.end(); ++itE2)
 			{
 				enemy *goE2 = (enemy *)*itE2;
@@ -1430,9 +1482,6 @@ void SceneSP3::Update(double dt)
 			for (std::vector<enemy*>::iterator itE = enemyList.begin(); itE != enemyList.end(); ++itE)
 			{
 				enemy *goE = (enemy *)*itE;
-				if (goE->getActive() == 1)
-				{
-
 					if (goE->getActive() == 1)
 					{
 
@@ -1471,7 +1520,7 @@ void SceneSP3::Update(double dt)
 							else
 							{
 								goE->slowDown(enemyList, objective);
-								if (goE->getPos().x > objective.x - 10 && goE->getPos().x < objective.x + 12 && goE->getPos().y > objective.y - 12 && goE->getPos().y < objective.y + 12 /*&& goE->leader == 0*/)
+								if (goE->getPos().x > objective.x - 10 && goE->getPos().x < objective.x + 10 && goE->getPos().y > objective.y - 10 && goE->getPos().y < objective.y + 10 /*&& goE->leader == 0*/)
 								{
 									goE->setActive(false);
 									points--;
@@ -1509,9 +1558,7 @@ void SceneSP3::Update(double dt)
 							}
 						}
 					}
-
-				}
-
+					std::cout << goE->vel << std::endl;
 
 			}
 			Dalasso->updateLasso(player1->pos, dt);
@@ -1760,6 +1807,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 							dragObj = true;
 							GameObject* testWater = new GameObject(GameObject::MAP_MUD);
 							testWater->pos.Set(worldX, worldY, 1);
+							testWater->scale.Set(4, 4, 4);
 							testWater->fresh = true;
 							testWater->active = true;
 							testMap.forceAddSingleProp(testWater);
@@ -2268,12 +2316,14 @@ void SceneSP3::RenderProps(playMap* map)
 		}
 		else if (go->type == GameObject::MAP_MUD)
 		{
+			glEnable(GL_DEPTH_TEST);
 			modelStack.PushMatrix();
 			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
 			modelStack.Rotate(90, 1, 0, 0);
 			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
 			RenderMesh(meshList[GEO_MUD], true);
 			modelStack.PopMatrix();
+			glDisable(GL_DEPTH_TEST);
 		}
 		else if (go->type == GameObject::MAP_LION)
 		{
@@ -2324,7 +2374,7 @@ void SceneSP3::mapEditorRender()
 	int h = Application::GetWindowHeight();
 	float worldX = x * m_worldWidth / w;
 	float worldY = (h - y) * m_worldHeight / h;
-	if (Application::IsKeyPressed(VK_LSHIFT))
+	if (Application::IsKeyPressed(VK_LSHIFT) && testMode == false)
 	{
 		int posx = worldX;
 		int posy = worldY;
@@ -2391,12 +2441,14 @@ void SceneSP3::mapEditorRender()
 		}
 		else if (go->type == GameObject::MAP_MUD)
 		{
+			glEnable(GL_DEPTH_TEST);
 			modelStack.PushMatrix();
 			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
 			modelStack.Rotate(90, 1, 0, 0);
 			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
 			RenderMesh(meshList[GEO_MUD], true);
 			modelStack.PopMatrix();
+			glDisable(GL_DEPTH_TEST);
 		}
 		else if (go->type == GameObject::MAP_LION)
 		{
