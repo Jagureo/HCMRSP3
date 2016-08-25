@@ -1,6 +1,6 @@
 #include "enemy.h"
 
-enemy::enemy(Vector3 pos, int eType)
+enemy::enemy(Vector3 pos, int eType, float getSta, float getSpd, float getStr)
 {
 	
 	position = pos;
@@ -10,22 +10,26 @@ enemy::enemy(Vector3 pos, int eType)
 	active = 1;
 	running = 0;
 	runLonger = 0;
-	stamina = 300;
 
 	if (eType == 0)
 	{
-		strength = 100;
-		stamina = 500;
-		speed = 2;
 		type = EN_ZEBRA;
+
 	}
 	else if (eType == 1)
 	{
-		strength = 300;
-		stamina = 300;
-		speed = 1;
 		type = EN_RHINO;
+
 	}
+	else if (eType == 2)
+	{
+		type = EN_LION;
+
+		
+	}
+	stamina = getSta;
+	speed = getSpd;
+	strength = getStr;
 }
 
 enemy::~enemy()
@@ -363,7 +367,7 @@ Vector3 enemy::alignment(std::vector<enemy*> enemyVector, enemy* leaderI)
 }
 
 
-enemy* newEnemy(float x, float y, float z, int type)
+enemy* newEnemy(float x, float y, float z, int type, float getSta, float getSpd, float getStr)
 {
-	return new enemy(Vector3(x,y,z), type);
+	return new enemy(Vector3(x,y,z), type, getSta,getSpd,getStr);
 }

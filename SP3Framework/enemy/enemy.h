@@ -7,6 +7,7 @@
 #endif
 
 #include "Vector3.h"
+#include "TextFile.h"
 #include <vector>
 
 
@@ -14,7 +15,7 @@
 	{
 	public:
 		
-		enemy(Vector3 pos, int type);
+		enemy(Vector3 pos, int type, float getSta, float getSpd, float getStr);
 		~enemy();
 		Vector3 getPos();
 		Vector3 getVel();
@@ -38,6 +39,7 @@
 		{
 			EN_ZEBRA,
 			EN_RHINO,
+			EN_LION,
 			EN_TOTAL, //must be last
 		};
 		ENEMY_TYPE type;
@@ -58,4 +60,4 @@
 		Vector3 alignment(std::vector<enemy*> enemyVector, enemy* leaderI);
 	};
 
-	ENEMY_API enemy* newEnemy(float x, float y, float z, int type);
+	ENEMY_API enemy* newEnemy(float x, float y, float z, int type, float getSta, float getSpd, float getStr);

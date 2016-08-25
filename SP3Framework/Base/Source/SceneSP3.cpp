@@ -64,24 +64,35 @@ void SceneSP3::Init()
 	testMap.setBackground(meshList[GEO_TESTMAP]);
 	testMap.setMapSize(20, 20);
 
-	gameStates = states::s_Upgrade_Cars1;
-	//gameStates = states::s_Tutorial;
+	//gameStates = states::s_Upgrade_Cars1;
+	gameStates = states::s_Tutorial;
+
+	animalStat = new TextFile(TextFile::ANIMAL);
 
 	for (int i = 0; i < 7; ++i)
 	{
-		enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 0);
+		animalStat->GetAnimalStat("Zebra");
+		enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 0, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
 		animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
 		animal->setLeader(0);
 		enemyList.push_back(animal);
 	}
 
+	animalStat = new TextFile(TextFile::ANIMAL);
+
 	for (int i = 0; i < 3; ++i)
 	{
-		enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 1);
+		animalStat->GetAnimalStat("Rhino");
+		enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 1, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
 		animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
 		animal->setLeader(0);
 		enemyList.push_back(animal);
 	}
+	animalStat->GetAnimalStat("Lion");
+	enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 1, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+	animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+	animal->setLeader(0);
+	enemyList.push_back(animal);
 }
 
 void SceneSP3::Reset()
@@ -626,7 +637,7 @@ void SceneSP3::Update(double dt)
 		objective.y += diffy;
 	}
 
-	if (Application::IsKeyPressed('1'))
+	/*if (Application::IsKeyPressed('1'))
 	{
 
 		enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 0);
@@ -643,7 +654,7 @@ void SceneSP3::Update(double dt)
 		animal->setLeader(0);
 		enemyList.push_back(animal);
 
-	}
+	}*/
 
 	if (Application::IsKeyPressed('R'))
 	{
@@ -1409,7 +1420,7 @@ void SceneSP3::Update(double dt)
 							else
 							{
 								goE->slowDown(enemyList, objective);
-								if (goE->getPos().x > objective.x - 10 && goE->getPos().x < objective.x + 10 && goE->getPos().y > objective.y - 10 && goE->getPos().y < objective.y + 10 && goE->leader == 0)
+								if (goE->getPos().x > objective.x - 10 && goE->getPos().x < objective.x + 12 && goE->getPos().y > objective.y - 12 && goE->getPos().y < objective.y + 12 /*&& goE->leader == 0*/)
 								{
 									goE->setActive(false);
 									points--;
@@ -1428,7 +1439,18 @@ void SceneSP3::Update(double dt)
 									goE->setCaught(0);
 									if (goE->active == 0)
 									{
-										points++;
+										if (goE->getType() == 0)
+										{
+											points++;
+										}
+										else if (goE->getType() == 1)
+										{
+											points += 2;
+										}
+										else if (goE->getType() == 2)
+										{
+											points += 5;
+										}
 										//std::cout << "ANIMAL CAUGHT" << std::endl;
 									}
 								}
@@ -2111,9 +2133,9 @@ void SceneSP3::RenderEnemy(enemy *go)
 		float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
 		modelStack.PushMatrix();
 		modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
-		modelStack.Rotate(angle, 0, 0, 1);
-		modelStack.Scale(3, 3, 3);
-		RenderMesh(meshList[GEO_ENEMY], true);
+		//modelStack.Rotate(angle, 0, 0, 1);
+		modelStack.Scale(7, 7, 3);
+		RenderMesh(meshList[GEO_ZEBRA], true);
 		modelStack.PopMatrix();
 	}
 	else if (go->getActive() == 1 && go->getType() == 1)
@@ -2121,9 +2143,19 @@ void SceneSP3::RenderEnemy(enemy *go)
 		float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
 		modelStack.PushMatrix();
 		modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
-		modelStack.Rotate(angle, 0, 0, 1);
-		modelStack.Scale(3, 3, 3);
-		RenderMesh(meshList[GEO_SHIP], true);
+		//modelStack.Rotate(angle, 0, 0, 1);
+		modelStack.Scale(7, 7, 3);
+		RenderMesh(meshList[GEO_RHINO], true);
+		modelStack.PopMatrix();
+	}
+	else if (go->getActive() == 1 && go->getType() == 2)
+	{
+		float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
+		modelStack.PushMatrix();
+		modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
+		//modelStack.Rotate(angle, 0, 0, 1);
+		modelStack.Scale(7, 7, 3);
+		RenderMesh(meshList[GEO_LION], true);
 		modelStack.PopMatrix();
 	}
 
@@ -2450,7 +2482,7 @@ void SceneSP3::renderMinimap(playMap* map)
 											 modelStack.Rotate(90, 1, 0, 0);
 											 RenderMesh(meshList[HUD_RADARENEMY], false);
 											 modelStack.PopMatrix();
-											 //RenderMesh(meshList[GEO_LION], false);
+											// RenderMesh(meshList[GEO_LION], false);
 											 break;
 				}
 				case GameObject::MAP_ZEBRA:
@@ -2468,7 +2500,7 @@ void SceneSP3::renderMinimap(playMap* map)
 											  modelStack.Rotate(90, 1, 0, 0);
 											  RenderMesh(meshList[HUD_RADARENEMY], false);
 											  modelStack.PopMatrix();
-											 //RenderMesh(meshList[GEO_RHINO], false);
+											//RenderMesh(meshList[GEO_RHINO], false);
 											 break;
 				}
 				case GameObject::MAP_HUMAN:
