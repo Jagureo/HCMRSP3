@@ -255,3 +255,234 @@ bool TextFile::GetAnimalStat(string name)
 	}
 	return false;
 }
+
+string TextFile::get_carname()
+{
+	return name;
+}
+int TextFile::get_engine()
+{
+	return engine;
+}
+int TextFile::get_hp()
+{
+	return hp;
+}
+int TextFile::get_handling()
+{
+	return handling;
+}
+int TextFile::get_lassolength()
+{
+	return lassolength;
+}
+int TextFile::get_lassostrength()
+{
+	return lassostrength;
+}
+int TextFile::get_tranqcount()
+{
+	return tranqcount;
+}
+int TextFile::get_tranqduration()
+{
+	return tranqduration;
+}
+bool TextFile::GetCarStat(string name, string filename)
+{
+	fstream File;
+	File.open(filename);
+	if (File.is_open())
+	{
+		string line;
+		while (getline(File, line))
+		{
+			size_t pos = line.find(",");
+			size_t temp = 0;
+			size_t length = pos;
+			bool correctLine = false;
+			for (int i = 0; i < 8; i++)
+			{
+				string hold = line.substr(temp, pos);
+				temp = pos + 1;
+				pos = line.find(",", temp);
+
+				length = pos - temp;
+				if (i == 0)
+				{
+					if (hold == name)
+					{
+						this->name = hold;
+						correctLine = true;
+					}
+				}
+				else if (i == 1 && correctLine)
+				{
+					engine = stoi(hold);
+				}
+				else if (i == 2 && correctLine)
+				{
+					hp = stoi(hold);
+				}
+				else if (i == 3 && correctLine)
+				{
+					handling = stoi(hold);
+				}
+				else if (i == 4 && correctLine)
+				{
+					lassolength = stoi(hold);
+				}
+				else if (i == 5 && correctLine)
+				{
+					lassostrength = stoi(hold);
+				}
+				else if (i == 6 && correctLine)
+				{
+					tranqcount = stoi(hold);
+				}
+				else if (i == 7 && correctLine)
+				{
+					tranqduration = stoi(hold);
+				}
+			}
+			if (correctLine)
+			{
+				cout << this->name << " stats- " << endl;
+				cout << "Engine: " << engine << " HP: " << hp << " Handling: " << handling << endl;
+				cout << "Lasso Length: " << lassolength << " Lasso Strength: " << lassostrength << endl;
+				cout << "Tranq Count: " << tranqcount << " Tranq Duration: " << tranqduration << endl;
+				break;
+			}
+		}
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+bool TextFile::SetCarStat(string replacename, string stattochange, string valueofstat)
+{
+	fstream File;
+	File.open("CarStats.txt");
+
+	fstream TempFile;
+	TempFile.open("tempsave.txt", ios_base::out);
+
+	if (File.is_open() && TempFile.is_open())
+	{
+		string line;
+		int lineno = 0;
+		while (getline(File, line))
+		{
+			size_t pos = line.find(",");
+			size_t temp = 0;
+			size_t length = pos;
+			string hold = line.substr(temp, pos);
+
+			length = pos - temp;
+			if (lineno == 0 && replacename == "Car1")
+			{
+				GetCarStat(replacename, "CarStats.txt");
+				if (stattochange == "engine")
+				{
+					TempFile << replacename << "," << valueofstat << "," << hp << "," << handling << "," << lassolength << "," << lassostrength << "," << tranqcount << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "hp")
+				{
+					TempFile << replacename << "," << engine << "," << valueofstat << "," << handling << "," << lassolength << "," << lassostrength << "," << tranqcount << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "handling")
+				{
+					TempFile << replacename << "," << engine << "," << hp << "," << valueofstat << "," << lassolength << "," << lassostrength << "," << tranqcount << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "lassolength")
+				{
+					TempFile << replacename << "," << engine << "," << hp << "," << handling << "," << valueofstat << "," << lassostrength << "," << tranqcount << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "lassostrength")
+				{
+					TempFile << replacename << "," << engine << "," << hp << "," << handling << "," << lassolength << "," << valueofstat << "," << tranqcount << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "tranqcount")
+				{
+					TempFile << replacename << "," << engine << "," << hp << "," << handling << "," << lassolength << "," << lassostrength << "," << valueofstat << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "tranqduration")
+				{
+					TempFile << replacename << "," << engine << "," << hp << "," << handling << "," << lassolength << "," << lassostrength << "," << tranqcount << "," << valueofstat << ",\n";
+				}
+			}
+			else if (lineno == 1 && replacename == "Car2")
+			{
+				GetCarStat(replacename, "CarStats.txt");
+				if (stattochange == "engine")
+				{
+					TempFile << replacename << "," << valueofstat << "," << hp << "," << handling << "," << lassolength << "," << lassostrength << "," << tranqcount << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "hp")
+				{
+					TempFile << replacename << "," << engine << "," << valueofstat << "," << handling << "," << lassolength << "," << lassostrength << "," << tranqcount << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "handling")
+				{
+					TempFile << replacename << "," << engine << "," << hp << "," << valueofstat << "," << lassolength << "," << lassostrength << "," << tranqcount << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "lassolength")
+				{
+					TempFile << replacename << "," << engine << "," << hp << "," << handling << "," << valueofstat << "," << lassostrength << "," << tranqcount << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "lassostrength")
+				{
+					TempFile << replacename << "," << engine << "," << hp << "," << handling << "," << lassolength << "," << valueofstat << "," << tranqcount << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "tranqcount")
+				{
+					TempFile << replacename << "," << engine << "," << hp << "," << handling << "," << lassolength << "," << lassostrength << "," << valueofstat << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "tranqduration")
+				{
+					TempFile << replacename << "," << engine << "," << hp << "," << handling << "," << lassolength << "," << lassostrength << "," << tranqcount << "," << valueofstat << ",\n";
+				}
+			}
+			else if (lineno == 2 && replacename == "Car3")
+			{
+				GetCarStat(replacename, "CarStats.txt");
+				if (stattochange == "engine")
+				{
+					TempFile << replacename << "," << valueofstat << "," << hp << "," << handling << "," << lassolength << "," << lassostrength << "," << tranqcount << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "hp")
+				{
+					TempFile << replacename << "," << engine << "," << valueofstat << "," << handling << "," << lassolength << "," << lassostrength << "," << tranqcount << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "handling")
+				{
+					TempFile << replacename << "," << engine << "," << hp << "," << valueofstat << "," << lassolength << "," << lassostrength << "," << tranqcount << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "lassolength")
+				{
+					TempFile << replacename << "," << engine << "," << hp << "," << handling << "," << valueofstat << "," << lassostrength << "," << tranqcount << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "lassostrength")
+				{
+					TempFile << replacename << "," << engine << "," << hp << "," << handling << "," << lassolength << "," << valueofstat << "," << tranqcount << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "tranqcount")
+				{
+					TempFile << replacename << "," << engine << "," << hp << "," << handling << "," << lassolength << "," << lassostrength << "," << valueofstat << "," << tranqduration << ",\n";
+				}
+				else if (stattochange == "tranqduration")
+				{
+					TempFile << replacename << "," << engine << "," << hp << "," << handling << "," << lassolength << "," << lassostrength << "," << tranqcount << "," << valueofstat << ",\n";
+				}
+			}
+			else
+			{
+				TempFile << line << "\n";
+			}
+			lineno++;
+		}
+	}
+	return true;
+}

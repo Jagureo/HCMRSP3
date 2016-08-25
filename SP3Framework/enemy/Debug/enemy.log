@@ -1,85 +1,9 @@
-﻿Build started 8/25/2016 10:57:54 AM.
-     1>Project "C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\enemy\enemy.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\/Common/Source /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D ENEMY_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt enemy.cpp
-         enemy.cpp
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(48): warning C4251: 'enemy::position' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'enemy'
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(49): warning C4251: 'enemy::vel' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'enemy'
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(4): warning C4273: 'enemy::enemy' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(17) : see previous definition of '{ctor}'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(30): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(31): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(32): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(37): warning C4273: 'enemy::~enemy' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(18) : see previous definition of '{dtor}'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(42): warning C4273: 'enemy::getPos' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(19) : see previous definition of 'getPos'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(47): warning C4273: 'enemy::getCaught' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(23) : see previous definition of 'getCaught'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(52): warning C4273: 'enemy::getRunLonger' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(24) : see previous definition of 'getRunLonger'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(57): warning C4273: 'enemy::getType' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(25) : see previous definition of 'getType'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(62): warning C4273: 'enemy::getActive' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(21) : see previous definition of 'getActive'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(67): warning C4273: 'enemy::getNewSpawn' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(22) : see previous definition of 'getNewSpawn'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(72): warning C4273: 'enemy::setNewSpawn' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(26) : see previous definition of 'setNewSpawn'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(77): warning C4273: 'enemy::increaseRunLonger' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(34) : see previous definition of 'increaseRunLonger'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(86): warning C4273: 'enemy::setCaught' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(27) : see previous definition of 'setCaught'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(91): warning C4273: 'enemy::setPos' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(31) : see previous definition of 'setPos'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(96): warning C4273: 'enemy::getVel' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(20) : see previous definition of 'getVel'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(101): warning C4273: 'enemy::setVel' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(30) : see previous definition of 'setVel'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(106): warning C4273: 'enemy::setActive' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(32) : see previous definition of 'setActive'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(111): warning C4273: 'enemy::setLeader' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(33) : see previous definition of 'setLeader'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(116): warning C4273: 'enemy::checkCollision' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(36) : see previous definition of 'checkCollision'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(137): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(138): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(144): warning C4273: 'enemy::runOff' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(28) : see previous definition of 'runOff'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(177): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(198): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(213): warning C4273: 'enemy::slowDown' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(29) : see previous definition of 'slowDown'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(235): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(236): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(242): warning C4273: 'enemy::updatePos' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(35) : see previous definition of 'updatePos'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(243): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(302): warning C4273: 'enemy::cohesion' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(57) : see previous definition of 'cohesion'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(303): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(304): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(307): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(330): warning C4273: 'enemy::seperation' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(58) : see previous definition of 'seperation'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(331): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(334): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(342): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(352): warning C4273: 'enemy::alignment' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(59) : see previous definition of 'alignment'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(353): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(356): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(358): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.cpp(379): warning C4273: 'newEnemy' : inconsistent dll linkage
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(62) : see previous definition of 'newEnemy'
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\enemy.dll" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\enemy.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\enemy.lib" /MACHINE:X86 /DLL Debug\enemy.obj
-         C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\Common.lib
-         enemy.vcxproj -> C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\enemy.dll
-     1>Done Building Project "C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\enemy\enemy.vcxproj" (Build target(s)).
+﻿Build started 25/8/2016 11:17:28 AM.
+     1>Project "C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\enemy\enemy.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         enemy.vcxproj -> C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug\enemy.dll
+     1>Done Building Project "C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\enemy\enemy.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.73
+Time Elapsed 00:00:00.07

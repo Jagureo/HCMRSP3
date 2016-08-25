@@ -1,81 +1,81 @@
-﻿Build started 8/25/2016 10:51:46 AM.
-     1>Project "C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Base\Base.vcxproj" on node 2 (Build target(s)).
+﻿Build started 25/8/2016 11:19:14 AM.
+     1>Project "C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Base\Base.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\\enemy /IC:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\\lasso /IC:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\/Common/Source /IC:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\/glew/include /IC:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\/glfw/include /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\SceneSP3.cpp
+         D:\New folder\VC\bin\CL.exe /c /IC:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\\enemy /IC:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\\lasso /IC:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\/Common/Source /IC:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\/glew/include /IC:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\/glfw/include /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\SceneSP3.cpp
          SceneSP3.cpp
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(48): warning C4251: 'enemy::position' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'enemy'
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\enemy\enemy.h(49): warning C4251: 'enemy::vel' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'enemy'
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\lasso\lasso.h(29): warning C4251: 'lasso::lassoPos' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'lasso'
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\lasso\lasso.h(31): warning C4251: 'lasso::targetPos' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'lasso'
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\lasso\lasso.h(32): warning C4251: 'lasso::lassoVel' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'lasso'
-                 c:\users\jagureo\desktop\hcmrsp3\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(59): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(138): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(171): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(180): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(190): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(222): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(272): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(302): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(332): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(454): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(473): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(490): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(502): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(545): warning C4800: 'float' : forcing value to bool 'true' or 'false' (performance warning)
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(550): warning C4800: 'float' : forcing value to bool 'true' or 'false' (performance warning)
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(579): warning C4800: 'float' : forcing value to bool 'true' or 'false' (performance warning)
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(583): warning C4800: 'float' : forcing value to bool 'true' or 'false' (performance warning)
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(592): warning C4800: 'float' : forcing value to bool 'true' or 'false' (performance warning)
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(596): warning C4800: 'float' : forcing value to bool 'true' or 'false' (performance warning)
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(618): warning C4800: 'float' : forcing value to bool 'true' or 'false' (performance warning)
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(622): warning C4800: 'float' : forcing value to bool 'true' or 'false' (performance warning)
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(770): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(989): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(990): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1158): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1162): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1166): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1170): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1259): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1298): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1427): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1436): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1444): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1513): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1533): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1564): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1586): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1587): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1659): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1660): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1714): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1715): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1974): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(1975): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(2024): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(2025): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(2141): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(2375): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(2376): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(2379): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(2380): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(2398): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(2547): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(2641): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(2642): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(2666): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(2731): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(2943): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(2953): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(3008): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\jagureo\desktop\hcmrsp3\sp3framework\base\source\scenesp3.cpp(3009): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(48): warning C4251: 'enemy::position' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'enemy'
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\enemy\enemy.h(49): warning C4251: 'enemy::vel' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'enemy'
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\lasso\lasso.h(29): warning C4251: 'lasso::lassoPos' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'lasso'
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\lasso\lasso.h(31): warning C4251: 'lasso::targetPos' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'lasso'
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\lasso\lasso.h(32): warning C4251: 'lasso::lassoVel' : struct 'Vector3' needs to have dll-interface to be used by clients of class 'lasso'
+                 c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\common\source\vector3.h(26) : see declaration of 'Vector3'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(59): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(138): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(171): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(180): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(190): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(222): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(272): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(302): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(332): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(454): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(473): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(490): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(502): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(545): warning C4800: 'float' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(550): warning C4800: 'float' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(579): warning C4800: 'float' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(583): warning C4800: 'float' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(592): warning C4800: 'float' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(596): warning C4800: 'float' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(618): warning C4800: 'float' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(622): warning C4800: 'float' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(774): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(993): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(994): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1162): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1166): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1170): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1174): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1263): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1302): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1431): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1440): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1448): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1517): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1537): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1568): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1590): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1591): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1663): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1664): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1718): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1719): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1978): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(1979): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(2028): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(2029): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(2145): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(2379): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(2380): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(2383): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(2384): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(2402): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(2551): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(2645): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(2646): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(2670): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(2735): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(2947): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(2957): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(3012): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\beckham\desktop\hcmrsp3_24_8_2016\sp3framework\base\source\scenesp3.cpp(3013): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\Base.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug /LIBPATH:"C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\/glfw/lib-msvc100" /LIBPATH:C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\/glew/lib Common.lib winmm.lib opengl32.lib glu32.lib glew32.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\Base.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\Base.lib" /MACHINE:X86 Debug\Application.obj
+         D:\New folder\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug\Base.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug /LIBPATH:"C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\/glfw/lib-msvc100" /LIBPATH:C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\/glew/lib Common.lib winmm.lib opengl32.lib glu32.lib glew32.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug\Base.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug\Base.lib" /MACHINE:X86 Debug\Application.obj
          Debug\Camera.obj
          Debug\GameObject.obj
          Debug\LoadOBJ.obj
@@ -94,14 +94,14 @@
          Debug\shader.obj
          Debug\TextFile.obj
          Debug\Utility.obj
-         C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\enemy.lib
-         C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\lasso.lib
+         C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug\enemy.lib
+         C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug\lasso.lib
      1>Application.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
-            Creating library C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\Base.lib and object C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\Base.exp
+            Creating library C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug\Base.lib and object C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug\Base.exp
      1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-         Base.vcxproj -> C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Debug\Base.exe
-     1>Done Building Project "C:\Users\Jagureo\Desktop\HCMRSP3\SP3Framework\Base\Base.vcxproj" (Build target(s)).
+         Base.vcxproj -> C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Debug\Base.exe
+     1>Done Building Project "C:\Users\Beckham\Desktop\HCMRSP3_24_8_2016\SP3Framework\Base\Base.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.57
+Time Elapsed 00:00:01.41

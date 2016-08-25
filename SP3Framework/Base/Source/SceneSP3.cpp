@@ -755,8 +755,12 @@ void SceneSP3::Update(double dt)
 	if (Application::IsKeyPressed('7') && hi == false)
 	{
 		hi = true;
-		TextFile* animal = new TextFile(TextFile::ANIMAL);
-		animal->GetAnimalStat("Zebra");
+		/*TextFile* animal = new TextFile(TextFile::ANIMAL);
+		animal->GetAnimalStat("Zebra");*/
+		TextFile* car = new TextFile(TextFile::CAR);
+		car->GetCarStat("Car2", "CarStats.txt");
+		car->SetCarStat("Car2", "hp", "8");
+		car->GetCarStat("Car2", "tempsave.txt");
 	}
 	if (hi && !Application::IsKeyPressed('7'))
 	{

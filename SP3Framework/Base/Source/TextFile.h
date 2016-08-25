@@ -41,6 +41,21 @@ public:
 	int get_strength();
 
 	bool GetAnimalStat(string name);
+
+	string get_carname();
+	int get_engine();
+	int get_hp();
+	int get_handling();
+
+	int get_lassolength();
+	int get_lassostrength();
+
+	int get_tranqcount();
+	int get_tranqduration();
+
+	bool GetCarStat(string name, string filename);
+	bool SetCarStat(string name, string stat, string data);
+
 	TextFile(FileType ftype = ANIMAL);
 	~TextFile();
 private:
@@ -51,5 +66,10 @@ private:
 	int stamina;
 	int speed;
 	int strength;
+
+	string name;
+	int engine, hp, handling;
+	int lassolength, lassostrength;
+	int tranqcount, tranqduration;
 };
 #endif
