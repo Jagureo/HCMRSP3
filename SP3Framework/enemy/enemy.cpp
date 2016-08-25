@@ -28,7 +28,7 @@ enemy::enemy(Vector3 pos, int eType, float getSta, float getSpd, float getStr)
 		
 	}
 	stamina = getSta;
-	speed = getSpd;
+	speed = getSpd + Math::RandFloatMinMax(-0.5, 0.5);
 	strength = getStr;
 	//strength = 99999;
 }
@@ -56,6 +56,11 @@ int enemy::getRunLonger()
 int enemy::getType()
 {
 	return type;
+}
+
+float enemy::getStrength()
+{
+	return strength;
 }
 
 bool enemy::getActive()
@@ -163,18 +168,18 @@ void enemy::runOff(Vector3 playerPos, std::vector<enemy*> enemyVector, enemy* le
 		if (caught == 1 )
 		{
 
-			vel.x += -((dir.Normalized()).x ) * (5 + speed);
-			vel.y += -((dir.Normalized()).y ) * (5 + speed);
+			vel.x += -((dir.Normalized()).x ) * (2* speed);
+			vel.y += -((dir.Normalized()).y ) * (2 * speed);
 		}
 		else if (leader == 1)
 		{
-			vel.x += -((dir.Normalized()).x) * (3 + speed);
-			vel.y += -((dir.Normalized()).y) * (3 + speed);
+			vel.x += -((dir.Normalized()).x) * (1 * speed);
+			vel.y += -((dir.Normalized()).y) * (1 * speed);
 		}
 		else
 		{
 			//vel += -(dir.Normalized()) * 3;
-			vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1)) * (3 + speed);
+			vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1)) * (1 * speed);
 			vel.z = 0;
 		}
 		stamina--;
@@ -184,18 +189,18 @@ void enemy::runOff(Vector3 playerPos, std::vector<enemy*> enemyVector, enemy* le
 		if (caught == 1)
 		{
 
-			vel.x += -((dir.Normalized()).x ) * (1 + speed);
-			vel.y += -((dir.Normalized()).y ) * (1 + speed);
+			vel.x += -((dir.Normalized()).x ) * (1 * speed);
+			vel.y += -((dir.Normalized()).y ) * (1 * speed);
 		}
 		if (leader == 1)
 		{
-			vel.x += -((dir.Normalized()).x) * ( speed);
-			vel.y += -((dir.Normalized()).y) * ( speed);
+			vel.x += -((dir.Normalized()).x) * ( 0.5*speed);
+			vel.y += -((dir.Normalized()).y) * ( 0.5 *speed);
 			
 		}
 		else
 		{
-			vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1)* ( speed));
+			vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1)* (0.5*speed));
 			vel.z = 0;
 		}
 	}
@@ -232,8 +237,8 @@ void enemy::slowDown(std::vector<enemy*> enemyVector, Vector3 objective)
 			{
 				dir.Set(1, 0, 0);
 			}
-			(dir.Normalized() * (speed));
-			vel += (dir.Normalized() * (speed));
+			//(dir.Normalized() * (speed));
+			vel += (dir.Normalized() * (0.5 * speed));
 }
 
 

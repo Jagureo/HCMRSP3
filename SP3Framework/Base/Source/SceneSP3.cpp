@@ -66,7 +66,7 @@ void SceneSP3::Init()
 	testMap.setMapSize(20, 20);
 
 	//gameStates = states::s_Upgrade_Cars1;
-	gameStates = states::s_Menu;
+	gameStates = states::s_Tutorial;
 
 	animalStat = new TextFile(TextFile::ANIMAL);
 
@@ -1522,7 +1522,7 @@ void SceneSP3::Update(double dt)
 								if (goE->getCaught() == 1)
 								{
 									goE->increaseRunLonger(3);
-									player1->vel += (0.0001 * goE->strength) * goE->getVel();
+									player1->vel += (0.0001 * goE->getStrength()) * goE->getVel();
 								}
 								else
 								{
@@ -1540,7 +1540,21 @@ void SceneSP3::Update(double dt)
 							}
 
 							goE->checkCollision(enemyList);
-
+							if (goE->getPos().x > player1->pos.x - 7 && goE->getPos().x < player1->pos.x + 7 && goE->getPos().y > player1->pos.y - 7 && goE->getPos().y < player1->pos.y + 7 /*&& goE->leader == 0*/)
+							{
+								goE->strength -= 100;
+								if (goE->getStrength() <= 0)
+								{
+									goE->setActive(false);
+								}
+								else
+								{
+									Vector3 temp = goE->getVel();
+									goE->setVel((temp.x + player1->vel.x) * 5, (temp.y + player1->vel.y) * 5, 0);
+								}
+								player1->vel = (0, 0, 0);
+								player1->engine = 0;
+							}
 
 							goE->updatePos(dt);
 							if (Dalasso->checkCaught(player1->pos, goE->getPos(), 5) == 1 || goE->getCaught() == 1)
@@ -1570,7 +1584,7 @@ void SceneSP3::Update(double dt)
 							}
 						}
 					}
-					std::cout << goE->vel << std::endl;
+					//std::cout << goE->vel << std::endl;
 
 			}
 			Dalasso->updateLasso(player1->pos, dt);
@@ -1606,6 +1620,35 @@ void SceneSP3::Update(double dt)
 			{
 				bLButtonState = false;
 			}
+
+			if (Dalasso->getLassoState() == 3)
+			{
+				/*if (player1->vel.x > 0)
+				{
+					player1->vel.x-= 0.1;
+				}
+				if (player1->vel.y > 0)
+				{
+					player1->vel.y-= 0.1;
+				}
+				if (player1->vel.x < 0)
+				{
+					player1->vel.x+= 0.1;
+				}
+				if (player1->vel.x < 0)
+				{
+					player1->vel.x+= 0.1;
+				}*/
+				if (player1->engine > 0)
+				{
+					player1->engine -= 1;
+				}
+				if (player1->engine < 0)
+				{
+					player1->engine += 1;
+				}
+			}
+			
 		}
 
 }

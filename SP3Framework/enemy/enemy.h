@@ -21,6 +21,7 @@
 		bool getActive();
 		bool getNewSpawn();
 		bool getCaught();
+		float getStrength();
 		int getRunLonger();
 		int getType();
 		void setNewSpawn(bool input);
@@ -52,7 +53,7 @@
 		bool leader;
 		int stamina;
 		int runLonger;
-		int speed;
+		float speed;
 		
 		Vector3 cohesion(std::vector<enemy*> enemyVector, enemy* leaderI);
 		Vector3 seperation(std::vector<enemy*> enemyVector, enemy* leaderI);
