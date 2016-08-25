@@ -169,6 +169,8 @@ void SceneBase::Init()
 
 	meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("Intro", Color(1, 1, 1), 1.f);
 	meshList[GEO_MENU_BACKGROUND]->textureID = LoadTGA("Image//IntroScreen.tga");
+	meshList[GEO_MENU_MAPEDITOR] = MeshBuilder::GenerateQuad("mapeditor", Color(1, 1, 1), 1.f);
+	meshList[GEO_MENU_MAPEDITOR]->textureID = LoadTGA("Image//menu_MapEditor.tga");
 	meshList[GEO_MENU_SIGNBOARD] = MeshBuilder::GenerateQuad("signboard", Color(1, 1, 1), 2.f);
 	meshList[GEO_MENU_SIGNBOARD]->textureID = LoadTGA("Image//noticeboard.tga");
 	meshList[GEO_MENU_ARROW] = MeshBuilder::GenerateQuad("arrow", Color(1, 1, 1), 2.f);

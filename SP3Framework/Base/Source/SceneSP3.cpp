@@ -66,7 +66,7 @@ void SceneSP3::Init()
 	testMap.setMapSize(20, 20);
 
 	//gameStates = states::s_Upgrade_Cars1;
-	gameStates = states::s_Tutorial;
+	gameStates = states::s_Menu;
 
 	animalStat = new TextFile(TextFile::ANIMAL);
 
@@ -1032,6 +1032,14 @@ void SceneSP3::Update(double dt)
 			}
 			else if (gameStates == states::s_Menu)
 			{
+		
+				if (worldX > 0.863f * m_worldWidth && worldX < 0.947f * m_worldWidth)
+				{
+					if (worldY > 84.11 && worldY < 95.4f)
+					{
+						gameStates = states::s_MapEditor;
+					}
+				}
 				if (worldX > 0.695f * m_worldWidth && worldX < 0.805f * m_worldWidth)
 				{
 					if (worldY > 36.111 && worldY < 39.444f)
@@ -2718,11 +2726,16 @@ void SceneSP3::renderMenu()
 {
 	if (gameStates == states::s_Menu)
 	{
-
 		modelStack.PushMatrix();
-		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -3);
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -4);
 		modelStack.Scale(m_worldWidth, m_worldHeight, 0);
 		RenderMesh(meshList[GEO_MENU_BACKGROUND], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 1.1, m_worldHeight / 1.1, -3);
+		modelStack.Scale(70, 70, 0);
+		RenderMesh(meshList[GEO_MENU_MAPEDITOR], false);
 		modelStack.PopMatrix();
 
 		modelStack.PushMatrix();
@@ -2976,6 +2989,10 @@ void SceneSP3::Render()
 		}*/
 
 		mapEditorRender();
+		if (Application::IsKeyPressed(VK_BACK))
+		{
+			gameStates = states::s_Menu;
+		}
 	}
 
 	//modelStack.PushMatrix();
