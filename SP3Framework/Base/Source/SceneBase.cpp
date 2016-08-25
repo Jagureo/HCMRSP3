@@ -208,11 +208,18 @@ void SceneBase::Init()
 	meshList[GEO_LEVELSELECT_CUSTOM] = MeshBuilder::GenerateQuad("customlevelselect", Color(1, 1, 1), 1.f);
 	meshList[GEO_LEVELSELECT_CUSTOM]->textureID = LoadTGA("Image//CustomLevelSelection.tga");
 
-
 	meshList[GEO_DISPLAY_CAR1] = MeshBuilder::GenerateOBJ("display_car1", "Object//jurrassiccar.obj");
 	meshList[GEO_DISPLAY_CAR1]->textureID = LoadTGA("Image//jeep.tga");
 	meshList[GEO_DISPLAY_CAR2] = MeshBuilder::GenerateOBJ("display_car2", "Object//jeep2.obj");
 	meshList[GEO_DISPLAY_CAR2]->textureID = LoadTGA("Image//jeep2.tga");
+	meshList[GEO_DISPLAY_CAR3] = MeshBuilder::GenerateOBJ("display_car3", "Object//jeep3.obj");
+	meshList[GEO_DISPLAY_CAR3]->textureID = LoadTGA("Image//jeep3.tga");
+
+	meshList[GEO_DISPLAY_WHEEL] = MeshBuilder::GenerateOBJ("display_wheel", "Object//wheels.obj");
+	meshList[GEO_DISPLAY_WHEEL]->textureID = LoadTGA("Image//wheels.tga");
+
+	meshList[GEO_DISPLAY_DARTS] = MeshBuilder::GenerateOBJ("display_wheel", "Object//darts.obj");
+	meshList[GEO_DISPLAY_DARTS]->textureID = LoadTGA("Image//darts.tga");
 
 	meshList[GEO_LOSE_SCENE] = MeshBuilder::GenerateQuad("loseScreen", Color(1, 1, 1), 1.f);
 	meshList[GEO_LOSE_SCENE]->textureID = LoadTGA("Image//loseScreen.tga");
