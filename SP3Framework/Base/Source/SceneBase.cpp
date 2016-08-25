@@ -138,6 +138,8 @@ void SceneBase::Init()
 	meshList[GEO_ROCK] = MeshBuilder::GenerateQuad("rock", Color(1, 1, 1), 1.f);
 	meshList[GEO_ROCK]->textureID = LoadTGA("Image//rock.tga");
 	meshList[GEO_MUD] = MeshBuilder::GenerateCircle("mud", Color(0.51f, 0.219f,0.101f));
+	meshList[GEO_OBJECTIVE] = MeshBuilder::GenerateQuad("robjective", Color(1, 1, 1), 1.f);
+	meshList[GEO_OBJECTIVE]->textureID = LoadTGA("Image//objective.tga");
 
 	meshList[GEO_LION] = MeshBuilder::GenerateQuad("lion", Color(1, 1, 1), 1.f);
 	meshList[GEO_LION]->textureID = LoadTGA("Image//animal_lion.tga");
@@ -153,6 +155,8 @@ void SceneBase::Init()
 	meshList[HUD_MAPEDITOR]->textureID = LoadTGA("Image//editorui.tga");
 	meshList[HUD_MAPEDITOR2] = MeshBuilder::GenerateQuad("gui2", Color(1, 1, 1), 1.f);
 	meshList[HUD_MAPEDITOR2]->textureID = LoadTGA("Image//editorui2.tga");
+	meshList[HUD_MAPEDITOR3] = MeshBuilder::GenerateQuad("gui3", Color(1, 1, 1), 1.f);
+	meshList[HUD_MAPEDITOR3]->textureID = LoadTGA("Image//editorui3.tga");
 	meshList[HUD_DELETEICON] = MeshBuilder::GenerateQuad("del", Color(1, 1, 1), 1.f);
 	meshList[HUD_DELETEICON]->textureID = LoadTGA("Image//deleteicon.tga");
 	meshList[HUD_SELECTION] = MeshBuilder::GenerateCube("selection", Color(1, 0, 0), 1.f);

@@ -540,29 +540,17 @@ void SceneSP3::playerControl()
 	}
 	if (Application::IsKeyPressed('D'))
 	{
-		if (driftMode)
-		{
-			player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
+		player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
+		player1->rotationAngle += player1->playerCar.turnSpeed * 3;
+		player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
+		player1->rotationAngle -= player1->playerCar.turnSpeed * 3;
 
-		}
-		else
-		{
-			player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
-		}
-		//player1->rotationAngle += player1->playerCar.turnSpeed * 3;
 		player1->rotationAngle -= player1->playerCar.turnSpeed;
-		//player1->rotationAngle -= player1->playerCar.turnSpeed * 3;
-		//player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
-		//player1->rotationAngle += player1->playerCar.turnSpeed * 3;
-		//player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
-		//player1->rotationAngle -= player1->playerCar.turnSpeed * 3;
-
-		//player1->rotationAngle -= player1->playerCar.turnSpeed;
-		if (player1->vel.Length() < 3)
+		if (player1->vel.Length() < 5)
 		{
-			if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
+			if (9 / player1->vel.Length() < player1->playerCar.turnSpeed)
 			{
-				player1->rotationAngle += 1 / player1->vel.Length();
+				player1->rotationAngle += 9 / player1->vel.Length();
 			}
 			else
 			{
@@ -570,56 +558,23 @@ void SceneSP3::playerControl()
 			}
 				
 		}
-		else if (driftMode)
-		{
-			player1->rotationAngle += player1->playerCar.turnSpeed / 5;
-		}
-		if (driftMode)
-		{
-			player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
-		}
-		else
-		{
-			player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
-		}
 
 		player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
 	}
 	if (Application::IsKeyPressed('A'))
 	{
-		if (driftMode)
-		{
-			player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
-		}
-		else
-		{
-			player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
-		}
-		player1->rotationAngle += player1->playerCar.turnSpeed;
-		//player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
-		//player1->rotationAngle -= player1->playerCar.turnSpeed * 3;
-		//player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
-		//player1->rotationAngle += player1->playerCar.turnSpeed * 3;
+		player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
+		player1->rotationAngle -= player1->playerCar.turnSpeed * 3;
+		player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine / 4, 0);
+		player1->rotationAngle += player1->playerCar.turnSpeed * 3;
 
-		//player1->rotationAngle += player1->playerCar.turnSpeed;
-		if (player1->vel.Length() < 3)
+		player1->rotationAngle += player1->playerCar.turnSpeed;
+		if (player1->vel.Length() < 5)
 		{
-			if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
-				player1->rotationAngle -= 1 / player1->vel.Length();
+			if (9 / player1->vel.Length() < player1->playerCar.turnSpeed)
+				player1->rotationAngle -= 9 / player1->vel.Length();
 			else
 				player1->rotationAngle -= player1->playerCar.turnSpeed;
-		}
-		else if (driftMode)
-		{
-			player1->rotationAngle -= player1->playerCar.turnSpeed / 5;
-		}
-		if (driftMode)
-		{
-			player1->pos -= Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
-		}
-		else
-		{
-			player1->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y / 2, sin(Math::DegreeToRadian(player1->rotationAngle)) * (bool)player1->engine * player1->scale.y / 2, 0);
 		}
 
 		player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
@@ -1897,6 +1852,16 @@ void SceneSP3::mapEditorUpdate(double dt)
 			{
 				editName = true;
 			}
+			else if ( worldX < 0.0834f * m_worldWidth && worldY < 15)
+			{
+				dragObj = true;
+				GameObject* testWater = new GameObject(GameObject::MAP_OBJECTIVE);
+				testWater->pos.Set(worldX, worldY, 1);
+				testWater->scale.Set(5, 5, 5);
+				testWater->fresh = true;
+				testWater->active = true;
+				testMap.forceAddSingleProp(testWater);
+			}
 			else if (worldX > 0.8625f * m_worldWidth && worldX < 0.918f * m_worldWidth && worldY > 87 && worldY < 97)
 			{
 				for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
@@ -2413,6 +2378,14 @@ void SceneSP3::RenderProps(playMap* map)
 			RenderMesh(meshList[GEO_HUMAN], true);
 			modelStack.PopMatrix();
 		}
+		else if (go->type == GameObject::MAP_OBJECTIVE)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_OBJECTIVE], true);
+			modelStack.PopMatrix();
+		}
 	}
 	glEnable(GL_DEPTH_TEST);
 }
@@ -2538,6 +2511,14 @@ void SceneSP3::mapEditorRender()
 			RenderMesh(meshList[GEO_HUMAN], true);
 			modelStack.PopMatrix();
 		}
+		else if (go->type == GameObject::MAP_OBJECTIVE)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_OBJECTIVE], true);
+			modelStack.PopMatrix();
+		}
 	}
 	if (deleteMode > 0)
 	{
@@ -2555,10 +2536,17 @@ void SceneSP3::mapEditorRender()
 	if (testMode == false)
 	{
 		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -1);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[HUD_MAPEDITOR3], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
 		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
 		RenderMesh(meshList[HUD_MAPEDITOR], false);
 		modelStack.PopMatrix();
+		
 		RenderTextOnScreen(meshList[GEO_TEXT], mapName, Color(0, 1, 0), 3, 39, 54);
 	}
 	else
@@ -2621,6 +2609,22 @@ void SceneSP3::renderMinimap(playMap* map)
 				modelStack.Scale(0.5f, 0.5f, 1);
 				switch (go->type)
 				{
+				case GameObject::MAP_MUD:
+				{
+											modelStack.PushMatrix();
+											modelStack.Rotate(90, 1, 0, 0);
+											RenderMesh(meshList[GEO_MUD], false);
+											modelStack.PopMatrix();
+											break;
+				}
+				case GameObject::MAP_WATER:
+				{
+											  modelStack.PushMatrix();
+											  modelStack.Rotate(90, 1, 0, 0);
+											  RenderMesh(meshList[GEO_ICE], false);
+											  modelStack.PopMatrix();
+											break;
+				}
 				case GameObject::MAP_ROCK:
 				{
 											 RenderMesh(meshList[GEO_ROCK], false);

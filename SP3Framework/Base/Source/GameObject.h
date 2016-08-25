@@ -35,6 +35,7 @@ struct GameObject
 		MAP_ZEBRA,
 		MAP_RHINO,
 		MAP_HUMAN,
+		MAP_OBJECTIVE,
 
 		GO_TOTAL, //must be last
 	};
