@@ -1540,17 +1540,18 @@ void SceneSP3::Update(double dt)
 							}
 
 							goE->checkCollision(enemyList);
-							if (goE->getPos().x > player1->pos.x - 7 && goE->getPos().x < player1->pos.x + 7 && goE->getPos().y > player1->pos.y - 7 && goE->getPos().y < player1->pos.y + 7 /*&& goE->leader == 0*/)
+							if (goE->getPos().x > player1->pos.x - 7 && goE->getPos().x < player1->pos.x + 7 && goE->getPos().y > player1->pos.y - 7 && goE->getPos().y < player1->pos.y + 7 /*&& goE->leader == 0*/ && player1->vel != (0,0,0))
 							{
-								goE->strength -= 100;
+								goE->strength -= 50;
 								if (goE->getStrength() <= 0)
 								{
 									goE->setActive(false);
+									points--;
 								}
 								else
 								{
-									Vector3 temp = goE->getVel();
-									goE->setVel((temp.x + player1->vel.x) * 5, (temp.y + player1->vel.y) * 5, 0);
+									Vector3 temp = goE->getPos();
+									goE->setVel((temp.x - player1->pos.x) * 10, (temp.y - player1->pos.y) * 10, 0);
 								}
 								player1->vel = (0, 0, 0);
 								player1->engine = 0;
@@ -2965,15 +2966,21 @@ void SceneSP3::Render()
 			RenderGO(go);
 		}
 	}
-
-	for (std::vector<enemy *>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+	if (gameStates == states::s_Tutorial ||
+		gameStates == states::s_Level2 ||
+		gameStates == states::s_Level3 ||
+		gameStates == states::s_LevelBoss)
 	{
-		enemy *go = (enemy *)*it;
+		for (std::vector<enemy *>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+		{
+			enemy *go = (enemy *)*it;
 
-		RenderEnemy(go);
+			RenderEnemy(go);
+		}
+		RenderLasso(Dalasso);
 	}
 
-	RenderLasso(Dalasso);
+	
 	//if (m_ghost->active)
 	//{
 	//	modelStack.PushMatrix();
