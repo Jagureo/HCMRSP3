@@ -30,6 +30,7 @@ enemy::enemy(Vector3 pos, int eType, float getSta, float getSpd, float getStr)
 	stamina = getSta;
 	speed = getSpd;
 	strength = getStr;
+	//strength = 99999;
 }
 
 enemy::~enemy()
@@ -161,13 +162,14 @@ void enemy::runOff(Vector3 playerPos, std::vector<enemy*> enemyVector, enemy* le
 	{
 		if (caught == 1 )
 		{
-			vel.x += -((dir.Normalized()).x + Math::RandFloatMinMax(-10, 10)) * 3;
-			vel.y += -((dir.Normalized()).y + Math::RandFloatMinMax(-10, 10)) * 3;
+
+			vel.x += -((dir.Normalized()).x ) * (5 + speed);
+			vel.y += -((dir.Normalized()).y ) * (5 + speed);
 		}
 		else if (leader == 1)
 		{
-			vel.x += -((dir.Normalized()).x) * 3;
-			vel.y += -((dir.Normalized()).y) * 3;
+			vel.x += -((dir.Normalized()).x) * (3 + speed);
+			vel.y += -((dir.Normalized()).y) * (3 + speed);
 		}
 		else
 		{
@@ -179,15 +181,21 @@ void enemy::runOff(Vector3 playerPos, std::vector<enemy*> enemyVector, enemy* le
 	}
 	else
 	{
+		if (caught == 1)
+		{
+
+			vel.x += -((dir.Normalized()).x ) * (1 + speed);
+			vel.y += -((dir.Normalized()).y ) * (1 + speed);
+		}
 		if (leader == 1)
 		{
-			vel.x += -((dir.Normalized()).x) * (2 + speed);
-			vel.y += -((dir.Normalized()).y) * (2 + speed);
+			vel.x += -((dir.Normalized()).x) * ( speed);
+			vel.y += -((dir.Normalized()).y) * ( speed);
 			
 		}
 		else
 		{
-			vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1)* (1 + speed));
+			vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1)* ( speed));
 			vel.z = 0;
 		}
 	}

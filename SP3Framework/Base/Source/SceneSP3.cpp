@@ -70,7 +70,7 @@ void SceneSP3::Init()
 
 	animalStat = new TextFile(TextFile::ANIMAL);
 
-	for (int i = 0; i < 7; ++i)
+	/*for (int i = 0; i < 7; ++i)
 	{
 		animalStat->GetAnimalStat("Zebra");
 		enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 0, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
@@ -78,8 +78,6 @@ void SceneSP3::Init()
 		animal->setLeader(0);
 		enemyList.push_back(animal);
 	}
-
-	animalStat = new TextFile(TextFile::ANIMAL);
 
 	for (int i = 0; i < 3; ++i)
 	{
@@ -90,10 +88,10 @@ void SceneSP3::Init()
 		enemyList.push_back(animal);
 	}
 	animalStat->GetAnimalStat("Lion");
-	enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 1, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+	enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 2, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
 	animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
 	animal->setLeader(0);
-	enemyList.push_back(animal);
+	enemyList.push_back(animal);*/
 }
 
 void SceneSP3::Reset()
@@ -1372,6 +1370,33 @@ void SceneSP3::Update(double dt)
 			std::cout << (leader->getPos() - player1->pos).Length() << std::endl;
 			leader->setLeader(0);
 			}*/
+
+			if (Application::IsKeyPressed('1'))
+			{
+				animalStat->GetAnimalStat("Zebra");
+				enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 0, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+				animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+				animal->setLeader(0);
+				enemyList.push_back(animal);
+			}
+			
+			if (Application::IsKeyPressed('2'))
+			{
+				animalStat->GetAnimalStat("Rhino");
+				enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 1, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+				animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+				animal->setLeader(0);
+				enemyList.push_back(animal);
+			}
+			if (Application::IsKeyPressed('3'))
+			{
+				animalStat->GetAnimalStat("Lion");
+				enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 2, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+				animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+				animal->setLeader(0);
+				enemyList.push_back(animal);
+			}
+
 			for (std::vector<enemy*>::iterator itE2 = enemyList.begin(); itE2 != enemyList.end(); ++itE2)
 			{
 				enemy *goE2 = (enemy *)*itE2;
@@ -1399,6 +1424,8 @@ void SceneSP3::Update(double dt)
 				}
 
 			}
+
+
 
 			for (std::vector<enemy*>::iterator itE = enemyList.begin(); itE != enemyList.end(); ++itE)
 			{
@@ -1431,7 +1458,15 @@ void SceneSP3::Update(double dt)
 							else if (goE->getRunLonger() > 0 || goE->getCaught() == 1)
 							{
 								goE->runOff(player1->pos, enemyList, leader);
-								goE->increaseRunLonger(-1);
+								if (goE->getCaught() == 1)
+								{
+									goE->increaseRunLonger(3);
+									player1->vel += (0.0001 * goE->strength) * goE->getVel();
+								}
+								else
+								{
+									goE->increaseRunLonger(-1);
+								}
 							}
 							else
 							{
