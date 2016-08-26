@@ -223,6 +223,11 @@ void SceneBase::Init()
 	meshList[GEO_DISPLAY_DARTS] = MeshBuilder::GenerateOBJ("display_wheel", "Object//darts.obj");
 	meshList[GEO_DISPLAY_DARTS]->textureID = LoadTGA("Image//darts.tga");
 
+	meshList[GEO_BUY] = MeshBuilder::GenerateQuad("buyButton", Color(1, 1, 1), 1.f);
+	meshList[GEO_BUY]->textureID = LoadTGA("Image//buyButton.tga");
+	meshList[GEO_SOLD] = MeshBuilder::GenerateQuad("sold", Color(1, 1, 1), 1.f);
+	meshList[GEO_SOLD]->textureID = LoadTGA("Image//SOLD.tga");
+
 	meshList[GEO_LOSE_SCENE] = MeshBuilder::GenerateQuad("loseScreen", Color(1, 1, 1), 1.f);
 	meshList[GEO_LOSE_SCENE]->textureID = LoadTGA("Image//loseScreen.tga");
 
