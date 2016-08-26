@@ -1528,7 +1528,7 @@ void SceneSP3::Update(double dt)
 							goE->checkCollision(enemyList);
 							if (goE->getPos().x > player1->pos.x - 7 && goE->getPos().x < player1->pos.x + 7 && goE->getPos().y > player1->pos.y - 7 && goE->getPos().y < player1->pos.y + 7 /*&& goE->leader == 0*/ && player1->vel != (0,0,0))
 							{
-								goE->strength -= 50;
+								goE->addStrength(50);
 								if (goE->getStrength() <= 0)
 								{
 									goE->setActive(false);
@@ -1558,7 +1558,7 @@ void SceneSP3::Update(double dt)
 								if (Dalasso->caughtUpdate(player1->pos, goE->getPos(), goE->getActive()) == 1)
 								{
 									goE->setCaught(0);
-									if (goE->active == 0)
+									if (goE->getActive() == 0)
 									{
 										if (goE->getType() == 0)
 										{
@@ -2287,7 +2287,7 @@ void SceneSP3::RenderEnemy(enemy *go)
 
 			if (go->getType() == 0)
 			{
-				float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
+				float angle = Math::RadianToDegree(atan2(go->getVel().y, go->getVel().x));
 				modelStack.PushMatrix();
 				modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
 				//modelStack.Rotate(angle, 0, 0, 1);
@@ -2297,7 +2297,7 @@ void SceneSP3::RenderEnemy(enemy *go)
 			}
 			else if (go->getType() == 1)
 			{
-				float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
+				float angle = Math::RadianToDegree(atan2(go->getVel().y, go->getVel().x));
 				modelStack.PushMatrix();
 				modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
 				//modelStack.Rotate(angle, 0, 0, 1);
@@ -2307,7 +2307,7 @@ void SceneSP3::RenderEnemy(enemy *go)
 			}
 			else if (go->getType() == 2)
 			{
-				float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
+				float angle = Math::RadianToDegree(atan2(go->getVel().y, go->getVel().x));
 				modelStack.PushMatrix();
 				modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
 				//modelStack.Rotate(angle, 0, 0, 1);
@@ -2317,7 +2317,7 @@ void SceneSP3::RenderEnemy(enemy *go)
 			}
 			else if (go->getType() == 3)
 			{
-				float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
+				float angle = Math::RadianToDegree(atan2(go->getVel().y, go->getVel().x));
 				modelStack.PushMatrix();
 				modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
 				//modelStack.Rotate(angle, 0, 0, 1);

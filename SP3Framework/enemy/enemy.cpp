@@ -100,6 +100,11 @@ void enemy::increaseRunLonger(int input)
 	}
 }
 
+void enemy::addStrength(int input)
+{
+	strength += input;
+}
+
 void enemy::setCaught(bool input)
 {
 	caught = input;

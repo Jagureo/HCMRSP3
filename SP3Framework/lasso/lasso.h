@@ -17,6 +17,19 @@ public:
 	~lasso();
 
 	
+	
+	
+	void throwLasso(Vector3 playerPos, Vector3 mousePos);
+	bool checkCaught(Vector3 playerPos, Vector3 enemyPos, float animalSize);
+	bool caughtUpdate(Vector3 playerPos, Vector3 enemyPos, bool enemyActive);
+	bool updateLasso(Vector3 playerPos,float dt);
+	void setLassoRange(float range);
+	Vector3 getLassoPos();
+	int getLassoState();
+	Vector3 getLassoVel();
+	Vector3 getTargetPos();
+
+private:
 	enum lassoStates
 	{
 		READY,
@@ -30,16 +43,6 @@ public:
 	lassoStates currLassoState;
 	Vector3 targetPos;
 	Vector3 lassoVel;
-	
-	void throwLasso(Vector3 playerPos, Vector3 mousePos);
-	bool checkCaught(Vector3 playerPos, Vector3 enemyPos, float animalSize);
-	bool caughtUpdate(Vector3 playerPos, Vector3 enemyPos, bool enemyActive);
-	bool updateLasso(Vector3 playerPos,float dt);
-	void setLassoRange(float range);
-	Vector3 getLassoPos();
-	int getLassoState();
-	Vector3 getLassoVel();
-	Vector3 getTargetPos();
 
 
 };

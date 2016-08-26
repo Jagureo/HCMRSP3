@@ -34,9 +34,11 @@
 		void setPos(float x, float y, float z);
 		void setActive(bool input);
 		void setLeader(bool input);
+		void addStrength(int input);
 		void increaseRunLonger(int input);
 		void updatePos(float dt);
 		void checkCollision(std::vector<enemy*> enemyVector);
+	private:
 		enum ENEMY_TYPE
 		{
 			EN_ZEBRA,
