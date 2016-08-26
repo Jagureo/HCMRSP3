@@ -141,6 +141,7 @@ protected:
 
 	Vector3 objective;
 	bool updateObjective;
+	Vector3 center;
 
 	enemy* leader;
 

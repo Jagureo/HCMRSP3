@@ -10,6 +10,7 @@ enemy::enemy(Vector3 pos, int eType, float getSta, float getSpd, float getStr)
 	active = 1;
 	running = 0;
 	runLonger = 0;
+	taken = 0;
 
 	if (eType == 0)
 	{
@@ -54,6 +55,12 @@ bool enemy::getCaught()
 	return caught;
 }
 
+bool enemy::getTaken()
+{
+	return taken;
+}
+
+
 int enemy::getRunLonger()
 {
 	return runLonger;
@@ -96,6 +103,11 @@ void enemy::increaseRunLonger(int input)
 void enemy::setCaught(bool input)
 {
 	caught = input;
+}
+
+void enemy::setTaken(bool input)
+{
+	taken = input;
 }
 
 void enemy::setPos(float x, float y, float z)
@@ -244,7 +256,15 @@ void enemy::slowDown(std::vector<enemy*> enemyVector, Vector3 objective)
 				dir.Set(1, 0, 0);
 			}
 			//(dir.Normalized() * (speed));
-			vel += (dir.Normalized() * (0.5 * speed));
+			if (taken == 0)
+			{
+
+				vel += (dir.Normalized() * (0.5 * speed));
+			}
+			else
+			{
+				vel -= (dir.Normalized() * (0.5 * speed));
+			}
 }
 
 

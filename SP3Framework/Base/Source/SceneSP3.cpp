@@ -26,8 +26,7 @@ void SceneSP3::Init()
 	m_ghost = new GameObject(GameObject::GO_BALL);
 
 	player1 = new GameObject(GameObject::GO_CAR);
-	//player1->pos.Set(25, 50, 0);
-	player1->pos.Set(0, 0, 0);
+	player1->pos.Set(25, 50, 0);
 	player1->mass = 5;
 	player1->vel.Set(0, 0, 0);
 	player1->rotationAngle = 0;
@@ -57,7 +56,8 @@ void SceneSP3::Init()
 	arrowSelection = 0;
 	rotateDisplayX = 0;
 	rotateDisplayY = 0;
-	objective = (0, 0, 0);
+	objective = NULL;
+	center = (0, 0, 0);
 	updateObjective = 0;
 	fuelAmount = 100.0f;
 	leader = NULL;
@@ -66,6 +66,7 @@ void SceneSP3::Init()
 	testMap.setBackground(meshList[GEO_TESTMAP]);
 	testMap.setMapSize(20, 20);
 
+	//gameStates = states::s_Upgrade_Cars1;
 	gameStates = states::s_Menu;
 	//gameStates = states::s_Tutorial;
 
@@ -606,28 +607,6 @@ void SceneSP3::playerControl()
 			player1->vel = player1->vel * 0.98f;
 		}
 	}
-	Vector3 m_worldBorder = mapPosition - Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
-	if (m_worldBorder.x > testMap.getMapSize().x * 5 && m_worldBorder.x < 100000 && m_worldBorder.x > -100000)
-	{
-		//cout << "LEFT" << endl;
-		player1->pos.x += m_worldBorder.x - testMap.getMapSize().x * 5;
-	}
-	else if (m_worldBorder.x < -testMap.getMapSize().x * 5 && m_worldBorder.x < 100000 && m_worldBorder.x > -100000)
-	{
-		//cout << "RIGHT" << endl;
-		player1->pos.x -= -m_worldBorder.x - testMap.getMapSize().x * 5;
-	}
-	if (m_worldBorder.y > testMap.getMapSize().y * 5 && m_worldBorder.y < 100000 && m_worldBorder.y > -100000)
-	{
-		//cout << "DOWN" << endl;
-		player1->pos.y += m_worldBorder.y - testMap.getMapSize().y * 5;
-	}
-	else if (m_worldBorder.y < -testMap.getMapSize().y * 5 && m_worldBorder.y < 100000 && m_worldBorder.y > -100000)
-	{
-		//cout << "UP" << endl;
-		player1->pos.y += testMap.getMapSize().y * 5 + m_worldBorder.y;
-	}
-	//cout << player1->pos << " mappos " << mapPosition - Vector3(m_worldWidth / 2, m_worldHeight / 2, 0) << endl;
 }
 
 void SceneSP3::Update(double dt)
@@ -654,33 +633,14 @@ void SceneSP3::Update(double dt)
 
 	if (updateObjective == 0)
 	{
-		objective += mapPosition;
+		center += mapPosition;
 		updateObjective = 1;
 	}
 	else
 	{
-		objective.x += diffx;
-		objective.y += diffy;
+		center.x += diffx;
+		center.y += diffy;
 	}
-
-	/*if (Application::IsKeyPressed('1'))
-	{
-
-		enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 0);
-		animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
-		animal->setLeader(0);
-		enemyList.push_back(animal);
-
-	}
-	if (Application::IsKeyPressed('2'))
-	{
-
-		enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 1);
-		animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
-		animal->setLeader(0);
-		enemyList.push_back(animal);
-
-	}*/
 
 	if (Application::IsKeyPressed('R'))
 	{
@@ -735,18 +695,10 @@ void SceneSP3::Update(double dt)
 		hi = true;
 		/*TextFile* animal = new TextFile(TextFile::ANIMAL);
 		animal->GetAnimalStat("Zebra");*/
-		/*TextFile* car = new TextFile(TextFile::CAR);
+		TextFile* car = new TextFile(TextFile::CAR);
 		car->GetCarStat("Car2", "CarStats.txt");
 		car->SetCarStat("Car2", "hp", "8");
-		car->GetCarStat("Car2", "tempsave.txt");*/
-		TextFile* score = new TextFile(TextFile::SCORE);
-		score->SetScore(24, "Level1");
-		score->SetScore(43, "Level2");
-		score->SetScore(19, "Level3");
-		score->SetScore(3, "Level1");
-		score->SetScore(62, "Level3");
-		score->SetScore(3, "Level2");
-		score->ListHighScore("Level1");
+		car->GetCarStat("Car2", "tempsave.txt");
 	}
 	if (hi && !Application::IsKeyPressed('7'))
 	{
@@ -1062,23 +1014,18 @@ void SceneSP3::Update(double dt)
 			}
 			else if (gameStates == states::s_LevelSelect)
 			{
-				if (worldY > 47.8 && worldY < 52.3f)
+				if (worldX > 0.78854f * m_worldWidth && worldX < 0.99219f * m_worldWidth)
 				{
-					if (worldX > 0.33f * m_worldWidth && worldX < 0.36f * m_worldWidth)
+					if (worldY > 1 && worldY < 11.6f)
 					{
-						gameStates = states::s_Tutorial;
+						gameStates = states::s_CustomLevelSelect;
 					}
-					if (worldX > 0.428f * m_worldWidth && worldX < 0.461f * m_worldWidth)
+				}
+				if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
+				{
+					if (worldY > 1 && worldY < 11.6f)
 					{
-						gameStates = states::s_Level2;
-					}
-					if (worldX > 0.5322f * m_worldWidth && worldX < 0.563f * m_worldWidth)
-					{
-						gameStates = states::s_Level3;
-					}
-					if (worldX > 0.631f * m_worldWidth && worldX < 0.669f * m_worldWidth)
-					{
-						gameStates = states::s_LevelBoss;
+						gameStates = states::s_Menu;
 					}
 				}
 			}
@@ -1429,7 +1376,8 @@ void SceneSP3::Update(double dt)
 		if (gameStates == states::s_Tutorial ||
 			gameStates == states::s_Level2 ||
 			gameStates == states::s_Level3 ||
-			gameStates == states::s_LevelBoss)
+			gameStates == states::s_LevelBoss ||
+			gameStates == states::s_MapEditor && testMode == 1)
 		{
 			/*if (leader != NULL)
 			{
@@ -1437,7 +1385,7 @@ void SceneSP3::Update(double dt)
 			leader->setLeader(0);
 			}*/
 
-			if (Application::IsKeyPressed('1'))
+			if (Application::IsKeyPressed('Z'))
 			{
 				animalStat->GetAnimalStat("Zebra");
 				enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 0, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
@@ -1446,7 +1394,7 @@ void SceneSP3::Update(double dt)
 				enemyList.push_back(animal);
 			}
 			
-			if (Application::IsKeyPressed('2'))
+			if (Application::IsKeyPressed('X'))
 			{
 				animalStat->GetAnimalStat("Rhino");
 				enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 1, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
@@ -1454,7 +1402,7 @@ void SceneSP3::Update(double dt)
 				animal->setLeader(0);
 				enemyList.push_back(animal);
 			}
-			if (Application::IsKeyPressed('3'))
+			if (Application::IsKeyPressed('C'))
 			{
 				animalStat->GetAnimalStat("Lion");
 				enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 2, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
@@ -1463,7 +1411,7 @@ void SceneSP3::Update(double dt)
 				enemyList.push_back(animal);
 			}
 
-			if (Application::IsKeyPressed('4'))
+			if (Application::IsKeyPressed('V'))
 			{
 				animalStat->GetAnimalStat("Human");
 				enemy* animal = newEnemy(Math::RandFloatMinMax(-100, 100), Math::RandFloatMinMax(-100, 100), 0, 3, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
@@ -1543,12 +1491,37 @@ void SceneSP3::Update(double dt)
 								}
 								else
 								{
-									goE->slowDown(enemyList, objective);
-									if (goE->getPos().x > objective.x - 10 && goE->getPos().x < objective.x + 10 && goE->getPos().y > objective.y - 10 && goE->getPos().y < objective.y + 10 /*&& goE->leader == 0*/)
+									for(std::vector<GameObject *>::iterator itO = testMap.mapProps.begin(); itO != testMap.mapProps.end(); ++itO)
 									{
-										goE->setActive(false);
-										points--;
+										GameObject *goO = (GameObject *)*itO;
+										if (goO->type == GameObject::MAP_OBJECTIVE)
+										{
+											if (objective == NULL)
+											{
+												objective = goO->pos;
+											}
+											else if ((goE->getPos() - goO->pos).Length() < (goE->getPos() - objective).Length())
+											{
+												objective = goO->pos;
+											}
+										}
 									}
+									goE->slowDown(enemyList, objective);
+									if (goE->getPos().x > objective.x - 10 && goE->getPos().x < objective.x + 10 && goE->getPos().y > objective.y - 10 && goE->getPos().y < objective.y + 10 && goE->getTaken() == 0)
+									{
+										goE->setTaken(1);
+									}
+									if (goE->getTaken() == 1)
+									{
+
+										if (center.x - goE->getPos().x < -(testMap.getMapSize().x) * 5 || center.x - goE->getPos().x > testMap.getMapSize().x * 5 ||  center.y - goE->getPos().y < -(testMap.getMapSize().y) * 5 || center.y - goE->getPos().y > testMap.getMapSize().y * 5)
+										{
+											float test = -(testMap.getMapSize().x) * 5;
+											goE->setActive(false);
+											points--;
+										}
+									}
+									objective = NULL;
 								}
 							}
 
@@ -1603,14 +1576,13 @@ void SceneSP3::Update(double dt)
 										{
 											points -= 3;
 										}
-										//std::cout << "ANIMAL CAUGHT" << std::endl;
 									}
 								}
-								//std::cout << "hi" << std::endl;
+	
 							}
 						}
 					}
-					//std::cout << goE->vel << std::endl;
+
 
 			}
 			Dalasso->updateLasso(player1->pos, dt);
@@ -1623,7 +1595,8 @@ void SceneSP3::Update(double dt)
 		if (gameStates == states::s_Tutorial ||
 			gameStates == states::s_Level2 ||
 			gameStates == states::s_Level3 ||
-			gameStates == states::s_LevelBoss)
+			gameStates == states::s_LevelBoss ||
+			gameStates == states::s_MapEditor && testMode == 1)
 		{
 			static bool bLButtonState = false;
 
@@ -1649,22 +1622,6 @@ void SceneSP3::Update(double dt)
 
 			if (Dalasso->getLassoState() == 3)
 			{
-				/*if (player1->vel.x > 0)
-				{
-					player1->vel.x-= 0.1;
-				}
-				if (player1->vel.y > 0)
-				{
-					player1->vel.y-= 0.1;
-				}
-				if (player1->vel.x < 0)
-				{
-					player1->vel.x+= 0.1;
-				}
-				if (player1->vel.x < 0)
-				{
-					player1->vel.x+= 0.1;
-				}*/
 				if (player1->engine > 0)
 				{
 					player1->engine -= 1;
@@ -1676,7 +1633,11 @@ void SceneSP3::Update(double dt)
 			}
 			
 		}
+		if (objective != NULL)
+		{
 
+			std::cout << objective << std::endl;
+		}
 }
 
 
@@ -2318,56 +2279,60 @@ void SceneSP3::RenderGO(GameObject *go)
 
 void SceneSP3::RenderEnemy(enemy *go)
 {
-	if (go->getActive() == 1 && (go->getPos().x - player1->pos.x) < 100 && (go->getPos().x - player1->pos.x) > -100 && go->getPos().y - player1->pos.y < 50 && go->getPos().y - player1->pos.y > -50 && (go->getPos() - objective).Length() < 200)
+	if (go->getActive() == 1 && (go->getPos().x) < m_worldWidth && (go->getPos().x ) > 0 && go->getPos().y < m_worldHeight && go->getPos().y > 0)
 	{
 
-		if (go->getType() == 0)
+		if (center.x - go->getPos().x > -(testMap.getMapSize().x) * 5 && center.x - go->getPos().x < testMap.getMapSize().x * 5 && center.y - go->getPos().y > -(testMap.getMapSize().y) * 5 && center.y - go->getPos().y < testMap.getMapSize().y * 5)
 		{
-			float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
-			modelStack.PushMatrix();
-			modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
-			//modelStack.Rotate(angle, 0, 0, 1);
-			modelStack.Scale(7, 7, 3);
-			RenderMesh(meshList[GEO_ZEBRA], true);
-			modelStack.PopMatrix();
-		}
-		else if (go->getType() == 1)
-		{
-			float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
-			modelStack.PushMatrix();
-			modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
-			//modelStack.Rotate(angle, 0, 0, 1);
-			modelStack.Scale(7, 7, 3);
-			RenderMesh(meshList[GEO_RHINO], true);
-			modelStack.PopMatrix();
-		}
-		else if (go->getType() == 2)
-		{
-			float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
-			modelStack.PushMatrix();
-			modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
-			//modelStack.Rotate(angle, 0, 0, 1);
-			modelStack.Scale(7, 7, 3);
-			RenderMesh(meshList[GEO_LION], true);
-			modelStack.PopMatrix();
-		}
-		else if (go->getType() == 3)
-		{
-			float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
-			modelStack.PushMatrix();
-			modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
-			//modelStack.Rotate(angle, 0, 0, 1);
-			modelStack.Scale(7, 7, 3);
-			RenderMesh(meshList[GEO_HUMAN], true);
-			modelStack.PopMatrix();
+
+			if (go->getType() == 0)
+			{
+				float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
+				modelStack.PushMatrix();
+				modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
+				//modelStack.Rotate(angle, 0, 0, 1);
+				modelStack.Scale(7, 7, 3);
+				RenderMesh(meshList[GEO_ZEBRA], true);
+				modelStack.PopMatrix();
+			}
+			else if (go->getType() == 1)
+			{
+				float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
+				modelStack.PushMatrix();
+				modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
+				//modelStack.Rotate(angle, 0, 0, 1);
+				modelStack.Scale(7, 7, 3);
+				RenderMesh(meshList[GEO_RHINO], true);
+				modelStack.PopMatrix();
+			}
+			else if (go->getType() == 2)
+			{
+				float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
+				modelStack.PushMatrix();
+				modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
+				//modelStack.Rotate(angle, 0, 0, 1);
+				modelStack.Scale(7, 7, 3);
+				RenderMesh(meshList[GEO_LION], true);
+				modelStack.PopMatrix();
+			}
+			else if (go->getType() == 3)
+			{
+				float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
+				modelStack.PushMatrix();
+				modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
+				//modelStack.Rotate(angle, 0, 0, 1);
+				modelStack.Scale(7, 7, 3);
+				RenderMesh(meshList[GEO_HUMAN], true);
+				modelStack.PopMatrix();
+			}
 		}
 	}
 
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(objective.x, objective.y, objective.z);
 	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SHIP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 }
 
 
@@ -3057,7 +3022,8 @@ void SceneSP3::Render()
 	if (gameStates == states::s_Tutorial ||
 		gameStates == states::s_Level2 ||
 		gameStates == states::s_Level3 ||
-		gameStates == states::s_LevelBoss)
+		gameStates == states::s_LevelBoss || 
+		gameStates == states::s_MapEditor && testMode == 1)
 	{
 		for (std::vector<enemy *>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
 		{
@@ -3230,7 +3196,7 @@ void SceneSP3::Exit()
 	SceneBase::Exit();
 	//Cleanup GameObjects
 	ofstream file;
-	file.open("HighScore.txt", ios::trunc);
+	file.open("tempsave.txt", ios::trunc);
 	file.close();
 	while (m_goList.size() > 0)
 	{

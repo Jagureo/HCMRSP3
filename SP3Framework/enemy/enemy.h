@@ -24,6 +24,8 @@
 		float getStrength();
 		int getRunLonger();
 		int getType();
+		bool getTaken();
+		void setTaken(bool input);
 		void setNewSpawn(bool input);
 		void setCaught(bool input);
 		void runOff(Vector3 player, std::vector<enemy*> enemyVector, enemy* leaderI);
@@ -55,6 +57,7 @@
 		int stamina;
 		int runLonger;
 		float speed;
+		bool taken;
 		
 		Vector3 cohesion(std::vector<enemy*> enemyVector, enemy* leaderI);
 		Vector3 seperation(std::vector<enemy*> enemyVector, enemy* leaderI);
