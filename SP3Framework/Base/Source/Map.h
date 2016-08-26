@@ -29,8 +29,10 @@ public:
 	void addClusterProp(GameObject* newProp, int density = 25);
 
 	void optimize();
+	void addBorder();
 
 	std::vector<GameObject *> mapProps;
+	std::vector<GameObject *> mapBorder;
 	int propCount;
 };
 

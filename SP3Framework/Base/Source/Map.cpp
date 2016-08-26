@@ -167,3 +167,43 @@ void playMap::optimize()
 	}
 	propCount = mapProps.size() - 1;
 }
+
+void playMap::addBorder()
+{
+	//for (std::vector<GameObject *>::iterator it = mapBorder.begin() + 1; it != mapBorder.end();)
+	//{
+	//	GameObject *go = (GameObject *)*it;
+	//	it = mapBorder.erase(it++);
+	//}
+
+	for (int i = 0; i < mapSize.x * 5; i++)
+	{
+		GameObject* testTree = new GameObject(GameObject::MAP_TREE);
+		testTree->pos.Set(-mapSize.x * 5 + i * 2.f, mapSize.y * 5, 1 + Math::RandFloatMinMax(-1.f, 1.f));
+		std::cout << testTree->pos << std::endl;
+		testTree->fresh = true;
+		testTree->active = true;
+		mapBorder.push_back(testTree);
+
+		GameObject* testTree2 = new GameObject(GameObject::MAP_TREE);
+		testTree2->pos.Set(-mapSize.x * 5 + i * 2.f, -mapSize.y * 5, 1 + Math::RandFloatMinMax(-1.f, 1.f));
+		testTree2->fresh = true;
+		testTree2->active = true;
+		mapBorder.push_back(testTree2);
+	}
+
+	for (int i = 0; i < mapSize.y * 5; i++)
+	{
+		GameObject* testTree3 = new GameObject(GameObject::MAP_TREE);
+		testTree3->pos.Set(-mapSize.x * 5, mapSize.y * 5 - i * 2.f, 1 + Math::RandFloatMinMax(-1.f, 1.f));
+		testTree3->fresh = true;
+		testTree3->active = true;
+		mapBorder.push_back(testTree3);
+
+		GameObject* testTree4 = new GameObject(GameObject::MAP_TREE);
+		testTree4->pos.Set(mapSize.x * 5, mapSize.y * 5 - i * 2.f, 1 + Math::RandFloatMinMax(-1.f, 1.f));
+		testTree4->fresh = true;
+		testTree4->active = true;
+		mapBorder.push_back(testTree4);
+	}
+}

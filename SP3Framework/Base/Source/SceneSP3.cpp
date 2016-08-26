@@ -607,6 +607,28 @@ void SceneSP3::playerControl()
 			player1->vel = player1->vel * 0.98f;
 		}
 	}
+	Vector3 m_worldBorder = mapPosition - Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
+	if (m_worldBorder.x > testMap.getMapSize().x * 5 && m_worldBorder.x < 100000 && m_worldBorder.x > -100000)
+	{
+		//cout << "LEFT" << endl;
+		player1->pos.x += m_worldBorder.x - testMap.getMapSize().x * 5;
+	}
+	else if (m_worldBorder.x < -testMap.getMapSize().x * 5 && m_worldBorder.x < 100000 && m_worldBorder.x > -100000)
+	{
+		//cout << "RIGHT" << endl;
+		player1->pos.x -= -m_worldBorder.x - testMap.getMapSize().x * 5;
+	}
+	if (m_worldBorder.y > testMap.getMapSize().y * 5 && m_worldBorder.y < 100000 && m_worldBorder.y > -100000)
+	{
+		//cout << "DOWN" << endl;
+		player1->pos.y += m_worldBorder.y - testMap.getMapSize().y * 5;
+	}
+	else if (m_worldBorder.y < -testMap.getMapSize().y * 5 && m_worldBorder.y < 100000 && m_worldBorder.y > -100000)
+	{
+		//cout << "UP" << endl;
+		player1->pos.y += testMap.getMapSize().y * 5 + m_worldBorder.y;
+	}
+	//cout << player1->pos << " mappos " << mapPosition - Vector3(m_worldWidth / 2, m_worldHeight / 2, 0) << endl;
 }
 
 void SceneSP3::Update(double dt)
@@ -669,6 +691,8 @@ void SceneSP3::Update(double dt)
 		testRock->fresh = true;
 		testRock->active = true;
 		testMap.addClusterProp(testRock);
+
+		testMap.addBorder();
 	}
 	if (Application::IsKeyPressed('T'))
 	{
@@ -1349,7 +1373,7 @@ void SceneSP3::Update(double dt)
 				//Exercise 13: improve collision detection algorithm [solution to be given later] 
 			}
 		}
-
+		
 		for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 		{
 			GameObject *go = (GameObject *)*it;
@@ -1371,6 +1395,19 @@ void SceneSP3::Update(double dt)
 				if (go->active == false)
 					continue;
 				CollisionMap(player1, go, dt);
+			}
+		}
+		for (std::vector<GameObject *>::iterator it = testMap.mapBorder.begin(); it != testMap.mapBorder.end(); ++it)
+		{
+			GameObject *go = (GameObject *)*it;
+			if (go->fresh)
+			{
+				go->pos += mapPosition;
+				go->fresh = false;
+			}
+			else
+			{
+				go->pos = Vector3(go->pos.x + diffx, go->pos.y + diffy, 1);
 			}
 		}
 		if (gameStates == states::s_Tutorial ||
@@ -2623,6 +2660,14 @@ void SceneSP3::mapEditorRender()
 		RenderMesh(meshList[HUD_MAPEDITOR2], false);
 		modelStack.PopMatrix();
 	}
+	else
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, 0.9f *  m_worldHeight, 9);
+		modelStack.Scale(m_worldWidth / 5, m_worldHeight / 10, 1);
+		RenderMesh(meshList[HUD_TESTMODE], false);
+		modelStack.PopMatrix();
+	}
 }
 void SceneSP3::renderMinimap(playMap* map)
 {
@@ -3054,9 +3099,19 @@ void SceneSP3::Render()
 	{
 		renderMenu();
 	}
-	if (gameStates == states::s_Tutorial || gameStates == states::s_Level2 || gameStates == states::s_Level3 || gameStates == states::s_LevelBoss)
+	if (gameStates == states::s_Tutorial || gameStates == states::s_Level2 || gameStates == states::s_Level3 || gameStates == states::s_LevelBoss || (gameStates == states::s_MapEditor && testMode))
 	{
 		RenderProps(&testMap);
+		for (std::vector<GameObject *>::iterator it = testMap.mapBorder.begin(); it != testMap.mapBorder.end(); ++it)
+		{
+			GameObject *go = (GameObject *)*it;
+			modelStack.PushMatrix();
+			//cout << go->pos << endl;
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z + 9);
+			modelStack.Scale(go->scale.x * 5, go->scale.y * 5, go->scale.z);
+			RenderMesh(meshList[GEO_TREETOP], false);
+			modelStack.PopMatrix();
+		}
 	}
 	if (gameStates == states::s_Upgrade_Cars1)
 	{

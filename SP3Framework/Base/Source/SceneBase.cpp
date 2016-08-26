@@ -157,6 +157,8 @@ void SceneBase::Init()
 	meshList[HUD_MAPEDITOR2]->textureID = LoadTGA("Image//editorui2.tga");
 	meshList[HUD_MAPEDITOR3] = MeshBuilder::GenerateQuad("gui3", Color(1, 1, 1), 1.f);
 	meshList[HUD_MAPEDITOR3]->textureID = LoadTGA("Image//editorui3.tga");
+	meshList[HUD_TESTMODE] = MeshBuilder::GenerateQuad("testmode", Color(1, 1, 1), 1.f);
+	meshList[HUD_TESTMODE]->textureID = LoadTGA("Image//testmode.tga");
 	meshList[HUD_DELETEICON] = MeshBuilder::GenerateQuad("del", Color(1, 1, 1), 1.f);
 	meshList[HUD_DELETEICON]->textureID = LoadTGA("Image//deleteicon.tga");
 	meshList[HUD_SELECTION] = MeshBuilder::GenerateCube("selection", Color(1, 0, 0), 1.f);
