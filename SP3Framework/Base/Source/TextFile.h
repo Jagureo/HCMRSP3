@@ -17,6 +17,8 @@ public:
 		ANIMAL,
 		CAR,
 		MAP,
+		SCORE,
+		TOTAL,
 	};
 	void ReadFile(const string FileName);
 	void WriteFile(const string FileName);
@@ -52,13 +54,13 @@ public:
 
 	int get_tranqcount();
 	int get_tranqduration();
-	void get_money();
+	int get_money();
 
 	bool GetCarStat(string name, string filename);
 	bool SetCarStat(string name, string stat, string data);
 
-	void ListHighScore();
-	void SetScore(int score);
+	void ListHighScore(string Level);
+	void SetScore(int score, string level);
 	TextFile(FileType ftype = ANIMAL);
 	~TextFile();
 private:

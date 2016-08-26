@@ -150,7 +150,7 @@ int TextFile::getRows(const string MapName)
 
 	if (file.is_open())
 	{
-		cout << "file opened: " << MapName << endl;
+		//cout << "file opened: " << MapName << endl;
 		while (getline(file, a))
 		{
 			++rows;
@@ -529,11 +529,70 @@ bool TextFile::SetCarStat(string replacename, string stattochange, string valueo
 	}
 	return true;
 }
-void TextFile::ListHighScore()
+int TextFile::get_money()
 {
-
+	return money;
 }
-void TextFile::SetScore(int score)
+void TextFile::ListHighScore(string Level)
 {
+	ifstream File;
+	File.open("HighScore.txt");
+	int ScoreArray[100];
+	int rows = getRows("HighScore.txt");
+	int arraycount = 0;
+	if (File.is_open())
+	{
+		string line;
+		for (int i = 0; i < rows; i++)
+		{
+			getline(File, line);
+			size_t pos = line.find(",");
+			size_t temp = 0;
+			size_t length = pos;
+			bool correctLine = false;
+			for (int a = 0; a < 2; a++)
+			{
+				string hold = line.substr(temp, pos);
+				temp = pos + 1;
+				pos = line.find(",", temp);
+				if (pos == 0)
+				{
+					pos = line.find(";", temp);
+				}
 
+				length = pos - temp;
+				if (a == 0)
+				{
+					if (hold == Level)
+					{
+						correctLine = true;
+					}
+				}
+				else if (a == 1 && correctLine)
+				{
+					ScoreArray[arraycount] = stoi(hold);
+					arraycount++;
+				}
+			}
+		}
+	}
+	cout << "Displaying scores for: " << Level << endl;
+	for (int i = 0; i < arraycount; i++)
+	{
+		if (ScoreArray[i] > 0)
+		{
+			cout << ScoreArray[i] << endl;
+		}
+	}
+}
+void TextFile::SetScore(int score, string level)
+{
+	ofstream File;
+	string sscore = to_string(score);
+	File.open("HighScore.txt", ios_base::app);
+
+	if (File.is_open())
+	{
+		File << level << "," << sscore << ";\n";
+	}
 }

@@ -735,10 +735,18 @@ void SceneSP3::Update(double dt)
 		hi = true;
 		/*TextFile* animal = new TextFile(TextFile::ANIMAL);
 		animal->GetAnimalStat("Zebra");*/
-		TextFile* car = new TextFile(TextFile::CAR);
+		/*TextFile* car = new TextFile(TextFile::CAR);
 		car->GetCarStat("Car2", "CarStats.txt");
 		car->SetCarStat("Car2", "hp", "8");
-		car->GetCarStat("Car2", "tempsave.txt");
+		car->GetCarStat("Car2", "tempsave.txt");*/
+		TextFile* score = new TextFile(TextFile::SCORE);
+		score->SetScore(24, "Level1");
+		score->SetScore(43, "Level2");
+		score->SetScore(19, "Level3");
+		score->SetScore(3, "Level1");
+		score->SetScore(62, "Level3");
+		score->SetScore(3, "Level2");
+		score->ListHighScore("Level1");
 	}
 	if (hi && !Application::IsKeyPressed('7'))
 	{
@@ -3222,7 +3230,7 @@ void SceneSP3::Exit()
 	SceneBase::Exit();
 	//Cleanup GameObjects
 	ofstream file;
-	file.open("tempsave.txt", ios::trunc);
+	file.open("HighScore.txt", ios::trunc);
 	file.close();
 	while (m_goList.size() > 0)
 	{
