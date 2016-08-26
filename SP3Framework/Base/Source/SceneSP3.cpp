@@ -65,8 +65,8 @@ void SceneSP3::Init()
 	testMap.setBackground(meshList[GEO_TESTMAP]);
 	testMap.setMapSize(20, 20);
 
-	//gameStates = states::s_Upgrade_Cars1;
-	gameStates = states::s_Tutorial;
+	gameStates = states::s_Menu;
+	//gameStates = states::s_Tutorial;
 
 	animalStat = new TextFile(TextFile::ANIMAL);
 
@@ -1031,18 +1031,23 @@ void SceneSP3::Update(double dt)
 			}
 			else if (gameStates == states::s_LevelSelect)
 			{
-				if (worldX > 0.78854f * m_worldWidth && worldX < 0.99219f * m_worldWidth)
+				if (worldY > 47.8 && worldY < 52.3f)
 				{
-					if (worldY > 1 && worldY < 11.6f)
+					if (worldX > 0.33f * m_worldWidth && worldX < 0.36f * m_worldWidth)
 					{
-						gameStates = states::s_CustomLevelSelect;
+						gameStates = states::s_Tutorial;
 					}
-				}
-				if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
-				{
-					if (worldY > 1 && worldY < 11.6f)
+					if (worldX > 0.428f * m_worldWidth && worldX < 0.461f * m_worldWidth)
 					{
-						gameStates = states::s_Menu;
+						gameStates = states::s_Level2;
+					}
+					if (worldX > 0.5322f * m_worldWidth && worldX < 0.563f * m_worldWidth)
+					{
+						gameStates = states::s_Level3;
+					}
+					if (worldX > 0.631f * m_worldWidth && worldX < 0.669f * m_worldWidth)
+					{
+						gameStates = states::s_LevelBoss;
 					}
 				}
 			}
