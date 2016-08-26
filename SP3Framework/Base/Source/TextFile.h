@@ -52,10 +52,13 @@ public:
 
 	int get_tranqcount();
 	int get_tranqduration();
+	void get_money();
 
 	bool GetCarStat(string name, string filename);
 	bool SetCarStat(string name, string stat, string data);
 
+	void ListHighScore();
+	void SetScore(int score);
 	TextFile(FileType ftype = ANIMAL);
 	~TextFile();
 private:
@@ -71,5 +74,6 @@ private:
 	int engine, hp, handling;
 	int lassolength, lassostrength;
 	int tranqcount, tranqduration;
+	int money;
 };
 #endif
