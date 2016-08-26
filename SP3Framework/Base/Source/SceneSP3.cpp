@@ -2282,45 +2282,49 @@ void SceneSP3::RenderGO(GameObject *go)
 
 void SceneSP3::RenderEnemy(enemy *go)
 {
-	if (go->getActive() == 1 && go->getType() == 0)
+	if (go->getActive() == 1 && (go->getPos().x - player1->pos.x) < 100 && (go->getPos().x - player1->pos.x) > -100 && go->getPos().y - player1->pos.y < 50 && go->getPos().y - player1->pos.y > -50 && (go->getPos() - objective).Length() < 200)
 	{
-		float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
-		modelStack.PushMatrix();
-		modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
-		//modelStack.Rotate(angle, 0, 0, 1);
-		modelStack.Scale(7, 7, 3);
-		RenderMesh(meshList[GEO_ZEBRA], true);
-		modelStack.PopMatrix();
-	}
-	else if (go->getActive() == 1 && go->getType() == 1)
-	{
-		float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
-		modelStack.PushMatrix();
-		modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
-		//modelStack.Rotate(angle, 0, 0, 1);
-		modelStack.Scale(7, 7, 3);
-		RenderMesh(meshList[GEO_RHINO], true);
-		modelStack.PopMatrix();
-	}
-	else if (go->getActive() == 1 && go->getType() == 2)
-	{
-		float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
-		modelStack.PushMatrix();
-		modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
-		//modelStack.Rotate(angle, 0, 0, 1);
-		modelStack.Scale(7, 7, 3);
-		RenderMesh(meshList[GEO_LION], true);
-		modelStack.PopMatrix();
-	}
-	else if (go->getActive() == 1 && go->getType() == 3)
-	{
-		float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
-		modelStack.PushMatrix();
-		modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
-		//modelStack.Rotate(angle, 0, 0, 1);
-		modelStack.Scale(7, 7, 3);
-		RenderMesh(meshList[GEO_HUMAN], true);
-		modelStack.PopMatrix();
+
+		if (go->getType() == 0)
+		{
+			float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
+			modelStack.PushMatrix();
+			modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
+			//modelStack.Rotate(angle, 0, 0, 1);
+			modelStack.Scale(7, 7, 3);
+			RenderMesh(meshList[GEO_ZEBRA], true);
+			modelStack.PopMatrix();
+		}
+		else if (go->getType() == 1)
+		{
+			float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
+			modelStack.PushMatrix();
+			modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
+			//modelStack.Rotate(angle, 0, 0, 1);
+			modelStack.Scale(7, 7, 3);
+			RenderMesh(meshList[GEO_RHINO], true);
+			modelStack.PopMatrix();
+		}
+		else if (go->getType() == 2)
+		{
+			float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
+			modelStack.PushMatrix();
+			modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
+			//modelStack.Rotate(angle, 0, 0, 1);
+			modelStack.Scale(7, 7, 3);
+			RenderMesh(meshList[GEO_LION], true);
+			modelStack.PopMatrix();
+		}
+		else if (go->getType() == 3)
+		{
+			float angle = Math::RadianToDegree(atan2(go->vel.y, go->vel.x));
+			modelStack.PushMatrix();
+			modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
+			//modelStack.Rotate(angle, 0, 0, 1);
+			modelStack.Scale(7, 7, 3);
+			RenderMesh(meshList[GEO_HUMAN], true);
+			modelStack.PopMatrix();
+		}
 	}
 
 	modelStack.PushMatrix();
