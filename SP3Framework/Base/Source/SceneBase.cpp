@@ -103,7 +103,7 @@ void SceneBase::Init()
 	}
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 	meshList[GEO_BALL] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 1), 10, 10, 1.f);
-	//meshList[GEO_ICE] = MeshBuilder::GenerateCircle("ice", Color(0.5f, 0.5f, 1));
+	meshList[GEO_ICE] = MeshBuilder::GenerateCircle("ice", Color(0.5f, 0.5f, 1));
 	meshList[GEO_SOCC] = MeshBuilder::GenerateOBJ("GEO_BALL", "Object//ball1.obj");
 	meshList[GEO_SOCC]->textureID = LoadTGA("Image//ballUV.tga");
 	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 1, 1), 4.f);

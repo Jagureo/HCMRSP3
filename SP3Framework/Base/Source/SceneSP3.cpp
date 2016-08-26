@@ -26,7 +26,8 @@ void SceneSP3::Init()
 	m_ghost = new GameObject(GameObject::GO_BALL);
 
 	player1 = new GameObject(GameObject::GO_CAR);
-	player1->pos.Set(25, 50, 0);
+	//player1->pos.Set(25, 50, 0);
+	player1->pos.Set(0, 0, 0);
 	player1->mass = 5;
 	player1->vel.Set(0, 0, 0);
 	player1->rotationAngle = 0;
@@ -605,6 +606,28 @@ void SceneSP3::playerControl()
 			player1->vel = player1->vel * 0.98f;
 		}
 	}
+	Vector3 m_worldBorder = mapPosition - Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
+	if (m_worldBorder.x > testMap.getMapSize().x * 5 && m_worldBorder.x < 100000 && m_worldBorder.x > -100000)
+	{
+		//cout << "LEFT" << endl;
+		player1->pos.x += m_worldBorder.x - testMap.getMapSize().x * 5;
+	}
+	else if (m_worldBorder.x < -testMap.getMapSize().x * 5 && m_worldBorder.x < 100000 && m_worldBorder.x > -100000)
+	{
+		//cout << "RIGHT" << endl;
+		player1->pos.x -= -m_worldBorder.x - testMap.getMapSize().x * 5;
+	}
+	if (m_worldBorder.y > testMap.getMapSize().y * 5 && m_worldBorder.y < 100000 && m_worldBorder.y > -100000)
+	{
+		//cout << "DOWN" << endl;
+		player1->pos.y += m_worldBorder.y - testMap.getMapSize().y * 5;
+	}
+	else if (m_worldBorder.y < -testMap.getMapSize().y * 5 && m_worldBorder.y < 100000 && m_worldBorder.y > -100000)
+	{
+		//cout << "UP" << endl;
+		player1->pos.y += testMap.getMapSize().y * 5 + m_worldBorder.y;
+	}
+	//cout << player1->pos << " mappos " << mapPosition - Vector3(m_worldWidth / 2, m_worldHeight / 2, 0) << endl;
 }
 
 void SceneSP3::Update(double dt)
