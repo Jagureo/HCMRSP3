@@ -81,7 +81,7 @@ void SceneSP3::Init()
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP2]);
-	testMap.setMapSize(20, 20);
+	testMap.setMapSize(30, 20);
 
 	gameStates = states::s_Upgrade;
 	//gameStates = states::s_Tutorial;
@@ -679,7 +679,7 @@ void SceneSP3::playerControl()
 void SceneSP3::Update(double dt)
 {
 	SceneBase::Update(dt);
-	time++;
+	time--;
 	if (Application::IsKeyPressed('5'))
 	{
 		testMap.setBackground(meshList[GEO_TESTMAP]);
@@ -2542,6 +2542,7 @@ void SceneSP3::RenderProps(playMap* map)
 			glEnable(GL_DEPTH_TEST);
 			modelStack.PushMatrix();
 			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z - 2);
+			modelStack.Rotate(90, 1, 0, 0);
 			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
 			RenderMesh(meshList[GEO_ICE], true);
 			modelStack.PopMatrix();
@@ -2813,14 +2814,22 @@ void SceneSP3::renderMinimap(playMap* map)
 			{
 				i += 360;
 			}
-			int j = (int)time % 360;
-			if (i > j && j < 100)
+			//int j = (int)time % 360;
+			//if (i > j && j < 100)
+			//{
+			//	j += 100;
+			//	i -= 260;
+			//}
+			//
+			//if (i < j && i > j - 100)
+			int j = ((int)time % 360) + 360;
+			if (i < j && j > 260)
 			{
-				j += 100;
-				i -= 260;
+				j = 100 - (360 - j);
+				i += 100;
 			}
 
-			if (i < j && i > j - 100)
+			if (i > j && i < j + 100)
 			{
 				//cout << Math::RadianToDegree(atan2(go->pos.y - player1->pos.y, go->pos.x - player1->pos.x)) << endl;
 				modelStack.PushMatrix();
@@ -2906,6 +2915,71 @@ void SceneSP3::renderMinimap(playMap* map)
 			else
 			{
 
+			}
+		}
+	}
+	for (std::vector<enemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+	{
+		enemy *go = (enemy *)*it;
+		if (go->getActive() == false)
+			continue;
+		if ((go->getPos() - player1->pos).LengthSquared() < 14400)
+		{
+			int i = Math::RadianToDegree(atan2(go->getPos().y - player1->pos.y, go->getPos().x - player1->pos.x));
+			if (i < 0)
+			{
+				i += 360;
+			}
+			int j = ((int)time % 360) + 360;
+			if (i < j && j > 260)
+			{
+				j = 100 - (360 - j);
+				i += 100;
+			}
+
+			if (i > j && i < j + 100)
+			{
+				//cout << Math::RadianToDegree(atan2(go->pos.y - player1->pos.y, go->pos.x - player1->pos.x)) << endl;
+				modelStack.PushMatrix();
+				modelStack.Translate((go->getPos().x - player1->pos.x) / 15, (go->getPos().y - player1->pos.y) / 15, 1);
+				modelStack.Translate(15, 10, 8);
+				modelStack.Scale(0.5f, 0.5f, 1);
+					modelStack.PushMatrix();
+					modelStack.Rotate(90, 1, 0, 0);
+					RenderMesh(meshList[HUD_RADARENEMY], false);
+					modelStack.PopMatrix();
+				modelStack.PopMatrix();
+			}
+		}
+	}
+	for (std::vector<GameObject *>::iterator it = testMap.mapBorder.begin(); it != testMap.mapBorder.end(); ++it)
+	{
+		GameObject *go = (GameObject *)*it;
+		if ((go->pos - player1->pos).LengthSquared() < 14400)
+		{
+			int i = Math::RadianToDegree(atan2(go->pos.y - player1->pos.y, go->pos.x - player1->pos.x));
+			if (i < 0)
+			{
+				i += 360;
+			}
+			int j = ((int)time % 360) + 360;
+	      if (i < j && j > 260)
+	      {
+	      	j = 100 - (360 - j);
+	      	i += 100;
+	      }
+	      
+	      if (i > j && i < j + 100)
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate((go->pos.x - player1->pos.x) / 15, (go->pos.y - player1->pos.y) / 15, 1);
+				modelStack.Translate(15, 10, 8);
+				modelStack.Scale(0.5f, 0.5f, 1);
+					modelStack.PushMatrix();
+					modelStack.Rotate(90, 1, 0, 0);
+					RenderMesh(meshList[HUD_RADARDETECT], false);
+					modelStack.PopMatrix();
+				modelStack.PopMatrix();
 			}
 		}
 	}
