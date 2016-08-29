@@ -35,7 +35,7 @@ enemy::enemy(Vector3 pos, int eType, float getSta, float getSpd, float getStr)
 
 	}
 	stamina = getSta;
-	speed = getSpd + Math::RandFloatMinMax(-0.5, 0.5);
+	speed = getSpd * Math::RandFloatMinMax(0.8, 1.2);
 	strength = getStr;
 	//strength = 99999;
 }
@@ -145,7 +145,7 @@ void enemy::checkCollision(std::vector<enemy*> enemyVector)
 	for (std::vector<enemy*>::iterator itE = enemyVector.begin(); itE != enemyVector.end(); ++itE)
 	{
 		enemy *goE = (enemy *)*itE;
-		if (position.x > goE->getPos().x - 10 && position.x < goE->getPos().x + 10 && position.y > goE->getPos().y - 10 && position.y < goE->getPos().y + 10 && goE->active == 1)
+		if (position.x > goE->getPos().x - 5 && position.x < goE->getPos().x + 5 && position.y > goE->getPos().y - 5 && position.y < goE->getPos().y + 5 && goE->active == 1)
 		{
 			float distanceSquared = (position - goE->getPos()).LengthSquared();
 			float yDist = goE->getPos().y - position.y;
@@ -162,8 +162,8 @@ void enemy::checkCollision(std::vector<enemy*> enemyVector)
 			{
 				dir.Set(1, 0, 0);
 			}
-			goE->vel += dir.Normalized() * (2 + speed);
-			vel += -(dir.Normalized()) * (2 + speed);
+			goE->vel += dir.Normalized();
+			vel += -(dir.Normalized());
 		}
 	}
 }
@@ -191,18 +191,18 @@ void enemy::runOff(Vector3 playerPos, std::vector<enemy*> enemyVector, enemy* le
 		if (caught == 1 )
 		{
 
-			vel.x += -((dir.Normalized()).x ) * (2* speed);
-			vel.y += -((dir.Normalized()).y ) * (2 * speed);
+			vel.x += -((dir.Normalized()).x  * 2);
+			vel.y += -((dir.Normalized()).y  * 2);
 		}
 		else if (leader == 1)
 		{
-			vel.x += -((dir.Normalized()).x) * (1 * speed);
-			vel.y += -((dir.Normalized()).y) * (1 * speed);
+			vel.x += -((dir.Normalized()).x * 1.8);
+			vel.y += -((dir.Normalized()).y * 1.8);
 		}
 		else
 		{
 			//vel += -(dir.Normalized()) * 3;
-			vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1)) * (1 * speed);
+			vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1) * 1.8);
 			vel.z = 0;
 		}
 		stamina--;
@@ -212,18 +212,18 @@ void enemy::runOff(Vector3 playerPos, std::vector<enemy*> enemyVector, enemy* le
 		if (caught == 1)
 		{
 
-			vel.x += -((dir.Normalized()).x ) * (1 * speed);
-			vel.y += -((dir.Normalized()).y ) * (1 * speed);
+			vel.x += -((dir.Normalized()).x * 1.5);
+			vel.y += -((dir.Normalized()).y  * 1.5);
 		}
 		if (leader == 1)
 		{
-			vel.x += -((dir.Normalized()).x) * ( 0.5*speed);
-			vel.y += -((dir.Normalized()).y) * ( 0.5 *speed);
+			vel.x += -((dir.Normalized()).x * 1.2);
+			vel.y += -((dir.Normalized()).y * 1.2);
 			
 		}
 		else
 		{
-			vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1)* (0.5*speed));
+			vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1) * 1.2);
 			vel.z = 0;
 		}
 	}
@@ -264,11 +264,11 @@ void enemy::slowDown(std::vector<enemy*> enemyVector, Vector3 objective)
 			if (taken == 0)
 			{
 
-				vel += (dir.Normalized() * (0.5 * speed));
+				vel += (dir.Normalized());
 			}
 			else
 			{
-				vel -= (dir.Normalized() * (0.5 * speed));
+				vel -= (dir.Normalized());
 			}
 }
 
@@ -288,21 +288,21 @@ void enemy::updatePos(float dt)
 	if (running == 1 && stamina > 0)
 	{
 
-		if (vel.x > 100)
+		if (vel.x > 80 * speed)
 		{
-			vel.x = 100;
+			vel.x = 80 * speed;
 		}
-		else if (vel.x < -100)
+		else if (vel.x < -80 * speed)
 		{
-			vel.x = -100;
+			vel.x = -80 * speed;
 		}
-		if (vel.y < -100)
+		if (vel.y < -80 * speed)
 		{
-			vel.y = -100;
+			vel.y = -80 * speed;
 		}
-		else if (vel.y > 100)
+		else if (vel.y > 80 * speed)
 		{
-			vel.y = 100;
+			vel.y = 80 * speed;
 		}
 		if (vel.z != 0)
 		{
@@ -311,21 +311,21 @@ void enemy::updatePos(float dt)
 	}
 	else
 	{
-		if (vel.x > 50)
+		if (vel.x > 50 * speed)
 		{
-			vel.x = 50;
+			vel.x = 50 * speed;
 		}
-		else if (vel.x < -50)
+		else if (vel.x < -50 * speed)
 		{
-			vel.x = -50;
+			vel.x = -50 * speed;
 		}
-		if (vel.y < -50)
+		if (vel.y < -50 * speed)
 		{
-			vel.y = -50;
+			vel.y = -50 * speed;
 		}
-		else if (vel.y > 50)
+		else if (vel.y > 50 * speed)
 		{
-			vel.y = 50;
+			vel.y = 50 * speed;
 		}
 		if (vel.z != 0)
 		{
