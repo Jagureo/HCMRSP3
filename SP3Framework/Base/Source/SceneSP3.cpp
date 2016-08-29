@@ -3,12 +3,16 @@
 #include "Application.h"
 #include <sstream>
 
-SceneSP3::SceneSP3()
+SceneSP3::SceneSP3() : theSoundEngine(NULL), Sound_Engine(NULL), Sound_Throw(NULL)
 {
 }
 
 SceneSP3::~SceneSP3()
 {
+	if (theSoundEngine != NULL)
+	{
+		theSoundEngine->drop();
+	}
 }
 string NameofMap;
 void SceneSP3::Init()
@@ -84,6 +88,11 @@ void SceneSP3::Init()
 
 	animalStat = new TextFile(TextFile::ANIMAL);
 
+	theSoundEngine = createIrrKlangDevice();
+	if (!theSoundEngine)
+	{
+	}
+
 	/*for (int i = 0; i < 7; ++i)
 	{
 		animalStat->GetAnimalStat("Zebra");
@@ -119,6 +128,22 @@ void SceneSP3::Reset()
 	m_objectCount = 0;
 
 	m_ghost = new GameObject(GameObject::GO_BALL);
+}
+
+void SceneSP3::engineSound()
+{
+	if (Sound_Engine == NULL)
+	{
+		Sound_Engine = theSoundEngine->play2D("Sound/vroom.mp3", false, true);
+	}
+	if (Sound_Engine->getIsPaused() == true)
+	{
+		Sound_Engine->setIsPaused(false);
+	}
+	else if (Sound_Engine->isFinished())
+	{
+		Sound_Engine = NULL;
+	}
 }
 
 GameObject* SceneSP3::FetchGO()
@@ -757,6 +782,15 @@ void SceneSP3::Update(double dt)
 	if (fuelAmount <= 0.0f)
 	{
 		gameStates = states::s_Lose;
+	}
+
+	if (player1->engine != 0)
+	{
+		engineSound();
+	}
+	else if (Sound_Engine != NULL)
+	{
+		Sound_Engine->stop();
 	}
 	
 

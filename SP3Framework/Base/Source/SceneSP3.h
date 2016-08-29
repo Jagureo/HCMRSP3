@@ -10,6 +10,8 @@
 #include "TextFile.h"
 #include "enemy.h"
 #include "lasso.h"
+#include <irrKlang.h>
+using namespace irrklang;
 
 using std::stoi;
 using std::ifstream;
@@ -110,6 +112,9 @@ public:
 	bool RenderMapFile();
 	bool MapExist(string FileName);
 
+	void engineSound();
+	void throwSound();
+
 	string FileName;
 protected:
 
@@ -164,6 +169,10 @@ protected:
 	//Auditing
 	float m1, m2;
 	Vector3 u1, u2, v1, v2;
+
+	ISoundEngine* theSoundEngine;
+	ISound* Sound_Engine;
+	ISound* Sound_Throw;
 };
 
 #endif
