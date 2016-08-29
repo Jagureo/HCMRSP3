@@ -57,6 +57,21 @@ class SceneSP3 : public SceneBase
 	float rotateDisplayY;
 	float fuelAmount;
 
+	bool car1Bought;
+	bool car2Bought;
+	bool car3Bought;
+	bool tire1Bought;
+	bool tire2Bought;
+	bool tire3Bought;
+	bool lasso1Bought;
+	bool lasso2Bought;
+	bool lasso3Bought;
+	bool dart1Bought;
+	bool dart2Bought;
+	bool dart3Bought;
+
+
+
 public:
 	SceneSP3();
 	~SceneSP3();
@@ -84,6 +99,7 @@ public:
 	void renderSelection(float x1, float y1);
 	void renderMinimap(playMap* map);
 	void renderMenu();
+	void UpgradeController();
 
 	void Reset();
 

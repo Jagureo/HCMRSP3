@@ -45,6 +45,19 @@ void SceneSP3::Init()
 	player1->playerCar.powerUp = 2;
 	m_goList.push_back(player1);
 
+	car1Bought = true;
+	car2Bought = false;
+	car3Bought = false;
+	tire1Bought = true;
+	tire2Bought = false;
+	tire3Bought = false;
+	lasso1Bought = true;
+	lasso2Bought = false;
+	lasso3Bought = false;
+	dart1Bought = true;
+	dart2Bought = false;
+	dart3Bought = false;
+
 	friction = 0.95f;
 	diffx = 0;
 	diffy = 0;
@@ -66,7 +79,6 @@ void SceneSP3::Init()
 	testMap.setBackground(meshList[GEO_TESTMAP]);
 	testMap.setMapSize(20, 20);
 
-	//gameStates = states::s_Upgrade_Cars1;
 	gameStates = states::s_Menu;
 	//gameStates = states::s_Tutorial;
 
@@ -607,6 +619,28 @@ void SceneSP3::playerControl()
 			player1->vel = player1->vel * 0.98f;
 		}
 	}
+	Vector3 m_worldBorder = mapPosition - Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
+	if (m_worldBorder.x > testMap.getMapSize().x * 5 && m_worldBorder.x < 100000 && m_worldBorder.x > -100000)
+	{
+		//cout << "LEFT" << endl;
+		player1->pos.x += m_worldBorder.x - testMap.getMapSize().x * 5;
+	}
+	else if (m_worldBorder.x < -testMap.getMapSize().x * 5 && m_worldBorder.x < 100000 && m_worldBorder.x > -100000)
+	{
+		//cout << "RIGHT" << endl;
+		player1->pos.x -= -m_worldBorder.x - testMap.getMapSize().x * 5;
+	}
+	if (m_worldBorder.y > testMap.getMapSize().y * 5 && m_worldBorder.y < 100000 && m_worldBorder.y > -100000)
+	{
+		//cout << "DOWN" << endl;
+		player1->pos.y += m_worldBorder.y - testMap.getMapSize().y * 5;
+	}
+	else if (m_worldBorder.y < -testMap.getMapSize().y * 5 && m_worldBorder.y < 100000 && m_worldBorder.y > -100000)
+	{
+		//cout << "UP" << endl;
+		player1->pos.y += testMap.getMapSize().y * 5 + m_worldBorder.y;
+	}
+	//cout << player1->pos << " mappos " << mapPosition - Vector3(m_worldWidth / 2, m_worldHeight / 2, 0) << endl;
 }
 
 void SceneSP3::Update(double dt)
@@ -669,6 +703,8 @@ void SceneSP3::Update(double dt)
 		testRock->fresh = true;
 		testRock->active = true;
 		testMap.addClusterProp(testRock);
+
+		testMap.addBorder();
 	}
 	if (Application::IsKeyPressed('T'))
 	{
@@ -722,196 +758,11 @@ void SceneSP3::Update(double dt)
 	{
 		gameStates = states::s_Lose;
 	}
-	//else
-	//{
-	//	player1->engine = 0;
-	//}
-	//if (player1->engine > player1->playerCar.engine)
-	//{
-	//	player1->engine = player1->playerCar.engine;
-	//}
-	//if (Application::IsKeyPressed('D'))
-	//{
-	//	player1->rotationAngle -= player1->playerCar.turnSpeed;
-	//	if (player1->vel.Length() < 3)
-	//	{
-	//		if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
-	//			player1->rotationAngle += 1 / player1->vel.Length();
-	//		else
-	//			player1->rotationAngle += player1->playerCar.turnSpeed;
-	//	}
-	//	player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
-	//}
-	//if (Application::IsKeyPressed('A'))
-	//{
-	//	player1->rotationAngle += player1->playerCar.turnSpeed;
-	//	if (player1->vel.Length() < 3)
-	//	{
-	//		if (1 / player1->vel.Length() < player1->playerCar.turnSpeed)
-	//			player1->rotationAngle -= 1 / player1->vel.Length();
-	//		else
-	//			player1->rotationAngle -= player1->playerCar.turnSpeed;
-	//	}
-	//	player1->normal = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0);
-	//}
-	//if (player1->vel.Length() < player1->playerCar.topSpeed)
-	//{
-	//	player1->vel += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->engine, 0);
-	//}
-
-	//if (friction > 0.99f)
-	//{
-	//	friction = 0.99f;
-	//}
-	//else if (friction < 0.95f - player1->mass * 0.01f)
-	//{
-	//	friction += 0.01f;
-	//}
-	//if (friction > 0.96f - player1->mass * 0.01f)
-	//{
-	//	friction -= 0.01f;
-	//}
-
-	////std::cout << player1->pos << std::endl;
-
-	//if (player1->vel.x != 0 || player1->vel.y != 0)
-	//{
-	//	player1->vel = player1->vel * friction;
-	//}
+	
 
 	//Mouse Section
 	static bool bLButtonState = false;
-	//if (!bLButtonState && Application::IsMousePressed(0))
-	//{
-	//	bLButtonState = true;
-	//	std::cout << "LBUTTON DOWN" << std::endl;
-	//	double x, y;
-	//	Application::GetCursorPos(&x, &y);
-	//	int w = Application::GetWindowWidth();
-	//	int h = Application::GetWindowHeight();
-	//	float worldX = x * m_worldWidth / w;
-	//	float worldY = (h - y) * m_worldHeight / h;
-	//	m_ghost->pos.Set(worldX, worldY, 0);
-	//	m_ghost->active = true;
-	//
-
-	//	//bLButtonState = false;
-	//	//std::cout << "LBUTTON UP" << std::endl;
-
-	//	////Exercise 6: spawn small GO_BALL
-	//	//double x, y;
-	//	//Application::GetCursorPos(&x, &y);
-	//	//int w = Application::GetWindowWidth();
-	//	//int h = Application::GetWindowHeight();
-	//	//float worldX = x * m_worldWidth / w;
-	//	//float worldY = (h - y) * m_worldHeight / h;
-	//	//m_ghost->active = false;
-
-	//	//	GameObject* ball = FetchGO();
-	//	//	ball->type = GameObject::GO_BALL;
-	//	//	Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
-	//	//	float radius = Math::Clamp(size.Length(), 1.f, 1.f);
-	//	//	ball->scale.Set(radius, radius, radius);
-	//	//	ball->pos = m_ghost->pos;
-	//	//	ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
-	//	//	ball->mass = radius;
-	//	//	ball->ballrotated = 0;
-	//	//	m_ghost->active = false;
-	//	//TextFile* hi = new TextFile(TextFile::MAP);
-	//	//hi->SetData("ball", ball->pos.x, ball->pos.y, ball->scale.x);
-	//	//hi->SaveMapObj("test.txt");
-	//	//m_estimatedTime = -1;
-	//	if (gameStates == states::s_Upgrade)
-	//	{
-	//		if (worldX > 0.0f * m_worldWidth && worldX < 0.33073f * m_worldWidth)
-	//		{
-	//			if (worldY > 68.472f && worldY < 76.111f)
-	//			{
-	//				gameStates = states::s_Upgrade_Cars;
-	//			}
-	//			if (worldY > 56.111f && worldY < 63.75f)
-	//			{
-	//				gameStates = states::s_Upgrade_Tires;
-	//			}
-	//			if (worldY > 43.333f && worldY < 50.833f)
-	//			{
-	//				gameStates = states::s_Upgrade_Lasso;
-	//			}
-	//			if (worldY > 30.694f && worldY < 38.333f)
-	//			{
-	//				gameStates = states::s_Upgrade_Darts;
-	//			}
-	//		}
-	//		else if (gameStates == states::s_Menu)
-	//		{
-	//			if (worldX > 0.656f * m_worldWidth && worldX < 0.88047f * m_worldWidth)
-	//			{
-	//				if (worldY > 36.111 && worldY < 39.444f)
-	//				{
-	//					gameStates = states::s_LevelSelect;
-	//				}
-	//				if (worldY > 29.2f && worldY <  32.35f)
-	//				{
-	//					gameStates = states::s_Instructions;
-	//				}
-	//				if (worldY > 22 && worldY < 25.27f)
-	//				{
-	//					gameStates = states::s_Options;
-	//				}
-	//				if (worldY > 15.438f && worldY < 18.6f)
-	//				{
-	//					gameStates = states::s_Highscore;
-	//				}
-	//				if (worldY > 8 && worldY < 11.406f)
-	//				{
-	//					exit(0);
-	//				}
-	//			}
-	//		}
-	//		else if (gameStates == states::s_Instructions)
-	//		{
-	//			if (worldX > 0.035f * m_worldWidth && worldX < 0.14141f * m_worldWidth)
-	//			{
-	//				if (worldY > 3.0 && worldY < 9.0f)
-	//				{
-	//					gameStates = states::s_Menu;
-	//				}
-	//			}
-	//		}
-	//		else if (gameStates == states::s_LevelSelect)
-	//		{
-	//			if (worldX > 0.78854f * m_worldWidth && worldX < 0.99219f * m_worldWidth)
-	//			{
-	//				if (worldY > 1 && worldY < 11.6f)
-	//				{
-	//					gameStates = states::s_CustomLevelSelect;
-	//				}
-	//			}
-	//			if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
-	//			{
-	//				if (worldY > 1 && worldY < 11.6f)
-	//				{
-	//					gameStates = states::s_Menu;
-	//				}
-	//			}
-	//		}
-	//		else if (gameStates == states::s_CustomLevelSelect)
-	//		{
-	//			if (worldX > 0.1f * m_worldWidth && worldX < 0.203f * m_worldWidth)
-	//			{
-	//				if (worldY > 1 && worldY < 11.6f)
-	//				{
-	//					gameStates = states::s_LevelSelect;
-	//				}
-	//			}
-
-	//		}
-	//	}
-	//}
-	//else
-	//{
-	//	static bool bLButtonState = false;
-	//}
+	
 	if (gameStates != states::s_Tutorial ||
 		gameStates != states::s_Level2 ||
 		gameStates != states::s_Level3 ||
@@ -932,20 +783,6 @@ void SceneSP3::Update(double dt)
 			float worldY = (h - y) * m_worldHeight / h;
 			m_ghost->active = false;
 
-			//GameObject* ball = FetchGO();
-			//ball->type = GameObject::GO_BALL;
-			//Vector3 size = Vector3(worldX, worldY, 0) - m_ghost->pos;
-			//float radius = Math::Clamp(size.Length(), 1.f, 1.f);
-			//ball->scale.Set(radius, radius, radius);
-			//ball->pos = m_ghost->pos;
-			////ball->vel = m_ghost->pos - Vector3(worldX, worldY, 0);
-			//ball->mass = radius;
-			//ball->ballrotated = 0;
-			//m_ghost->active = false;
-			//TextFile* hi = new TextFile(TextFile::MAP);
-			//hi->SetData("ball", ball->pos.x, ball->pos.y, ball->scale.x);
-			//hi->SaveMapObj("test.txt");
-			//m_estimatedTime = -1;
 			if (gameStates == states::s_Upgrade)
 			{
 				if (worldX > 0.0f * m_worldWidth && worldX < 0.33073f * m_worldWidth)
@@ -1040,6 +877,7 @@ void SceneSP3::Update(double dt)
 				}
 
 			}
+
 			if (gameStates == states::s_Upgrade_Cars1 || gameStates == states::s_Upgrade_Cars3)
 			{
 				if (worldX > 0.232f * m_worldWidth && worldX < 0.3777f * m_worldWidth)
@@ -1067,6 +905,99 @@ void SceneSP3::Update(double dt)
 					if (worldY > 13.16f && worldY < 24.5f)
 					{
 						gameStates = states::s_Upgrade_Cars3;
+					}
+				}
+			}
+
+			if (gameStates == states::s_Upgrade_Tires1 || gameStates == states::s_Upgrade_Tires3)
+			{
+				if (worldX > 0.232f * m_worldWidth && worldX < 0.3777f * m_worldWidth)
+				{
+					if (worldY > 13.16f && worldY < 24.5f)
+					{
+						gameStates = states::s_Upgrade_Tires2;
+					}
+				}
+			}
+			if (gameStates == states::s_Upgrade_Tires2 || gameStates == states::s_Upgrade_Tires3)
+			{
+				if (worldX > 0.054f * m_worldWidth && worldX < 0.20f * m_worldWidth)
+				{
+					if (worldY > 13.16f && worldY < 24.5f)
+					{
+						gameStates = states::s_Upgrade_Tires1;
+					}
+				}
+			}
+			if (gameStates == states::s_Upgrade_Tires1 || gameStates == states::s_Upgrade_Tires2)
+			{
+				if (worldX > 0.408f * m_worldWidth && worldX < 0.554f * m_worldWidth)
+				{
+					if (worldY > 13.16f && worldY < 24.5f)
+					{
+						gameStates = states::s_Upgrade_Tires3;
+					}
+				}
+			}
+
+			if (gameStates == states::s_Upgrade_Lasso1 || gameStates == states::s_Upgrade_Lasso3)
+			{
+				if (worldX > 0.232f * m_worldWidth && worldX < 0.3777f * m_worldWidth)
+				{
+					if (worldY > 13.16f && worldY < 24.5f)
+					{
+						gameStates = states::s_Upgrade_Lasso2;
+					}
+				}
+			}
+			if (gameStates == states::s_Upgrade_Lasso2 || gameStates == states::s_Upgrade_Lasso3)
+			{
+				if (worldX > 0.054f * m_worldWidth && worldX < 0.20f * m_worldWidth)
+				{
+					if (worldY > 13.16f && worldY < 24.5f)
+					{
+						gameStates = states::s_Upgrade_Lasso1;
+					}
+				}
+			}
+			if (gameStates == states::s_Upgrade_Lasso1 || gameStates == states::s_Upgrade_Lasso2)
+			{
+				if (worldX > 0.408f * m_worldWidth && worldX < 0.554f * m_worldWidth)
+				{
+					if (worldY > 13.16f && worldY < 24.5f)
+					{
+						gameStates = states::s_Upgrade_Lasso3;
+					}
+				}
+			}
+
+			if (gameStates == states::s_Upgrade_Darts1 || gameStates == states::s_Upgrade_Darts3)
+			{
+				if (worldX > 0.232f * m_worldWidth && worldX < 0.3777f * m_worldWidth)
+				{
+					if (worldY > 13.16f && worldY < 24.5f)
+					{
+						gameStates = states::s_Upgrade_Darts2;
+					}
+				}
+			}
+			if (gameStates == states::s_Upgrade_Darts2 || gameStates == states::s_Upgrade_Darts3)
+			{
+				if (worldX > 0.054f * m_worldWidth && worldX < 0.20f * m_worldWidth)
+				{
+					if (worldY > 13.16f && worldY < 24.5f)
+					{
+						gameStates = states::s_Upgrade_Darts1;
+					}
+				}
+			}
+			if (gameStates == states::s_Upgrade_Darts1 || gameStates == states::s_Upgrade_Darts2)
+			{
+				if (worldX > 0.408f * m_worldWidth && worldX < 0.554f * m_worldWidth)
+				{
+					if (worldY > 13.16f && worldY < 24.5f)
+					{
+						gameStates = states::s_Upgrade_Darts3;
 					}
 				}
 			}
@@ -1341,7 +1272,7 @@ void SceneSP3::Update(double dt)
 						go->active = false;
 					}
 				}
-
+				UpgradeController();
 				//Exercise 10: handle collision using momentum swap instead
 
 				//Exercise 12: improve inner loop to prevent double collision
@@ -1349,7 +1280,7 @@ void SceneSP3::Update(double dt)
 				//Exercise 13: improve collision detection algorithm [solution to be given later] 
 			}
 		}
-
+		
 		for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 		{
 			GameObject *go = (GameObject *)*it;
@@ -1371,6 +1302,19 @@ void SceneSP3::Update(double dt)
 				if (go->active == false)
 					continue;
 				CollisionMap(player1, go, dt);
+			}
+		}
+		for (std::vector<GameObject *>::iterator it = testMap.mapBorder.begin(); it != testMap.mapBorder.end(); ++it)
+		{
+			GameObject *go = (GameObject *)*it;
+			if (go->fresh)
+			{
+				go->pos += mapPosition;
+				go->fresh = false;
+			}
+			else
+			{
+				go->pos = Vector3(go->pos.x + diffx, go->pos.y + diffy, 1);
 			}
 		}
 		if (gameStates == states::s_Tutorial ||
@@ -2334,7 +2278,147 @@ void SceneSP3::RenderEnemy(enemy *go)
 	RenderMesh(meshList[GEO_SHIP], true);
 	modelStack.PopMatrix();*/
 }
+void SceneSP3::UpgradeController()
+{
+	double x, y;
+	Application::GetCursorPos(&x, &y);
+	int w = Application::GetWindowWidth();
+	int h = Application::GetWindowHeight();
+	float worldX = x * m_worldWidth / w;
+	float worldY = (h - y) * m_worldHeight / h;
+	static bool bLButtonState = false;
 
+	if (bLButtonState && !Application::IsMousePressed(0))
+	{
+		bLButtonState = false;
+		//Buying upgrades
+		if (gameStates == states::s_Upgrade_Cars1)
+		{
+			if (worldX > 0.75549f * m_worldWidth && worldX < 0.82577f * m_worldWidth)
+			{
+				if (worldY > 16.8f && worldY < 22.6f)
+				{
+					car1Bought = true;
+				}
+			}
+		}
+		if (gameStates == states::s_Upgrade_Cars2)
+		{
+			if (worldX > 0.75549f * m_worldWidth && worldX < 0.82577f * m_worldWidth)
+			{
+				if (worldY > 16.8f && worldY < 22.6f)
+				{
+					car2Bought = true;
+				}
+			}
+		}
+		if (gameStates == states::s_Upgrade_Cars3)
+		{
+			if (worldX > 0.75549f * m_worldWidth && worldX < 0.82577f * m_worldWidth)
+			{
+				if (worldY > 16.8f && worldY < 22.6f)
+				{
+					car3Bought = true;
+				}
+			}
+		}
+		if (gameStates == states::s_Upgrade_Tires1)
+		{
+			if (worldX > 0.75549f * m_worldWidth && worldX < 0.82577f * m_worldWidth)
+			{
+				if (worldY > 16.8f && worldY < 22.6f)
+				{
+					tire1Bought = true;
+				}
+			}
+		}
+		if (gameStates == states::s_Upgrade_Tires2)
+		{
+			if (worldX > 0.75549f * m_worldWidth && worldX < 0.82577f * m_worldWidth)
+			{
+				if (worldY > 16.8f && worldY < 22.6f)
+				{
+					tire2Bought = true;
+				}
+			}
+		}
+		if (gameStates == states::s_Upgrade_Tires3)
+		{
+			if (worldX > 0.75549f * m_worldWidth && worldX < 0.82577f * m_worldWidth)
+			{
+				if (worldY > 16.8f && worldY < 22.6f)
+				{
+					tire3Bought = true;
+				}
+			}
+		}
+		if (gameStates == states::s_Upgrade_Lasso1)
+		{
+			if (worldX > 0.75549f * m_worldWidth && worldX < 0.82577f * m_worldWidth)
+			{
+				if (worldY > 16.8f && worldY < 22.6f)
+				{
+					lasso1Bought = true;
+				}
+			}
+		}
+		if (gameStates == states::s_Upgrade_Lasso2)
+		{
+			if (worldX > 0.75549f * m_worldWidth && worldX < 0.82577f * m_worldWidth)
+			{
+				if (worldY > 16.8f && worldY < 22.6f)
+				{
+					lasso2Bought = true;
+				}
+			}
+		}
+		if (gameStates == states::s_Upgrade_Lasso3)
+		{
+			if (worldX > 0.75549f * m_worldWidth && worldX < 0.82577f * m_worldWidth)
+			{
+				if (worldY > 16.8f && worldY < 22.6f)
+				{
+					lasso3Bought = true;
+				}
+			}
+		}
+		if (gameStates == states::s_Upgrade_Darts1)
+		{
+			if (worldX > 0.75549f * m_worldWidth && worldX < 0.82577f * m_worldWidth)
+			{
+				if (worldY > 16.8f && worldY < 22.6f)
+				{
+					dart1Bought = true;
+				}
+			}
+		}
+		if (gameStates == states::s_Upgrade_Darts2)
+		{
+			if (worldX > 0.75549f * m_worldWidth && worldX < 0.82577f * m_worldWidth)
+			{
+				if (worldY > 16.8f && worldY < 22.6f)
+				{
+					dart2Bought = true;
+				}
+			}
+		}
+		if (gameStates == states::s_Upgrade_Darts3)
+		{
+			if (worldX > 0.75549f * m_worldWidth && worldX < 0.82577f * m_worldWidth)
+			{
+				if (worldY > 16.8f && worldY < 22.6f)
+				{
+					dart3Bought = true;
+				}
+			}
+		}
+	}
+	if (!bLButtonState && Application::IsMousePressed(0))
+	{
+		bLButtonState = true;
+	}
+
+}
 
 void SceneSP3::RenderProps(playMap* map)
 {
@@ -2621,6 +2705,14 @@ void SceneSP3::mapEditorRender()
 		modelStack.Translate(m_worldWidth / 2 + panel2x, m_worldHeight / 2, 9);
 		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
 		RenderMesh(meshList[HUD_MAPEDITOR2], false);
+		modelStack.PopMatrix();
+	}
+	else
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, 0.9f *  m_worldHeight, 9);
+		modelStack.Scale(m_worldWidth / 5, m_worldHeight / 10, 1);
+		RenderMesh(meshList[HUD_TESTMODE], false);
 		modelStack.PopMatrix();
 	}
 }
@@ -2928,6 +3020,23 @@ void SceneSP3::renderMenu()
 		RenderMesh(meshList[GEO_UPGRADE_UI_CARS], false);
 		modelStack.PopMatrix();
 
+		if (car2Bought == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(m_worldWidth / 3.2, m_worldHeight / 5, -4);
+			modelStack.Scale(30, 30, 1);
+			RenderMesh(meshList[GEO_SOLD], false);
+			modelStack.PopMatrix();
+		}
+		if (car3Bought == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(m_worldWidth / 2.1, m_worldHeight / 5, -4);
+			modelStack.Scale(30, 30, 1);
+			RenderMesh(meshList[GEO_SOLD], false);
+			modelStack.PopMatrix();
+		}
+
 		if (Application::IsKeyPressed(VK_BACK))
 		{
 			gameStates = states::s_Upgrade;
@@ -2941,6 +3050,22 @@ void SceneSP3::renderMenu()
 		RenderMesh(meshList[GEO_UPGRADE_UI_TIRES], false);
 		modelStack.PopMatrix();
 
+		if (tire2Bought == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(m_worldWidth / 3.2, m_worldHeight / 5, -4);
+			modelStack.Scale(30, 30, 1);
+			RenderMesh(meshList[GEO_SOLD], false);
+			modelStack.PopMatrix();
+		}
+		if (tire3Bought == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(m_worldWidth / 2.1, m_worldHeight / 5, -4);
+			modelStack.Scale(30, 30, 1);
+			RenderMesh(meshList[GEO_SOLD], false);
+			modelStack.PopMatrix();
+		}
 		if (Application::IsKeyPressed(VK_BACK))
 		{
 			gameStates = states::s_Upgrade;
@@ -2953,6 +3078,23 @@ void SceneSP3::renderMenu()
 		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
 		RenderMesh(meshList[GEO_UPGRADE_UI_LASSO], false);
 		modelStack.PopMatrix();
+
+		if (lasso2Bought == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(m_worldWidth / 3.2, m_worldHeight / 5, -4);
+			modelStack.Scale(30, 30, 1);
+			RenderMesh(meshList[GEO_SOLD], false);
+			modelStack.PopMatrix();
+		}
+		if (lasso3Bought == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(m_worldWidth / 2.1, m_worldHeight / 5, -4);
+			modelStack.Scale(30, 30, 1);
+			RenderMesh(meshList[GEO_SOLD], false);
+			modelStack.PopMatrix();
+		}
 
 		if (Application::IsKeyPressed(VK_BACK))
 		{
@@ -2967,11 +3109,64 @@ void SceneSP3::renderMenu()
 		RenderMesh(meshList[GEO_UPGRADE_UI_DARTS], false);
 		modelStack.PopMatrix();
 
+		if (dart2Bought == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(m_worldWidth / 3.2, m_worldHeight / 5, -4);
+			modelStack.Scale(30, 30, 1);
+			RenderMesh(meshList[GEO_SOLD], false);
+			modelStack.PopMatrix();
+		}
+
+		if (dart3Bought == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(m_worldWidth / 2.1, m_worldHeight / 5, -4);
+			modelStack.Scale(30, 30, 1);
+			RenderMesh(meshList[GEO_SOLD], false);
+			modelStack.PopMatrix();
+		}
+
 		if (Application::IsKeyPressed(VK_BACK))
 		{
 			gameStates = states::s_Upgrade;
 		}
 	}
+
+	// if SOLD
+	if (car1Bought == true)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 8, m_worldHeight / 5, -4);
+		modelStack.Scale(30, 30, 1);
+		RenderMesh(meshList[GEO_SOLD], false);
+		modelStack.PopMatrix();
+	}
+	if (tire1Bought == true)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 8, m_worldHeight / 5, -4);
+		modelStack.Scale(30, 30, 1);
+		RenderMesh(meshList[GEO_SOLD], false);
+		modelStack.PopMatrix();
+	}
+	if (lasso1Bought == true)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 8, m_worldHeight / 5, -4);
+		modelStack.Scale(30, 30, 1);
+		RenderMesh(meshList[GEO_SOLD], false);
+		modelStack.PopMatrix();
+	}
+	if (dart1Bought == true)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 8, m_worldHeight / 5, -4);
+		modelStack.Scale(30, 30, 1);
+		RenderMesh(meshList[GEO_SOLD], false);
+		modelStack.PopMatrix();
+	}
+
 	if (gameStates == states::s_Lose)
 	{
 		modelStack.PushMatrix();
@@ -2981,7 +3176,6 @@ void SceneSP3::renderMenu()
 		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
 		RenderMesh(meshList[GEO_LOSE_SCENE], false);
 		modelStack.PopMatrix();
-
 	}
 }
 
@@ -3054,9 +3248,19 @@ void SceneSP3::Render()
 	{
 		renderMenu();
 	}
-	if (gameStates == states::s_Tutorial || gameStates == states::s_Level2 || gameStates == states::s_Level3 || gameStates == states::s_LevelBoss)
+	if (gameStates == states::s_Tutorial || gameStates == states::s_Level2 || gameStates == states::s_Level3 || gameStates == states::s_LevelBoss || (gameStates == states::s_MapEditor && testMode))
 	{
 		RenderProps(&testMap);
+		for (std::vector<GameObject *>::iterator it = testMap.mapBorder.begin(); it != testMap.mapBorder.end(); ++it)
+		{
+			GameObject *go = (GameObject *)*it;
+			modelStack.PushMatrix();
+			//cout << go->pos << endl;
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z + 9);
+			modelStack.Scale(go->scale.x * 5, go->scale.y * 5, go->scale.z);
+			RenderMesh(meshList[GEO_TREETOP], false);
+			modelStack.PopMatrix();
+		}
 	}
 	if (gameStates == states::s_Upgrade_Cars1)
 	{
@@ -3066,6 +3270,12 @@ void SceneSP3::Render()
 		modelStack.Rotate(rotateDisplayX - 45, 0, 1, 0);
 		modelStack.Scale(10, 10, 10);
 		RenderMesh(meshList[GEO_DISPLAY_CAR1], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.200, 2);
+		modelStack.Scale(30, 30, 1);
+		RenderMesh(meshList[GEO_BUY], false);
 		modelStack.PopMatrix();
 	}
 	if (gameStates == states::s_Upgrade_Cars2)
@@ -3077,6 +3287,12 @@ void SceneSP3::Render()
 		modelStack.Scale(15, 15, 15);
 		RenderMesh(meshList[GEO_DISPLAY_CAR2], false);
 		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.200, 2);
+		modelStack.Scale(30, 30, 1);
+		RenderMesh(meshList[GEO_BUY], false);
+		modelStack.PopMatrix();
 	}
 	if (gameStates == states::s_Upgrade_Cars3)
 	{
@@ -3087,25 +3303,91 @@ void SceneSP3::Render()
 		modelStack.Scale(15, 15, 15);
 		RenderMesh(meshList[GEO_DISPLAY_CAR3], false);
 		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.200, 2);
+		modelStack.Scale(30, 30, 1);
+		RenderMesh(meshList[GEO_BUY], false);
+		modelStack.PopMatrix();
 	}
-	if (gameStates == states::s_Upgrade_Tires1 || gameStates == states::s_Upgrade_Tires2 || gameStates == states::s_Upgrade_Tires3)
+	if (gameStates == states::s_Upgrade_Tires1)
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.500, 9);
+		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.500, 2);
 		modelStack.Rotate(rotateDisplayY, 1, 0, 0);
 		modelStack.Rotate(rotateDisplayX - 45, 0, 1, 0);
 		modelStack.Scale(1.5, 1.5, 1.5);
 		RenderMesh(meshList[GEO_DISPLAY_WHEEL], false);
 		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.200, 2);
+		modelStack.Scale(30, 30, 1);
+		RenderMesh(meshList[GEO_BUY], false);
+		modelStack.PopMatrix();
+	}
+	if (gameStates == states::s_Upgrade_Tires2)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.500, 2);
+		modelStack.Rotate(rotateDisplayY, 1, 0, 0);
+		modelStack.Rotate(rotateDisplayX - 45, 0, 1, 0);
+		modelStack.Scale(1.5, 1.5, 1.5);
+		RenderMesh(meshList[GEO_DISPLAY_WHEEL], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.200, 2);
+		modelStack.Scale(30, 30, 1);
+		RenderMesh(meshList[GEO_BUY], false);
+		modelStack.PopMatrix();
+	}
+	if (gameStates == states::s_Upgrade_Tires3)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.500, 2);
+		modelStack.Rotate(rotateDisplayY, 1, 0, 0);
+		modelStack.Rotate(rotateDisplayX - 45, 0, 1, 0);
+		modelStack.Scale(1.5, 1.5, 1.5);
+		RenderMesh(meshList[GEO_DISPLAY_WHEEL], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.200, 2);
+		modelStack.Scale(30, 30, 1);
+		RenderMesh(meshList[GEO_BUY], false);
+		modelStack.PopMatrix();
+	}
+	if (gameStates == states::s_Upgrade_Lasso1 || gameStates == states::s_Upgrade_Lasso2 || gameStates == states::s_Upgrade_Lasso3)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.500, 2);
+		modelStack.Rotate(rotateDisplayY, 1, 0, 0);
+		modelStack.Rotate(rotateDisplayX - 45, 0, 1, 0);
+		modelStack.Scale(1.5, 1.5, 1.5);
+		RenderMesh(meshList[GEO_DISPLAY_WHEEL], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.200, 2);
+		modelStack.Scale(30, 30, 1);
+		RenderMesh(meshList[GEO_BUY], false);
+		modelStack.PopMatrix();
 	}
 	if (gameStates == states::s_Upgrade_Darts1 || gameStates == states::s_Upgrade_Darts2 || gameStates == states::s_Upgrade_Darts3)
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.500, 9);
+		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.500, 2);
 		modelStack.Rotate(rotateDisplayY, 1, 0, 0);
 		modelStack.Rotate(rotateDisplayX + 90, 0, 1, 0);
 		modelStack.Scale(5, 5, 5);
 		RenderMesh(meshList[GEO_DISPLAY_DARTS], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.200, 2);
+		modelStack.Scale(30, 30, 1);
+		RenderMesh(meshList[GEO_BUY], false);
 		modelStack.PopMatrix();
 	}
 	if (gameStates == states::s_MapEditor)

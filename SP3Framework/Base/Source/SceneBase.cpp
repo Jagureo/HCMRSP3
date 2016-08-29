@@ -157,6 +157,8 @@ void SceneBase::Init()
 	meshList[HUD_MAPEDITOR2]->textureID = LoadTGA("Image//editorui2.tga");
 	meshList[HUD_MAPEDITOR3] = MeshBuilder::GenerateQuad("gui3", Color(1, 1, 1), 1.f);
 	meshList[HUD_MAPEDITOR3]->textureID = LoadTGA("Image//editorui3.tga");
+	meshList[HUD_TESTMODE] = MeshBuilder::GenerateQuad("testmode", Color(1, 1, 1), 1.f);
+	meshList[HUD_TESTMODE]->textureID = LoadTGA("Image//testmode.tga");
 	meshList[HUD_DELETEICON] = MeshBuilder::GenerateQuad("del", Color(1, 1, 1), 1.f);
 	meshList[HUD_DELETEICON]->textureID = LoadTGA("Image//deleteicon.tga");
 	meshList[HUD_SELECTION] = MeshBuilder::GenerateCube("selection", Color(1, 0, 0), 1.f);
@@ -220,6 +222,11 @@ void SceneBase::Init()
 
 	meshList[GEO_DISPLAY_DARTS] = MeshBuilder::GenerateOBJ("display_wheel", "Object//darts.obj");
 	meshList[GEO_DISPLAY_DARTS]->textureID = LoadTGA("Image//darts.tga");
+
+	meshList[GEO_BUY] = MeshBuilder::GenerateQuad("buyButton", Color(1, 1, 1), 1.f);
+	meshList[GEO_BUY]->textureID = LoadTGA("Image//buyButton.tga");
+	meshList[GEO_SOLD] = MeshBuilder::GenerateQuad("sold", Color(1, 1, 1), 1.f);
+	meshList[GEO_SOLD]->textureID = LoadTGA("Image//SOLD.tga");
 
 	meshList[GEO_LOSE_SCENE] = MeshBuilder::GenerateQuad("loseScreen", Color(1, 1, 1), 1.f);
 	meshList[GEO_LOSE_SCENE]->textureID = LoadTGA("Image//loseScreen.tga");
