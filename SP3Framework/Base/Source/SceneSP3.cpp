@@ -80,10 +80,10 @@ void SceneSP3::Init()
 	leader = NULL;
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
-	testMap.setBackground(meshList[GEO_TESTMAP]);
+	testMap.setBackground(meshList[GEO_TESTMAP2]);
 	testMap.setMapSize(20, 20);
 
-	gameStates = states::s_Menu;
+	gameStates = states::s_Upgrade_Tires1;
 	//gameStates = states::s_Tutorial;
 
 	animalStat = new TextFile(TextFile::ANIMAL);
@@ -672,7 +672,14 @@ void SceneSP3::Update(double dt)
 {
 	SceneBase::Update(dt);
 	time++;
-
+	if (Application::IsKeyPressed('5'))
+	{
+		testMap.setBackground(meshList[GEO_TESTMAP]);
+	}
+	else if (Application::IsKeyPressed('6'))
+	{
+		testMap.setBackground(meshList[GEO_TESTMAP2]);
+	}
 	if (Application::IsKeyPressed('V'))
 	{
 		testMap.optimize();
@@ -1348,7 +1355,9 @@ void SceneSP3::Update(double dt)
 			}
 			else
 			{
-				go->pos = Vector3(go->pos.x + diffx, go->pos.y + diffy, 1);
+				//go->pos = Vector3(go->pos.x + diffx, go->pos.y + diffy, 1);
+				go->pos.x += diffx;
+				go->pos.y += diffy;
 			}
 		}
 		if (gameStates == states::s_Tutorial ||
@@ -3260,6 +3269,13 @@ void SceneSP3::Render()
 			RenderEnemy(go);
 		}
 		RenderLasso(Dalasso);
+
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2.f, m_worldHeight / 2.f, -8.5f);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		//modelStack.Scale(10, 10, 1);
+		RenderMesh(meshList[GEO_BACKGROUND], false);
+		modelStack.PopMatrix();
 	}
 
 	
@@ -3285,16 +3301,18 @@ void SceneSP3::Render()
 	if (gameStates == states::s_Tutorial || gameStates == states::s_Level2 || gameStates == states::s_Level3 || gameStates == states::s_LevelBoss || (gameStates == states::s_MapEditor && testMode))
 	{
 		RenderProps(&testMap);
+		//glDisable(GL_DEPTH_TEST);
 		for (std::vector<GameObject *>::iterator it = testMap.mapBorder.begin(); it != testMap.mapBorder.end(); ++it)
 		{
 			GameObject *go = (GameObject *)*it;
 			modelStack.PushMatrix();
 			//cout << go->pos << endl;
-			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z + 9);
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
 			modelStack.Scale(go->scale.x * 5, go->scale.y * 5, go->scale.z);
 			RenderMesh(meshList[GEO_TREETOP], false);
 			modelStack.PopMatrix();
 		}
+		//glEnable(GL_DEPTH_TEST);
 	}
 	if (gameStates == states::s_Upgrade_Cars1)
 	{

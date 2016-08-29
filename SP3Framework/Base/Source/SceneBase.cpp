@@ -130,9 +130,13 @@ void SceneBase::Init()
 	meshList[GEO_SAWBLADE]->textureID = LoadTGA("Image//sawblade.tga");
 
 	// SP 3 STUFF
-
+	
+	meshList[GEO_BACKGROUND] = MeshBuilder::GenerateQuad("TESTMAPBACKGROUND", Color(1, 1, 1), 1.f);
+	meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image//bg_calm_ocen_water.tga");
 	meshList[GEO_TESTMAP] = MeshBuilder::GenerateQuad("TESTMAP", Color(1, 1, 1), 10.f);
 	meshList[GEO_TESTMAP]->textureID = LoadTGA("Image//grass_lightblue.tga");
+	meshList[GEO_TESTMAP2] = MeshBuilder::GenerateQuad("TESTMAP2", Color(1, 1, 1), 10.f);
+	meshList[GEO_TESTMAP2]->textureID = LoadTGA("Image//grass_lightbrown.tga");
 	meshList[GEO_TREETOP] = MeshBuilder::GenerateQuad("treetop", Color(1, 1, 1), 2.f);
 	meshList[GEO_TREETOP]->textureID = LoadTGA("Image//treetop.tga");
 	meshList[GEO_ROCK] = MeshBuilder::GenerateQuad("rock", Color(1, 1, 1), 1.f);
@@ -165,11 +169,11 @@ void SceneBase::Init()
 	meshList[HUD_GRIDLOCK] = MeshBuilder::GenerateQuad("grid", Color(1, 1, 1), 1.f);
 	meshList[HUD_GRIDLOCK]->textureID = LoadTGA("Image//gridlock.tga");
 	meshList[HUD_RADAR] = MeshBuilder::GenerateQuad("radar", Color(1, 1, 1), 1.f);
-	meshList[HUD_RADAR]->textureID = LoadTGA("Image//radar.tga");
-	meshList[HUD_RADARLINE] = MeshBuilder::GenerateCube("radarline", Color(0, 1, 0), 4.f);
+	meshList[HUD_RADAR]->textureID = LoadTGA("Image//radar2.tga");
+	meshList[HUD_RADARLINE] = MeshBuilder::GenerateCube("radarline", Color(1, 118.f / 255.f, 247.f / 255.f), 4.f);
 	meshList[HUD_RADARDETECT] = MeshBuilder::GenerateCircle("detect", Color(0, 1, 0));
 	meshList[HUD_RADARENEMY] = MeshBuilder::GenerateCircle("detectene", Color(1, 0, 0));
-	meshList[HUD_RADARDETECT]->textureID = LoadTGA("Image//yellow-orange-bubble-clip-art.tga");
+	//meshList[HUD_RADARDETECT]->textureID = LoadTGA("Image//yellow-orange-bubble-clip-art.tga");
 
 	meshList[GEO_TESTENEMY] = MeshBuilder::GenerateSphere("enemy", Color(255, 144, 0), 10, 10, 1.f);
 

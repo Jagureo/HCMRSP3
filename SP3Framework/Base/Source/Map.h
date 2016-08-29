@@ -11,6 +11,7 @@ class playMap
 {
 private:
 	Mesh* background;
+	Mesh* rearBackground;
 	Vector3 mapSize;
 	
 
