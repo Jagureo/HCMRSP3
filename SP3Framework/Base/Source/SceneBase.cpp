@@ -220,10 +220,10 @@ void SceneBase::Init()
 	meshList[GEO_DISPLAY_CAR2]->textureID = LoadTGA("Image//jeep2.tga");
 	meshList[GEO_DISPLAY_CAR3] = MeshBuilder::GenerateOBJ("display_car3", "Object//jeep3.obj");
 	meshList[GEO_DISPLAY_CAR3]->textureID = LoadTGA("Image//jeep3.tga");
-
 	meshList[GEO_DISPLAY_WHEEL] = MeshBuilder::GenerateOBJ("display_wheel", "Object//wheels.obj");
 	meshList[GEO_DISPLAY_WHEEL]->textureID = LoadTGA("Image//wheels.tga");
-
+	meshList[GEO_DISPLAY_ROPE] = MeshBuilder::GenerateOBJ("display_rope", "Object//wheels.obj");
+	meshList[GEO_DISPLAY_ROPE]->textureID = LoadTGA("Image//wheels.tga");
 	meshList[GEO_DISPLAY_DARTS] = MeshBuilder::GenerateOBJ("display_wheel", "Object//darts.obj");
 	meshList[GEO_DISPLAY_DARTS]->textureID = LoadTGA("Image//darts.tga");
 

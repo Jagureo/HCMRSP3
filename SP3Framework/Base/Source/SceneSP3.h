@@ -72,7 +72,9 @@ class SceneSP3 : public SceneBase
 	bool dart2Bought;
 	bool dart3Bought;
 
+	int currentLevel;
 
+	void InitCarStat(string varname);
 
 public:
 	SceneSP3();

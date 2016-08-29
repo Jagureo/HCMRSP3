@@ -7,6 +7,8 @@ using std::string;
 struct rocketCar
 {
 	float engine;
+	float hp;
+	float handling;
 	float topSpeed;
 	float turnSpeed;
 	float mass;
