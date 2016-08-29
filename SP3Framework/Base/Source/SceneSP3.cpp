@@ -3,16 +3,13 @@
 #include "Application.h"
 #include <sstream>
 
-SceneSP3::SceneSP3() : theSoundEngine(NULL), Sound_Engine(NULL), Sound_Throw(NULL)
+SceneSP3::SceneSP3() : theSoundEngine(NULL), Sound_Engine(NULL), Sound_Throw(NULL), Sound_Snap(NULL), Sound_Ding(NULL), Sound_Bump(NULL)
 {
 }
 
 SceneSP3::~SceneSP3()
 {
-	if (theSoundEngine != NULL)
-	{
-		theSoundEngine->drop();
-	}
+	
 }
 string NameofMap;
 void SceneSP3::Init()
@@ -78,13 +75,15 @@ void SceneSP3::Init()
 	updateObjective = 0;
 	fuelAmount = 100.0f;
 	leader = NULL;
+	snapSet = 0;
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP2]);
 	testMap.setMapSize(30, 20);
 
-	gameStates = states::s_Upgrade;
+	//gameStates = states::s_Upgrade_Tires1;
 	//gameStates = states::s_Tutorial;
+	gameStates = states::s_Menu;
 
 	animalStat = new TextFile(TextFile::ANIMAL);
 
@@ -153,6 +152,71 @@ void SceneSP3::engineSound()
 		Sound_Engine = NULL;
 	}
 }
+
+void SceneSP3::throwSound()
+{
+	if (Sound_Throw == NULL)
+	{
+		Sound_Throw = theSoundEngine->play2D("Sound/throw.mp3", false, true);
+	}
+	if (Sound_Throw->getIsPaused() == true)
+	{
+		Sound_Throw->setIsPaused(false);
+	}
+	else if (Sound_Throw->isFinished())
+	{
+		Sound_Throw = NULL;
+	}
+}
+
+void SceneSP3::snapSound()
+{
+	if (Sound_Snap == NULL)
+	{
+		Sound_Snap = theSoundEngine->play2D("Sound/snap.mp3", false, true);
+	}
+	if (Sound_Snap->getIsPaused() == true)
+	{
+		Sound_Snap->setIsPaused(false);
+	}
+	else if (Sound_Snap->isFinished())
+	{
+		Sound_Snap = NULL;
+	}
+}
+
+void SceneSP3::dingSound()
+{
+	if (Sound_Ding == NULL)
+	{
+		Sound_Ding = theSoundEngine->play2D("Sound/ding.mp3", false, true);
+	}
+	if (Sound_Ding->getIsPaused() == true)
+	{
+		Sound_Ding->setIsPaused(false);
+	}
+	else if (Sound_Ding->isFinished())
+	{
+		Sound_Ding = NULL;
+	}
+}
+
+void SceneSP3::bumpSound()
+{
+	if (Sound_Bump == NULL)
+	{
+		Sound_Bump = theSoundEngine->play2D("Sound/bump.mp3", false, true);
+	}
+	if (Sound_Bump->getIsPaused() == true)
+	{
+		Sound_Bump->setIsPaused(false);
+	}
+	else if (Sound_Bump->isFinished())
+	{
+		Sound_Bump = NULL;
+	}
+}
+
 
 GameObject* SceneSP3::FetchGO()
 {
@@ -1519,9 +1583,15 @@ void SceneSP3::Update(double dt)
 							}
 
 							goE->checkCollision(enemyList);
-							if (goE->getPos().x > player1->pos.x - 7 && goE->getPos().x < player1->pos.x + 7 && goE->getPos().y > player1->pos.y - 7 && goE->getPos().y < player1->pos.y + 7 /*&& goE->leader == 0*/ && player1->vel != (0,0,0))
+							if (goE->getPos().x > player1->pos.x - 7 && goE->getPos().x < player1->pos.x + 7 && goE->getPos().y > player1->pos.y - 7 && goE->getPos().y < player1->pos.y + 7)
 							{
-								goE->addStrength(50);
+								/*if (Sound_Bump != NULL)
+								{
+									Sound_Bump->stop();
+								}*/
+								bumpSound();
+								bumpSound();
+								goE->addStrength(-50);
 								if (goE->getStrength() <= 0)
 								{
 									goE->setActive(false);
@@ -1553,6 +1623,8 @@ void SceneSP3::Update(double dt)
 									goE->setCaught(0);
 									if (goE->getActive() == 0)
 									{
+										dingSound();
+										dingSound();
 										if (goE->getType() == 0)
 										{
 											points++;
@@ -1606,6 +1678,15 @@ void SceneSP3::Update(double dt)
 				//m_ghost->pos.Set(worldX, worldY, 0);
 				//m_ghost->active = true;
 				Dalasso->throwLasso(player1->pos, Vector3(worldX, worldY, 0));
+				/*if (Sound_Throw != NULL)
+				{
+					Sound_Throw->stop();
+				}*/
+				throwSound();
+				throwSound();
+
+				snapSet = 1;
+				
 
 			}
 			else
@@ -1615,6 +1696,16 @@ void SceneSP3::Update(double dt)
 
 			if (Dalasso->getLassoState() == 3)
 			{
+				if (snapSet == 1)
+				{
+					/*if (Sound_Snap != NULL)
+					{
+						Sound_Snap->stop();
+					}*/
+					snapSound();
+					snapSound();
+					snapSet = 0;
+				}
 				if (player1->engine > 0)
 				{
 					player1->engine -= 1;
@@ -3638,6 +3729,26 @@ void SceneSP3::Render()
 void SceneSP3::Exit()
 {
 	SceneBase::Exit();
+	if (Sound_Snap != NULL)
+	{
+		Sound_Snap->drop();
+	}
+	if (Sound_Engine != NULL)
+	{
+		Sound_Engine->drop();
+	}
+	if (Sound_Bump != NULL)
+	{
+		Sound_Bump->drop();
+	}
+	if (Sound_Throw != NULL)
+	{
+		Sound_Throw->drop();
+	}
+	if (theSoundEngine != NULL)
+	{
+		theSoundEngine->drop();
+	}
 	//Cleanup GameObjects
 	ofstream file;
 	file.open("tempsave.txt", ios::trunc);

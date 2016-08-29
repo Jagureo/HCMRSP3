@@ -35,7 +35,7 @@ enemy::enemy(Vector3 pos, int eType, float getSta, float getSpd, float getStr)
 
 	}
 	stamina = getSta;
-	speed = getSpd * Math::RandFloatMinMax(0.8, 1.2);
+	speed = getSpd * Math::RandFloatMinMax(0.7, 1.3);
 	strength = getStr;
 	//strength = 99999;
 }

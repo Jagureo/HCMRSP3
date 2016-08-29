@@ -116,6 +116,9 @@ public:
 
 	void engineSound();
 	void throwSound();
+	void snapSound();
+	void dingSound();
+	void bumpSound();
 
 	string FileName;
 protected:
@@ -172,9 +175,13 @@ protected:
 	float m1, m2;
 	Vector3 u1, u2, v1, v2;
 
+	bool snapSet;
 	ISoundEngine* theSoundEngine;
 	ISound* Sound_Engine;
 	ISound* Sound_Throw;
+	ISound* Sound_Snap;
+	ISound* Sound_Ding;
+	ISound* Sound_Bump;
 };
 
 #endif
