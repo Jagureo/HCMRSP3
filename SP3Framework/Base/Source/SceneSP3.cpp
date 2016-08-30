@@ -76,7 +76,6 @@ void SceneSP3::Init()
 	fuelAmount = 100.0f;
 	leader = NULL;
 	snapSet = 0;
-	sound = 1;
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP2]);
@@ -217,6 +216,7 @@ void SceneSP3::bumpSound()
 		Sound_Bump = NULL;
 	}
 }
+
 
 void SceneSP3::eraseEnemy()
 {
@@ -854,11 +854,7 @@ void SceneSP3::Update(double dt)
 	{
 		hi = false;
 	}
-	if (gameStates == states::s_Tutorial ||
-		gameStates == states::s_Level2 ||
-		gameStates == states::s_Level3 ||
-		gameStates == states::s_LevelBoss ||
-		gameStates == states::s_MapEditor && testMode == 1)
+	if (gameStates != states::s_MapEditor)
 	{
 		playerControl();
 		if (Application::IsKeyPressed('W') || (Application::IsKeyPressed('S')))
@@ -1631,11 +1627,8 @@ void SceneSP3::Update(double dt)
 								{
 									Sound_Bump->stop();
 								}*/
-								if (sound == 1)
-								{
-									bumpSound();
-									bumpSound();
-								}
+								bumpSound();
+								bumpSound();
 								goE->addStrength(-50);
 								if (goE->getStrength() <= 0)
 								{
@@ -1668,11 +1661,8 @@ void SceneSP3::Update(double dt)
 									goE->setCaught(0);
 									if (goE->getActive() == 0)
 									{
-										if (sound == 1)
-										{
-											dingSound();
-											dingSound();
-										}
+										dingSound();
+										dingSound();
 										if (goE->getType() == 0)
 										{
 											points++;
@@ -1730,11 +1720,8 @@ void SceneSP3::Update(double dt)
 				{
 					Sound_Throw->stop();
 				}*/
-				if (sound == 1)
-				{
-					throwSound();
-					throwSound();
-				}
+				throwSound();
+				throwSound();
 
 				snapSet = 1;
 				
@@ -1753,11 +1740,8 @@ void SceneSP3::Update(double dt)
 					{
 						Sound_Snap->stop();
 					}*/
-					if (sound == 1)
-					{
-						snapSound();
-						snapSound();
-					}
+					snapSound();
+					snapSound();
 					snapSet = 0;
 				}
 				if (player1->engine > 0)
@@ -2260,6 +2244,46 @@ void SceneSP3::mapEditorUpdate(double dt)
 				{
 					go->dead = true;
 				}
+				if (go->dead == true)
+				{
+					continue;
+				}
+				if (go->type == GameObject::MAP_LION)
+				{
+					animalStat->GetAnimalStat("Lion");
+					enemy* animal = newEnemy(go->pos.x - mapPosition.x, go->pos.y - mapPosition.y, 0, 2, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+					animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+					animal->setLeader(0);
+					enemyList.push_back(animal);
+					go->active = false;
+				}
+				else if (go->type == GameObject::MAP_ZEBRA)
+				{
+					animalStat->GetAnimalStat("Zebra");
+					enemy* animal = newEnemy(go->pos.x - mapPosition.x, go->pos.y - mapPosition.y, 0, 0, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+					animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+					animal->setLeader(0);
+					enemyList.push_back(animal);
+					go->active = false;
+				}
+				else if (go->type == GameObject::MAP_RHINO)
+				{
+					animalStat->GetAnimalStat("Rhino");
+					enemy* animal = newEnemy(go->pos.x - mapPosition.x, go->pos.y - mapPosition.y, 0, 1, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+					animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+					animal->setLeader(0);
+					enemyList.push_back(animal);
+					go->active = false;
+				}
+				else if (go->type == GameObject::MAP_HUMAN)
+				{
+					animalStat->GetAnimalStat("Human");
+					enemy* animal = newEnemy(go->pos.x - mapPosition.x, go->pos.y - mapPosition.y, 0, 3, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+					animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+					animal->setLeader(0);
+					enemyList.push_back(animal);
+					go->active = false;
+				}
 			}
 		}
 		if (panel2)
@@ -2285,13 +2309,9 @@ void SceneSP3::mapEditorUpdate(double dt)
 			}
 		}
 	}
-	else if (gameStates == states::s_Tutorial ||
-		gameStates == states::s_Level2 ||
-		gameStates == states::s_Level3 ||
-		gameStates == states::s_LevelBoss ||
-		gameStates == states::s_MapEditor && testMode == 1)
+	else if (testMode == true)
 	{
-		//playerControl();
+		playerControl();
 		if (Application::IsKeyPressed(VK_F2))
 		{
 			player1->vel.SetZero();
@@ -2300,6 +2320,11 @@ void SceneSP3::mapEditorUpdate(double dt)
 				GameObject *go = (GameObject *)*it;
 				if (go->dead != true)
 					go->active = true;
+			}
+			for (std::vector<enemy *>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+			{
+				enemy *go = (enemy *)*it;
+				go->setActive(false);
 			}
 			testMode = false;
 			deleteMode = 0;
@@ -2386,24 +2411,16 @@ void SceneSP3::RenderGO(GameObject *go)
 
 		break;
 	case GameObject::GO_CAR:
-		if (gameStates == states::s_Tutorial ||
-			gameStates == states::s_Level2 ||
-			gameStates == states::s_Level3 ||
-			gameStates == states::s_LevelBoss ||
-			gameStates == states::s_MapEditor && testMode == 1)
-		{
-
-			modelStack.PushMatrix();
-			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
-			modelStack.Rotate(-10, 1, 0, 0);
-			modelStack.Rotate(go->rotationAngle, 0, 0, 1);
-			modelStack.Rotate(90, 0, 0, 1);
-			modelStack.Rotate(90, 1, 0, 0);
-			modelStack.Scale(go->scale.x / 10, go->scale.y / 5, go->scale.z / 2);
-			modelStack.Scale(2, 2.5, 3.5);
-			RenderMesh(meshList[GEO_DISPLAY_CAR1], false);
-			modelStack.PopMatrix();
-		}
+		modelStack.PushMatrix();
+		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+		modelStack.Rotate(-10, 1, 0, 0);
+		modelStack.Rotate(go->rotationAngle, 0, 0, 1);
+		modelStack.Rotate(90, 0, 0, 1);
+		modelStack.Rotate(90, 1, 0, 0);
+		modelStack.Scale(go->scale.x / 10, go->scale.y / 5, go->scale.z / 2);
+		modelStack.Scale(2, 2.5, 3.5);
+		RenderMesh(meshList[GEO_DISPLAY_CAR1], false);
+		modelStack.PopMatrix();
 		
 		break;
 	case GameObject::GO_PILLAR:
