@@ -76,6 +76,7 @@ void SceneSP3::Init()
 	fuelAmount = 100.0f;
 	leader = NULL;
 	snapSet = 0;
+	sound = 1;
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP2]);
@@ -844,7 +845,11 @@ void SceneSP3::Update(double dt)
 	{
 		hi = false;
 	}
-	if (gameStates != states::s_MapEditor)
+	if (gameStates == states::s_Tutorial ||
+		gameStates == states::s_Level2 ||
+		gameStates == states::s_Level3 ||
+		gameStates == states::s_LevelBoss ||
+		gameStates == states::s_MapEditor && testMode == 1)
 	{
 		playerControl();
 		if (Application::IsKeyPressed('W') || (Application::IsKeyPressed('S')))
@@ -1589,8 +1594,11 @@ void SceneSP3::Update(double dt)
 								{
 									Sound_Bump->stop();
 								}*/
-								bumpSound();
-								bumpSound();
+								if (sound == 1)
+								{
+									bumpSound();
+									bumpSound();
+								}
 								goE->addStrength(-50);
 								if (goE->getStrength() <= 0)
 								{
@@ -1623,8 +1631,11 @@ void SceneSP3::Update(double dt)
 									goE->setCaught(0);
 									if (goE->getActive() == 0)
 									{
-										dingSound();
-										dingSound();
+										if (sound == 1)
+										{
+											dingSound();
+											dingSound();
+										}
 										if (goE->getType() == 0)
 										{
 											points++;
@@ -1682,8 +1693,11 @@ void SceneSP3::Update(double dt)
 				{
 					Sound_Throw->stop();
 				}*/
-				throwSound();
-				throwSound();
+				if (sound == 1)
+				{
+					throwSound();
+					throwSound();
+				}
 
 				snapSet = 1;
 				
@@ -1702,8 +1716,11 @@ void SceneSP3::Update(double dt)
 					{
 						Sound_Snap->stop();
 					}*/
-					snapSound();
-					snapSound();
+					if (sound == 1)
+					{
+						snapSound();
+						snapSound();
+					}
 					snapSet = 0;
 				}
 				if (player1->engine > 0)
@@ -1717,10 +1734,9 @@ void SceneSP3::Update(double dt)
 			}
 			
 		}
-		if (objective != NULL)
+		if (gameStates == states::s_Options)
 		{
 
-			std::cout << objective << std::endl;
 		}
 }
 
@@ -2217,7 +2233,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 	}
 	else if (testMode == true)
 	{
-		playerControl();
+		//playerControl();
 		if (Application::IsKeyPressed(VK_F2))
 		{
 			player1->vel.SetZero();
@@ -2311,17 +2327,26 @@ void SceneSP3::RenderGO(GameObject *go)
 		modelStack.PopMatrix();
 
 		break;
+
 	case GameObject::GO_CAR:
-		modelStack.PushMatrix();
-		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
-		modelStack.Rotate(-10, 1, 0, 0);
-		modelStack.Rotate(go->rotationAngle, 0, 0, 1);
-		modelStack.Rotate(90, 0, 0, 1);
-		modelStack.Rotate(90, 1, 0, 0);
-		modelStack.Scale(go->scale.x / 10, go->scale.y / 5, go->scale.z / 2);
-		modelStack.Scale(2, 2.5, 3.5);
-		RenderMesh(meshList[GEO_DISPLAY_CAR1], false);
-		modelStack.PopMatrix();
+		if (gameStates == states::s_Tutorial ||
+			gameStates == states::s_Level2 ||
+			gameStates == states::s_Level3 ||
+			gameStates == states::s_LevelBoss ||
+			gameStates == states::s_MapEditor && testMode == 1)
+		{
+
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Rotate(-10, 1, 0, 0);
+			modelStack.Rotate(go->rotationAngle, 0, 0, 1);
+			modelStack.Rotate(90, 0, 0, 1);
+			modelStack.Rotate(90, 1, 0, 0);
+			modelStack.Scale(go->scale.x / 10, go->scale.y / 5, go->scale.z / 2);
+			modelStack.Scale(2, 2.5, 3.5);
+			RenderMesh(meshList[GEO_DISPLAY_CAR1], false);
+			modelStack.PopMatrix();
+		}
 		
 		break;
 	case GameObject::GO_PILLAR:
@@ -3215,7 +3240,15 @@ void SceneSP3::renderMenu()
 		RenderMesh(meshList[GEO_MENU_QUIT], false);
 		modelStack.PopMatrix();
 	}
-	if (gameStates == states::s_LevelSelect)
+	else if (gameStates == states::s_Options)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -4);
+		modelStack.Scale(m_worldWidth/2, m_worldHeight/2, 0);
+		RenderMesh(meshList[GEO_OPTIONS], false);
+		modelStack.PopMatrix();
+	}
+	else if (gameStates == states::s_LevelSelect)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -3);
@@ -3224,7 +3257,7 @@ void SceneSP3::renderMenu()
 		modelStack.PopMatrix();
 
 	}
-	if (gameStates == states::s_CustomLevelSelect)
+	else if (gameStates == states::s_CustomLevelSelect)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -3);
@@ -3233,7 +3266,7 @@ void SceneSP3::renderMenu()
 		modelStack.PopMatrix();
 
 	}
-	if (gameStates == states::s_Instructions)
+	else if (gameStates == states::s_Instructions)
 	{
 		modelStack.PushMatrix();
 		//modelStack.Translate(140, 58, 4);
@@ -3248,7 +3281,7 @@ void SceneSP3::renderMenu()
 			gameStates = states::s_Menu;
 		}
 	}
-	if (gameStates == states::s_Upgrade)
+	else if (gameStates == states::s_Upgrade)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
@@ -3256,7 +3289,7 @@ void SceneSP3::renderMenu()
 		RenderMesh(meshList[GEO_UPGRADE_BACKGROUND], false);
 		modelStack.PopMatrix();
 	}
-	if (gameStates == states::s_Upgrade_Cars1 || gameStates == states::s_Upgrade_Cars2 || gameStates == states::s_Upgrade_Cars3)
+	else if (gameStates == states::s_Upgrade_Cars1 || gameStates == states::s_Upgrade_Cars2 || gameStates == states::s_Upgrade_Cars3)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -7);
@@ -3286,7 +3319,7 @@ void SceneSP3::renderMenu()
 			gameStates = states::s_Upgrade;
 		}
 	}
-	if (gameStates == states::s_Upgrade_Tires1 || gameStates == states::s_Upgrade_Tires2 || gameStates == states::s_Upgrade_Tires3)
+	else if (gameStates == states::s_Upgrade_Tires1 || gameStates == states::s_Upgrade_Tires2 || gameStates == states::s_Upgrade_Tires3)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -5);
@@ -3315,7 +3348,7 @@ void SceneSP3::renderMenu()
 			gameStates = states::s_Upgrade;
 		}
 	}
-	if (gameStates == states::s_Upgrade_Lasso1 || gameStates == states::s_Upgrade_Lasso2 || gameStates == states::s_Upgrade_Lasso3)
+	else if (gameStates == states::s_Upgrade_Lasso1 || gameStates == states::s_Upgrade_Lasso2 || gameStates == states::s_Upgrade_Lasso3)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -5);
@@ -3345,7 +3378,7 @@ void SceneSP3::renderMenu()
 			gameStates = states::s_Upgrade;
 		}
 	}
-	if (gameStates == states::s_Upgrade_Darts1 || gameStates == states::s_Upgrade_Darts2 || gameStates == states::s_Upgrade_Darts3)
+	else if (gameStates == states::s_Upgrade_Darts1 || gameStates == states::s_Upgrade_Darts2 || gameStates == states::s_Upgrade_Darts3)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -5);
@@ -3376,7 +3409,16 @@ void SceneSP3::renderMenu()
 			gameStates = states::s_Upgrade;
 		}
 	}
-
+	else if (gameStates == states::s_Lose)
+	{
+		modelStack.PushMatrix();
+		//modelStack.Translate(140, 58, 4);
+		//modelStack.Scale(50, 20, 0);
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[GEO_LOSE_SCENE], false);
+		modelStack.PopMatrix();
+	}
 	// if SOLD
 	if (car1Bought == true)
 	{
@@ -3411,16 +3453,7 @@ void SceneSP3::renderMenu()
 		modelStack.PopMatrix();
 	}
 
-	if (gameStates == states::s_Lose)
-	{
-		modelStack.PushMatrix();
-		//modelStack.Translate(140, 58, 4);
-		//modelStack.Scale(50, 20, 0);
-		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
-		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
-		RenderMesh(meshList[GEO_LOSE_SCENE], false);
-		modelStack.PopMatrix();
-	}
+	
 }
 
 void SceneSP3::Render()
