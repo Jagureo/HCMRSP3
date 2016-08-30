@@ -120,6 +120,8 @@ public:
 	void dingSound();
 	void bumpSound();
 
+	void eraseEnemy();
+
 	string FileName;
 protected:
 

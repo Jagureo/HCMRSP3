@@ -218,6 +218,15 @@ void SceneSP3::bumpSound()
 	}
 }
 
+void SceneSP3::eraseEnemy()
+{
+	for (std::vector<enemy *>::iterator it = enemyList.begin(); it != enemyList.end();)
+	{
+		enemy *go = (enemy *)*it;
+		it = enemyList.erase(it++);
+	}
+}
+
 
 GameObject* SceneSP3::FetchGO()
 {
