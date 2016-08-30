@@ -142,7 +142,7 @@ void SceneSP3::engineSound()
 {
 	if (Sound_Engine == NULL)
 	{
-		Sound_Engine = theSoundEngine->play2D("Sound/vroom.mp3", false, true);
+		Sound_Engine = theSoundEngine->play2D("Sound/vroom.mp3", true, true);
 	}
 	//if (Sound_Engine->getIsPaused() == true)
 	//{
@@ -190,7 +190,7 @@ void SceneSP3::backSound()
 {
 	if (Sound_Back == NULL)
 	{
-		Sound_Back = theSoundEngine->play2D("Sound/song.mp3", false, true);
+		Sound_Back = theSoundEngine->play2D("Sound/song.mp3", true, true);
 	}
 	/*if (Sound_Back->getIsPaused() == true)
 	{
