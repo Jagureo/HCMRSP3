@@ -76,6 +76,7 @@ void SceneSP3::Init()
 	fuelAmount = 100.0f;
 	leader = NULL;
 	snapSet = 0;
+	sound = 1;
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP2]);
@@ -90,7 +91,8 @@ void SceneSP3::Init()
 	if (!theSoundEngine)
 	{
 	}
-
+	engineSound();
+	backSound();
 	/*for (int i = 0; i < 7; ++i)
 	{
 		animalStat->GetAnimalStat("Zebra");
@@ -142,29 +144,21 @@ void SceneSP3::engineSound()
 	{
 		Sound_Engine = theSoundEngine->play2D("Sound/vroom.mp3", false, true);
 	}
-	if (Sound_Engine->getIsPaused() == true)
-	{
-		Sound_Engine->setIsPaused(false);
-	}
-	else if (Sound_Engine->isFinished())
-	{
-		Sound_Engine = NULL;
-	}
+	//if (Sound_Engine->getIsPaused() == true)
+	//{
+	//	Sound_Engine->setIsPaused(false);
+	//}
+	//else if (Sound_Engine->isFinished())
+	//{
+	//	Sound_Engine = NULL;
+	//}
 }
 
 void SceneSP3::throwSound()
 {
 	if (Sound_Throw == NULL)
 	{
-		Sound_Throw = theSoundEngine->play2D("Sound/throw.mp3", false, true);
-	}
-	if (Sound_Throw->getIsPaused() == true)
-	{
-		Sound_Throw->setIsPaused(false);
-	}
-	else if (Sound_Throw->isFinished())
-	{
-		Sound_Throw = NULL;
+		Sound_Throw = theSoundEngine->play2D("Sound/throw.mp3", false, false);
 	}
 }
 
@@ -172,15 +166,7 @@ void SceneSP3::snapSound()
 {
 	if (Sound_Snap == NULL)
 	{
-		Sound_Snap = theSoundEngine->play2D("Sound/snap.mp3", false, true);
-	}
-	if (Sound_Snap->getIsPaused() == true)
-	{
-		Sound_Snap->setIsPaused(false);
-	}
-	else if (Sound_Snap->isFinished())
-	{
-		Sound_Snap = NULL;
+		Sound_Snap = theSoundEngine->play2D("Sound/snap.mp3", false, false);
 	}
 }
 
@@ -188,15 +174,7 @@ void SceneSP3::dingSound()
 {
 	if (Sound_Ding == NULL)
 	{
-		Sound_Ding = theSoundEngine->play2D("Sound/ding.mp3", false, true);
-	}
-	if (Sound_Ding->getIsPaused() == true)
-	{
-		Sound_Ding->setIsPaused(false);
-	}
-	else if (Sound_Ding->isFinished())
-	{
-		Sound_Ding = NULL;
+		Sound_Ding = theSoundEngine->play2D("Sound/ding.mp3", false, false);
 	}
 }
 
@@ -204,15 +182,7 @@ void SceneSP3::bumpSound()
 {
 	if (Sound_Bump == NULL)
 	{
-		Sound_Bump = theSoundEngine->play2D("Sound/bump.mp3", false, true);
-	}
-	if (Sound_Bump->getIsPaused() == true)
-	{
-		Sound_Bump->setIsPaused(false);
-	}
-	else if (Sound_Bump->isFinished())
-	{
-		Sound_Bump = NULL;
+		Sound_Bump = theSoundEngine->play2D("Sound/bump.mp3", false, false);
 	}
 }
 
@@ -222,14 +192,14 @@ void SceneSP3::backSound()
 	{
 		Sound_Back = theSoundEngine->play2D("Sound/song.mp3", false, true);
 	}
-	if (Sound_Back->getIsPaused() == true)
+	/*if (Sound_Back->getIsPaused() == true)
 	{
 		Sound_Back->setIsPaused(false);
 	}
 	else if (Sound_Back->isFinished())
 	{
 		Sound_Back = NULL;
-	}
+	}*/
 }
 
 void SceneSP3::eraseEnemy()
@@ -868,7 +838,11 @@ void SceneSP3::Update(double dt)
 	{
 		hi = false;
 	}
-	if (gameStates != states::s_MapEditor)
+	if (gameStates == states::s_Tutorial ||
+		gameStates == states::s_Level2 ||
+		gameStates == states::s_Level3 ||
+		gameStates == states::s_LevelBoss ||
+		gameStates == states::s_MapEditor && testMode == 1)
 	{
 		playerControl();
 		if (Application::IsKeyPressed('W') || (Application::IsKeyPressed('S')))
@@ -886,15 +860,15 @@ void SceneSP3::Update(double dt)
 	{
 		gameStates = states::s_Lose;
 	}
-	if (sound == 1)
+	if (sound == 1 && Sound_Engine != NULL)
 	{
 		if (player1->engine != 0)
 		{
-			engineSound();
+			Sound_Engine->setIsPaused(false);
 		}
-		else if (Sound_Engine != NULL)
+		else
 		{
-			Sound_Engine->stop();
+			Sound_Engine->setIsPaused(true);
 		}
 	}
 	
@@ -907,9 +881,8 @@ void SceneSP3::Update(double dt)
 		gameStates != states::s_Level3 ||
 		gameStates != states::s_LevelBoss)
 	{
-		if (sound == 1)
+		/*if (sound == 1)
 		{
-
 			backSound();
 		}
 		else
@@ -918,7 +891,7 @@ void SceneSP3::Update(double dt)
 			{
 				Sound_Back->stop();
 			}
-		}
+		}*/
 		if (bLButtonState && !Application::IsMousePressed(0))
 		{
 			bLButtonState = false;
@@ -1034,12 +1007,13 @@ void SceneSP3::Update(double dt)
 					{
 						if (sound == 1)
 						{
-
 							sound = 0;
+							Sound_Back->setIsPaused(true);
 						}
 						else
 						{
 							sound = 1;
+							Sound_Back->setIsPaused(false);
 						}
 					}
 				}
@@ -1499,10 +1473,16 @@ void SceneSP3::Update(double dt)
 			gameStates == states::s_LevelBoss ||
 			gameStates == states::s_MapEditor)
 		{
-
-			if (Sound_Back != NULL)
+			if (sound == 1 && Sound_Back != NULL)
 			{
-				Sound_Back->stop();
+				Sound_Back->setIsPaused(true);
+			}
+		}
+		else
+		{
+			if (sound == 1 && Sound_Back != NULL)
+			{
+				Sound_Back->setIsPaused(false);
 			}
 		}
 		if (gameStates == states::s_Tutorial ||
@@ -1660,12 +1640,10 @@ void SceneSP3::Update(double dt)
 							goE->checkCollision(enemyList);
 							if (goE->getPos().x > player1->pos.x - 7 && goE->getPos().x < player1->pos.x + 7 && goE->getPos().y > player1->pos.y - 7 && goE->getPos().y < player1->pos.y + 7)
 							{
-								/*if (Sound_Bump != NULL)
+								if (sound == 1)
 								{
-									Sound_Bump->stop();
-								}*/
-								bumpSound();
-								bumpSound();
+									bumpSound();
+								}
 								goE->addStrength(-50);
 								if (goE->getStrength() <= 0)
 								{
@@ -1698,8 +1676,10 @@ void SceneSP3::Update(double dt)
 									goE->setCaught(0);
 									if (goE->getActive() == 0)
 									{
-										dingSound();
-										dingSound();
+										if (sound == 1)
+										{
+											dingSound();
+										}
 										if (goE->getType() == 0)
 										{
 											points++;
@@ -1753,12 +1733,10 @@ void SceneSP3::Update(double dt)
 				//m_ghost->pos.Set(worldX, worldY, 0);
 				//m_ghost->active = true;
 				Dalasso->throwLasso(player1->pos, Vector3(worldX, worldY, 0));
-				/*if (Sound_Throw != NULL)
+				if (sound == 1)
 				{
-					Sound_Throw->stop();
-				}*/
-				throwSound();
-				throwSound();
+					throwSound();
+				}
 
 				snapSet = 1;
 				
@@ -1773,12 +1751,10 @@ void SceneSP3::Update(double dt)
 			{
 				if (snapSet == 1)
 				{
-					/*if (Sound_Snap != NULL)
+					if (sound == 1)
 					{
-						Sound_Snap->stop();
-					}*/
-					snapSound();
-					snapSound();
+						snapSound();
+					}
 					snapSet = 0;
 				}
 				if (player1->engine > 0)
@@ -2348,7 +2324,6 @@ void SceneSP3::mapEditorUpdate(double dt)
 	}
 	else if (testMode == true)
 	{
-		playerControl();
 		if (Application::IsKeyPressed(VK_F2))
 		{
 			player1->vel.SetZero();
@@ -2448,16 +2423,23 @@ void SceneSP3::RenderGO(GameObject *go)
 
 		break;
 	case GameObject::GO_CAR:
-		modelStack.PushMatrix();
-		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
-		modelStack.Rotate(-10, 1, 0, 0);
-		modelStack.Rotate(go->rotationAngle, 0, 0, 1);
-		modelStack.Rotate(90, 0, 0, 1);
-		modelStack.Rotate(90, 1, 0, 0);
-		modelStack.Scale(go->scale.x / 10, go->scale.y / 5, go->scale.z / 2);
-		modelStack.Scale(2, 2.5, 3.5);
-		RenderMesh(meshList[GEO_DISPLAY_CAR1], false);
-		modelStack.PopMatrix();
+		if (gameStates == states::s_Tutorial ||
+			gameStates == states::s_Level2 ||
+			gameStates == states::s_Level3 ||
+			gameStates == states::s_LevelBoss ||
+			gameStates == states::s_MapEditor && testMode == 1)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Rotate(-10, 1, 0, 0);
+			modelStack.Rotate(go->rotationAngle, 0, 0, 1);
+			modelStack.Rotate(90, 0, 0, 1);
+			modelStack.Rotate(90, 1, 0, 0);
+			modelStack.Scale(go->scale.x / 10, go->scale.y / 5, go->scale.z / 2);
+			modelStack.Scale(2, 2.5, 3.5);
+			RenderMesh(meshList[GEO_DISPLAY_CAR1], false);
+			modelStack.PopMatrix();
+		}
 		
 		break;
 	case GameObject::GO_PILLAR:
