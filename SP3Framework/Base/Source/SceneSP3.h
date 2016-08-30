@@ -176,6 +176,7 @@ protected:
 	Vector3 u1, u2, v1, v2;
 
 	bool snapSet;
+	bool sound;
 	ISoundEngine* theSoundEngine;
 	ISound* Sound_Engine;
 	ISound* Sound_Throw;

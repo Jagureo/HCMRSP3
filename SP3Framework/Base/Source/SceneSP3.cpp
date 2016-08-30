@@ -76,6 +76,7 @@ void SceneSP3::Init()
 	fuelAmount = 100.0f;
 	leader = NULL;
 	snapSet = 0;
+	sound = 1;
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP2]);
@@ -844,7 +845,11 @@ void SceneSP3::Update(double dt)
 	{
 		hi = false;
 	}
-	if (gameStates != states::s_MapEditor)
+	if (gameStates == states::s_Tutorial ||
+		gameStates == states::s_Level2 ||
+		gameStates == states::s_Level3 ||
+		gameStates == states::s_LevelBoss ||
+		gameStates == states::s_MapEditor && testMode == 1)
 	{
 		playerControl();
 		if (Application::IsKeyPressed('W') || (Application::IsKeyPressed('S')))
@@ -1617,8 +1622,11 @@ void SceneSP3::Update(double dt)
 								{
 									Sound_Bump->stop();
 								}*/
-								bumpSound();
-								bumpSound();
+								if (sound == 1)
+								{
+									bumpSound();
+									bumpSound();
+								}
 								goE->addStrength(-50);
 								if (goE->getStrength() <= 0)
 								{
@@ -1651,8 +1659,11 @@ void SceneSP3::Update(double dt)
 									goE->setCaught(0);
 									if (goE->getActive() == 0)
 									{
-										dingSound();
-										dingSound();
+										if (sound == 1)
+										{
+											dingSound();
+											dingSound();
+										}
 										if (goE->getType() == 0)
 										{
 											points++;
@@ -1710,8 +1721,11 @@ void SceneSP3::Update(double dt)
 				{
 					Sound_Throw->stop();
 				}*/
-				throwSound();
-				throwSound();
+				if (sound == 1)
+				{
+					throwSound();
+					throwSound();
+				}
 
 				snapSet = 1;
 				
@@ -1730,8 +1744,11 @@ void SceneSP3::Update(double dt)
 					{
 						Sound_Snap->stop();
 					}*/
-					snapSound();
-					snapSound();
+					if (sound == 1)
+					{
+						snapSound();
+						snapSound();
+					}
 					snapSet = 0;
 				}
 				if (player1->engine > 0)
@@ -2259,9 +2276,13 @@ void SceneSP3::mapEditorUpdate(double dt)
 			}
 		}
 	}
-	else if (testMode == true)
+	else if (gameStates == states::s_Tutorial ||
+		gameStates == states::s_Level2 ||
+		gameStates == states::s_Level3 ||
+		gameStates == states::s_LevelBoss ||
+		gameStates == states::s_MapEditor && testMode == 1)
 	{
-		playerControl();
+		//playerControl();
 		if (Application::IsKeyPressed(VK_F2))
 		{
 			player1->vel.SetZero();
@@ -2356,16 +2377,24 @@ void SceneSP3::RenderGO(GameObject *go)
 
 		break;
 	case GameObject::GO_CAR:
-		modelStack.PushMatrix();
-		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
-		modelStack.Rotate(-10, 1, 0, 0);
-		modelStack.Rotate(go->rotationAngle, 0, 0, 1);
-		modelStack.Rotate(90, 0, 0, 1);
-		modelStack.Rotate(90, 1, 0, 0);
-		modelStack.Scale(go->scale.x / 10, go->scale.y / 5, go->scale.z / 2);
-		modelStack.Scale(2, 2.5, 3.5);
-		RenderMesh(meshList[GEO_DISPLAY_CAR1], false);
-		modelStack.PopMatrix();
+		if (gameStates == states::s_Tutorial ||
+			gameStates == states::s_Level2 ||
+			gameStates == states::s_Level3 ||
+			gameStates == states::s_LevelBoss ||
+			gameStates == states::s_MapEditor && testMode == 1)
+		{
+
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Rotate(-10, 1, 0, 0);
+			modelStack.Rotate(go->rotationAngle, 0, 0, 1);
+			modelStack.Rotate(90, 0, 0, 1);
+			modelStack.Rotate(90, 1, 0, 0);
+			modelStack.Scale(go->scale.x / 10, go->scale.y / 5, go->scale.z / 2);
+			modelStack.Scale(2, 2.5, 3.5);
+			RenderMesh(meshList[GEO_DISPLAY_CAR1], false);
+			modelStack.PopMatrix();
+		}
 		
 		break;
 	case GameObject::GO_PILLAR:
