@@ -867,14 +867,17 @@ void SceneSP3::Update(double dt)
 	{
 		gameStates = states::s_Lose;
 	}
+	if (sound == 1)
+	{
 
-	if (player1->engine != 0)
-	{
-		engineSound();
-	}
-	else if (Sound_Engine != NULL)
-	{
-		Sound_Engine->stop();
+		if (player1->engine != 0)
+		{
+			engineSound();
+		}
+		else if (Sound_Engine != NULL)
+		{
+			Sound_Engine->stop();
+		}
 	}
 	
 
@@ -992,6 +995,31 @@ void SceneSP3::Update(double dt)
 					}
 				}
 
+			}
+			else if (gameStates == states::s_Options)
+			{
+				if (worldX > 0.341f * m_worldWidth && worldX < 0.647f * m_worldWidth)
+				{
+					if (worldY > 73.64f && worldY < 77.26f)
+					{
+						if (sound == 1)
+						{
+
+							sound = 0;
+						}
+						else
+						{
+							sound = 1;
+						}
+					}
+				}
+				if (worldX > 0.448f * m_worldWidth && worldX < 0.550f * m_worldWidth)
+				{
+					if (worldY > 34.5f && worldY < 38.5f)
+					{
+						gameStates = states::s_Menu;
+					}
+				}
 			}
 
 			if (gameStates == states::s_Upgrade_Cars1 || gameStates == states::s_Upgrade_Cars3)
@@ -1734,10 +1762,7 @@ void SceneSP3::Update(double dt)
 			}
 			
 		}
-		if (gameStates == states::s_Options)
-		{
-
-		}
+		
 }
 
 
@@ -3247,6 +3272,21 @@ void SceneSP3::renderMenu()
 		modelStack.Scale(m_worldWidth/2, m_worldHeight/2, 0);
 		RenderMesh(meshList[GEO_OPTIONS], false);
 		modelStack.PopMatrix();
+
+		if (sound == 1)
+		{
+			std::ostringstream sso1;
+			sso1.precision(5);
+			sso1 << "On";
+			RenderTextOnScreen(meshList[GEO_TEXT], sso1.str(), Color(0, 1, 0), 5, 45, 43);
+		}
+		else
+		{
+			std::ostringstream sso1;
+			sso1.precision(5);
+			sso1 << "Off";
+			RenderTextOnScreen(meshList[GEO_TEXT], sso1.str(), Color(1, 0, 0), 5, 45, 43);
+		}
 	}
 	else if (gameStates == states::s_LevelSelect)
 	{
