@@ -76,13 +76,12 @@ void SceneSP3::Init()
 	fuelAmount = 100.0f;
 	leader = NULL;
 	snapSet = 0;
-	sound = 1;
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP2]);
 	testMap.setMapSize(30, 20);
 
-	//gameStates = states::s_Upgrade_Tires1;
+	gameStates = states::s_Menu;
 	//gameStates = states::s_Tutorial;
 	gameStates = states::s_Menu;
 
@@ -845,11 +844,7 @@ void SceneSP3::Update(double dt)
 	{
 		hi = false;
 	}
-	if (gameStates == states::s_Tutorial ||
-		gameStates == states::s_Level2 ||
-		gameStates == states::s_Level3 ||
-		gameStates == states::s_LevelBoss ||
-		gameStates == states::s_MapEditor && testMode == 1)
+	if (gameStates != states::s_MapEditor)
 	{
 		playerControl();
 		if (Application::IsKeyPressed('W') || (Application::IsKeyPressed('S')))
@@ -1594,11 +1589,8 @@ void SceneSP3::Update(double dt)
 								{
 									Sound_Bump->stop();
 								}*/
-								if (sound == 1)
-								{
-									bumpSound();
-									bumpSound();
-								}
+								bumpSound();
+								bumpSound();
 								goE->addStrength(-50);
 								if (goE->getStrength() <= 0)
 								{
@@ -1631,11 +1623,8 @@ void SceneSP3::Update(double dt)
 									goE->setCaught(0);
 									if (goE->getActive() == 0)
 									{
-										if (sound == 1)
-										{
-											dingSound();
-											dingSound();
-										}
+										dingSound();
+										dingSound();
 										if (goE->getType() == 0)
 										{
 											points++;
@@ -1693,11 +1682,8 @@ void SceneSP3::Update(double dt)
 				{
 					Sound_Throw->stop();
 				}*/
-				if (sound == 1)
-				{
-					throwSound();
-					throwSound();
-				}
+				throwSound();
+				throwSound();
 
 				snapSet = 1;
 				
@@ -1716,11 +1702,8 @@ void SceneSP3::Update(double dt)
 					{
 						Sound_Snap->stop();
 					}*/
-					if (sound == 1)
-					{
-						snapSound();
-						snapSound();
-					}
+					snapSound();
+					snapSound();
 					snapSet = 0;
 				}
 				if (player1->engine > 0)
@@ -1734,9 +1717,10 @@ void SceneSP3::Update(double dt)
 			}
 			
 		}
-		if (gameStates == states::s_Options)
+		if (objective != NULL)
 		{
 
+			std::cout << objective << std::endl;
 		}
 }
 
@@ -2016,8 +2000,6 @@ void SceneSP3::mapEditorUpdate(double dt)
 			else if (worldX > 0.9362068f * m_worldWidth && worldX < 0.9827586f * m_worldWidth && worldY > 88 && worldY < 96)
 			{
 				string FileName;
-				if (editName == false)
-				{
 					if (mapName == "")
 					{
 						cout << "No Name Entered" << endl;
@@ -2034,8 +2016,6 @@ void SceneSP3::mapEditorUpdate(double dt)
 							FileName = map->CreateMapFile(mapName, false);
 						}
 					}
-
-				}
 				for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 				{
 					GameObject *go = (GameObject *)* it;
@@ -2064,6 +2044,30 @@ void SceneSP3::mapEditorUpdate(double dt)
 							TextFile *mud = new TextFile(TextFile::MAP);
 							mud->SetData("mud", go->pos.x - mapPosition.x, go->pos.y - mapPosition.y);
 							mud->WriteFile(FileName);
+						}
+						else if (go->type == GameObject::MAP_LION)
+						{
+							TextFile *lion = new TextFile(TextFile::MAP);
+							lion->SetData("lion", go->pos.x - mapPosition.x, go->pos.y - mapPosition.y);
+							lion->WriteFile(FileName);
+						}
+						else if (go->type == GameObject::MAP_ZEBRA)
+						{
+							TextFile *zebra = new TextFile(TextFile::MAP);
+							zebra->SetData("zebra", go->pos.x - mapPosition.x, go->pos.y - mapPosition.y);
+							zebra->WriteFile(FileName);
+						}
+						else if (go->type == GameObject::MAP_RHINO)
+						{
+							TextFile *rhino = new TextFile(TextFile::MAP);
+							rhino->SetData("rhino", go->pos.x - mapPosition.x, go->pos.y - mapPosition.y);
+							rhino->WriteFile(FileName);
+						}
+						else if (go->type == GameObject::MAP_HUMAN)
+						{
+							TextFile *human = new TextFile(TextFile::MAP);
+							human->SetData("human", go->pos.x - mapPosition.x, go->pos.y - mapPosition.y);
+							human->WriteFile(FileName);
 						}
 					}
 				}
@@ -2233,7 +2237,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 	}
 	else if (testMode == true)
 	{
-		//playerControl();
+		playerControl();
 		if (Application::IsKeyPressed(VK_F2))
 		{
 			player1->vel.SetZero();
@@ -2327,26 +2331,17 @@ void SceneSP3::RenderGO(GameObject *go)
 		modelStack.PopMatrix();
 
 		break;
-
 	case GameObject::GO_CAR:
-		if (gameStates == states::s_Tutorial ||
-			gameStates == states::s_Level2 ||
-			gameStates == states::s_Level3 ||
-			gameStates == states::s_LevelBoss ||
-			gameStates == states::s_MapEditor && testMode == 1)
-		{
-
-			modelStack.PushMatrix();
-			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
-			modelStack.Rotate(-10, 1, 0, 0);
-			modelStack.Rotate(go->rotationAngle, 0, 0, 1);
-			modelStack.Rotate(90, 0, 0, 1);
-			modelStack.Rotate(90, 1, 0, 0);
-			modelStack.Scale(go->scale.x / 10, go->scale.y / 5, go->scale.z / 2);
-			modelStack.Scale(2, 2.5, 3.5);
-			RenderMesh(meshList[GEO_DISPLAY_CAR1], false);
-			modelStack.PopMatrix();
-		}
+		modelStack.PushMatrix();
+		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+		modelStack.Rotate(-10, 1, 0, 0);
+		modelStack.Rotate(go->rotationAngle, 0, 0, 1);
+		modelStack.Rotate(90, 0, 0, 1);
+		modelStack.Rotate(90, 1, 0, 0);
+		modelStack.Scale(go->scale.x / 10, go->scale.y / 5, go->scale.z / 2);
+		modelStack.Scale(2, 2.5, 3.5);
+		RenderMesh(meshList[GEO_DISPLAY_CAR1], false);
+		modelStack.PopMatrix();
 		
 		break;
 	case GameObject::GO_PILLAR:
@@ -3147,10 +3142,10 @@ bool SceneSP3::RenderMapFile()
 		else if (map->get_type() == "rock")
 		{
 			obs = new GameObject(GameObject::MAP_ROCK);
-			obs->pos.Set(map->get_x() - mapPosition.x, map->get_y() - mapPosition.y, 1);
+			obs->pos.Set(map->get_x(), map->get_y(), 1);
 			obs->fresh = true;
 			obs->active = true;
-			obs->scale.Set(1, 1, 1);
+			obs->scale.Set(6,6,6);
 			testMap.forceAddSingleProp(obs);
 
 			cout << "rock added" << endl;
@@ -3158,10 +3153,10 @@ bool SceneSP3::RenderMapFile()
 		else if (map->get_type() == "water")
 		{
 			obs = new GameObject(GameObject::MAP_WATER);
-			obs->pos.Set(map->get_x() - mapPosition.x, map->get_y() - mapPosition.y, 1);
+			obs->pos.Set(map->get_x(), map->get_y(), 1);
 			obs->fresh = true;
 			obs->active = true;
-			obs->scale.Set(1, 1, 1);
+			obs->scale.Set(6,6,6);
 			testMap.forceAddSingleProp(obs);
 
 			cout << "water added" << endl;
@@ -3169,13 +3164,57 @@ bool SceneSP3::RenderMapFile()
 		else if (map->get_type() == "mud")
 		{
 			obs = new GameObject(GameObject::MAP_MUD);
-			obs->pos.Set(map->get_x() - mapPosition.x, map->get_y() - mapPosition.y, 1);
+			obs->pos.Set(map->get_x(), map->get_y(), 1);
 			obs->fresh = true;
 			obs->active = true;
-			obs->scale.Set(1, 1, 1);
+			obs->scale.Set(6,6,6);
 			testMap.forceAddSingleProp(obs);
 
 			cout << "mud added" << endl;
+		}
+		else if (map->get_type() == "lion")
+		{
+			obs = new GameObject(GameObject::MAP_LION);
+			obs->pos.Set(map->get_x(), map->get_y(), 1);
+			obs->fresh = true;
+			obs->active = true;
+			obs->scale.Set(6,6,6);
+			testMap.forceAddSingleProp(obs);
+
+			cout << "lion added" << endl;
+		}
+		else if (map->get_type() == "rhino")
+		{
+			obs = new GameObject(GameObject::MAP_RHINO);
+			obs->pos.Set(map->get_x(), map->get_y(), 1);
+			obs->fresh = true;
+			obs->active = true;
+			obs->scale.Set(6,6,6);
+			testMap.forceAddSingleProp(obs);
+
+			cout << "rhino added" << endl;
+		}
+		else if (map->get_type() == "zebra")
+		{
+			obs = new GameObject(GameObject::MAP_ZEBRA);
+			obs->pos.Set(map->get_x(), map->get_y(), 1);
+			obs->fresh = true;
+			obs->active = true;
+			obs->scale.Set(6,6,6);
+			testMap.forceAddSingleProp(obs);
+
+			cout << "zebra added" << endl;
+		}
+		else if (map->get_type() == "human")
+		{
+			obs = new GameObject(GameObject::MAP_HUMAN);
+			obs->pos.Set(map->get_x(), map->get_y(), 1);
+			obs->fresh = true;
+			obs->active = true;
+			obs->scale.Set(6,6,6);
+			testMap.forceAddSingleProp(obs);
+
+			cout << "human added" << endl;
 		}
 	}
 	return true;
@@ -3240,15 +3279,7 @@ void SceneSP3::renderMenu()
 		RenderMesh(meshList[GEO_MENU_QUIT], false);
 		modelStack.PopMatrix();
 	}
-	else if (gameStates == states::s_Options)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -4);
-		modelStack.Scale(m_worldWidth/2, m_worldHeight/2, 0);
-		RenderMesh(meshList[GEO_OPTIONS], false);
-		modelStack.PopMatrix();
-	}
-	else if (gameStates == states::s_LevelSelect)
+	if (gameStates == states::s_LevelSelect)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -3);
@@ -3257,7 +3288,7 @@ void SceneSP3::renderMenu()
 		modelStack.PopMatrix();
 
 	}
-	else if (gameStates == states::s_CustomLevelSelect)
+	if (gameStates == states::s_CustomLevelSelect)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -3);
@@ -3266,7 +3297,7 @@ void SceneSP3::renderMenu()
 		modelStack.PopMatrix();
 
 	}
-	else if (gameStates == states::s_Instructions)
+	if (gameStates == states::s_Instructions)
 	{
 		modelStack.PushMatrix();
 		//modelStack.Translate(140, 58, 4);
@@ -3281,7 +3312,7 @@ void SceneSP3::renderMenu()
 			gameStates = states::s_Menu;
 		}
 	}
-	else if (gameStates == states::s_Upgrade)
+	if (gameStates == states::s_Upgrade)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
@@ -3289,7 +3320,7 @@ void SceneSP3::renderMenu()
 		RenderMesh(meshList[GEO_UPGRADE_BACKGROUND], false);
 		modelStack.PopMatrix();
 	}
-	else if (gameStates == states::s_Upgrade_Cars1 || gameStates == states::s_Upgrade_Cars2 || gameStates == states::s_Upgrade_Cars3)
+	if (gameStates == states::s_Upgrade_Cars1 || gameStates == states::s_Upgrade_Cars2 || gameStates == states::s_Upgrade_Cars3)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -7);
@@ -3319,7 +3350,7 @@ void SceneSP3::renderMenu()
 			gameStates = states::s_Upgrade;
 		}
 	}
-	else if (gameStates == states::s_Upgrade_Tires1 || gameStates == states::s_Upgrade_Tires2 || gameStates == states::s_Upgrade_Tires3)
+	if (gameStates == states::s_Upgrade_Tires1 || gameStates == states::s_Upgrade_Tires2 || gameStates == states::s_Upgrade_Tires3)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -5);
@@ -3348,7 +3379,7 @@ void SceneSP3::renderMenu()
 			gameStates = states::s_Upgrade;
 		}
 	}
-	else if (gameStates == states::s_Upgrade_Lasso1 || gameStates == states::s_Upgrade_Lasso2 || gameStates == states::s_Upgrade_Lasso3)
+	if (gameStates == states::s_Upgrade_Lasso1 || gameStates == states::s_Upgrade_Lasso2 || gameStates == states::s_Upgrade_Lasso3)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -5);
@@ -3378,7 +3409,7 @@ void SceneSP3::renderMenu()
 			gameStates = states::s_Upgrade;
 		}
 	}
-	else if (gameStates == states::s_Upgrade_Darts1 || gameStates == states::s_Upgrade_Darts2 || gameStates == states::s_Upgrade_Darts3)
+	if (gameStates == states::s_Upgrade_Darts1 || gameStates == states::s_Upgrade_Darts2 || gameStates == states::s_Upgrade_Darts3)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -5);
@@ -3409,16 +3440,7 @@ void SceneSP3::renderMenu()
 			gameStates = states::s_Upgrade;
 		}
 	}
-	else if (gameStates == states::s_Lose)
-	{
-		modelStack.PushMatrix();
-		//modelStack.Translate(140, 58, 4);
-		//modelStack.Scale(50, 20, 0);
-		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
-		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
-		RenderMesh(meshList[GEO_LOSE_SCENE], false);
-		modelStack.PopMatrix();
-	}
+
 	// if SOLD
 	if (car1Bought == true)
 	{
@@ -3453,7 +3475,16 @@ void SceneSP3::renderMenu()
 		modelStack.PopMatrix();
 	}
 
-	
+	if (gameStates == states::s_Lose)
+	{
+		modelStack.PushMatrix();
+		//modelStack.Translate(140, 58, 4);
+		//modelStack.Scale(50, 20, 0);
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[GEO_LOSE_SCENE], false);
+		modelStack.PopMatrix();
+	}
 }
 
 void SceneSP3::Render()

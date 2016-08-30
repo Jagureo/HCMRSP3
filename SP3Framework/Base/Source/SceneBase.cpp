@@ -232,9 +232,6 @@ void SceneBase::Init()
 	meshList[GEO_SOLD] = MeshBuilder::GenerateQuad("sold", Color(1, 1, 1), 1.f);
 	meshList[GEO_SOLD]->textureID = LoadTGA("Image//SOLD.tga");
 
-	meshList[GEO_OPTIONS] = MeshBuilder::GenerateQuad("options", Color(1, 1, 1), 2.f);
-	meshList[GEO_OPTIONS]->textureID = LoadTGA("Image//options.tga");
-
 	meshList[GEO_LOSE_SCENE] = MeshBuilder::GenerateQuad("loseScreen", Color(1, 1, 1), 1.f);
 	meshList[GEO_LOSE_SCENE]->textureID = LoadTGA("Image//loseScreen.tga");
 
