@@ -119,6 +119,7 @@ public:
 	void snapSound();
 	void dingSound();
 	void bumpSound();
+	void backSound();
 
 	void eraseEnemy();
 
@@ -185,6 +186,7 @@ protected:
 	ISound* Sound_Snap;
 	ISound* Sound_Ding;
 	ISound* Sound_Bump;
+	ISound* Sound_Back;
 };
 
 #endif

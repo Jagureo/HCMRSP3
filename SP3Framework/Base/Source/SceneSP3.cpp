@@ -3,7 +3,7 @@
 #include "Application.h"
 #include <sstream>
 
-SceneSP3::SceneSP3() : theSoundEngine(NULL), Sound_Engine(NULL), Sound_Throw(NULL), Sound_Snap(NULL), Sound_Ding(NULL), Sound_Bump(NULL)
+SceneSP3::SceneSP3() : theSoundEngine(NULL), Sound_Engine(NULL), Sound_Throw(NULL), Sound_Snap(NULL), Sound_Ding(NULL), Sound_Bump(NULL), Sound_Back(NULL)
 {
 }
 
@@ -84,7 +84,6 @@ void SceneSP3::Init()
 
 	gameStates = states::s_Menu;
 	//gameStates = states::s_Tutorial;
-	gameStates = states::s_Menu;
 
 	animalStat = new TextFile(TextFile::ANIMAL);
 
@@ -215,6 +214,22 @@ void SceneSP3::bumpSound()
 	else if (Sound_Bump->isFinished())
 	{
 		Sound_Bump = NULL;
+	}
+}
+
+void SceneSP3::backSound()
+{
+	if (Sound_Back == NULL)
+	{
+		Sound_Back = theSoundEngine->play2D("Sound/song.mp3", false, true);
+	}
+	if (Sound_Back->getIsPaused() == true)
+	{
+		Sound_Back->setIsPaused(false);
+	}
+	else if (Sound_Back->isFinished())
+	{
+		Sound_Back = NULL;
 	}
 }
 
@@ -878,7 +893,6 @@ void SceneSP3::Update(double dt)
 	}
 	if (sound == 1)
 	{
-
 		if (player1->engine != 0)
 		{
 			engineSound();
@@ -898,7 +912,18 @@ void SceneSP3::Update(double dt)
 		gameStates != states::s_Level3 ||
 		gameStates != states::s_LevelBoss)
 	{
+		if (sound == 1)
+		{
 
+			backSound();
+		}
+		else
+		{
+			if (Sound_Back != NULL)
+			{
+				Sound_Back->stop();
+			}
+		}
 		if (bLButtonState && !Application::IsMousePressed(0))
 		{
 			bLButtonState = false;
@@ -944,6 +969,7 @@ void SceneSP3::Update(double dt)
 					}
 					if (worldY > 8 && worldY < 11.406f)
 					{
+						Exit();
 						exit(0);
 					}
 				}
@@ -1470,6 +1496,18 @@ void SceneSP3::Update(double dt)
 				//go->pos = Vector3(go->pos.x + diffx, go->pos.y + diffy, 1);
 				go->pos.x += diffx;
 				go->pos.y += diffy;
+			}
+		}
+		if (gameStates == states::s_Tutorial ||
+			gameStates == states::s_Level2 ||
+			gameStates == states::s_Level3 ||
+			gameStates == states::s_LevelBoss ||
+			gameStates == states::s_MapEditor)
+		{
+
+			if (Sound_Back != NULL)
+			{
+				Sound_Back->stop();
 			}
 		}
 		if (gameStates == states::s_Tutorial ||
@@ -3877,7 +3915,6 @@ void SceneSP3::Render()
 
 void SceneSP3::Exit()
 {
-	SceneBase::Exit();
 	if (Sound_Snap != NULL)
 	{
 		Sound_Snap->drop();
@@ -3890,14 +3927,23 @@ void SceneSP3::Exit()
 	{
 		Sound_Bump->drop();
 	}
+	if (Sound_Ding != NULL)
+	{
+		Sound_Ding->drop();
+	}
 	if (Sound_Throw != NULL)
 	{
 		Sound_Throw->drop();
+	}
+	if (Sound_Back != NULL)
+	{
+		Sound_Back->drop();
 	}
 	if (theSoundEngine != NULL)
 	{
 		theSoundEngine->drop();
 	}
+	SceneBase::Exit();
 	//Cleanup GameObjects
 	ofstream file;
 	file.open("tempsave.txt", ios::trunc);
