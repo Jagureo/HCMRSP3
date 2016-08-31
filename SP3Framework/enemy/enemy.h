@@ -28,6 +28,7 @@
 		void setTaken(bool input);
 		void setNewSpawn(bool input);
 		void setCaught(bool input);
+		void setDrunk(bool input);
 		void runOff(Vector3 player, std::vector<enemy*> enemyVector, enemy* leaderI);
 		void slowDown( std::vector<enemy*> enemyVector, Vector3 objective);
 		void setVel(float x, float y, float z);
@@ -60,6 +61,7 @@
 		int runLonger;
 		float speed;
 		bool taken;
+		bool drunk;
 		
 		Vector3 cohesion(std::vector<enemy*> enemyVector, enemy* leaderI);
 		Vector3 seperation(std::vector<enemy*> enemyVector, enemy* leaderI);

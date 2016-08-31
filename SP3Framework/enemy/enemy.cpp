@@ -37,6 +37,7 @@ enemy::enemy(Vector3 pos, int eType, float getSta, float getSpd, float getStr)
 	stamina = getSta;
 	speed = getSpd * Math::RandFloatMinMax(0.7, 1.3);
 	strength = getStr;
+	drunk = 0;
 	//strength = 99999;
 }
 
@@ -188,43 +189,92 @@ void enemy::runOff(Vector3 playerPos, std::vector<enemy*> enemyVector, enemy* le
 	}
 	if (stamina > 0)
 	{
-		if (caught == 1 )
+		if (drunk == 0)
 		{
+			if (caught == 1)
+			{
 
-			vel.x += -((dir.Normalized()).x  * 2);
-			vel.y += -((dir.Normalized()).y  * 2);
-		}
-		else if (leader == 1)
-		{
-			vel.x += -((dir.Normalized()).x * 1.8);
-			vel.y += -((dir.Normalized()).y * 1.8);
+				vel.x += -((dir.Normalized()).x * 2);
+				vel.y += -((dir.Normalized()).y * 2);
+			}
+			else if (leader == 1)
+			{
+				vel.x += -((dir.Normalized()).x * 1.8);
+				vel.y += -((dir.Normalized()).y * 1.8);
+			}
+			else
+			{
+				//vel += -(dir.Normalized()) * 3;
+				vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1) * 1.8);
+				vel.z = 0;
+			}
+			stamina--;
 		}
 		else
 		{
-			//vel += -(dir.Normalized()) * 3;
-			vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1) * 1.8);
-			vel.z = 0;
+			if (caught == 1)
+			{
+
+				vel.x += -((dir.Normalized()).x * 1.8);
+				vel.y += -((dir.Normalized()).y * 1.8);
+				strength -= 1;
+			}
+			else if (leader == 1)
+			{
+				vel.x += -((dir.Normalized()).x * 1.5);
+				vel.y += -((dir.Normalized()).y * 1.5);
+			}
+			else
+			{
+				//vel += -(dir.Normalized()) * 3;
+				vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1) * 1.5);
+				vel.z = 0;
+			}
+			stamina -= 2;
 		}
-		stamina--;
 	}
 	else
 	{
-		if (caught == 1)
+		if (drunk == 0)
 		{
 
-			vel.x += -((dir.Normalized()).x * 1.5);
-			vel.y += -((dir.Normalized()).y  * 1.5);
-		}
-		if (leader == 1)
-		{
-			vel.x += -((dir.Normalized()).x * 1.2);
-			vel.y += -((dir.Normalized()).y * 1.2);
-			
+			if (caught == 1)
+			{
+
+				vel.x += -((dir.Normalized()).x * 1.5);
+				vel.y += -((dir.Normalized()).y  * 1.5);
+			}
+			if (leader == 1)
+			{
+				vel.x += -((dir.Normalized()).x * 1.2);
+				vel.y += -((dir.Normalized()).y * 1.2);
+
+			}
+			else
+			{
+				vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1) * 1.2);
+				vel.z = 0;
+			}
 		}
 		else
 		{
-			vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1) * 1.2);
-			vel.z = 0;
+			if (caught == 1)
+			{
+				vel.x += -((dir.Normalized()).x * 1.2);
+				vel.y += -((dir.Normalized()).y  * 1.2);
+				strength -= 1;
+			}
+			if (leader == 1)
+			{
+				vel.x += -((dir.Normalized()).x * 1.0);
+				vel.y += -((dir.Normalized()).y * 1.0);
+
+			}
+			else
+			{
+				vel += (cohesion(enemyVector, leader1) + alignment(enemyVector, leader1) + seperation(enemyVector, leader1) * 1.0);
+				vel.z = 0;
+			}
 		}
 	}
 	
@@ -261,14 +311,28 @@ void enemy::slowDown(std::vector<enemy*> enemyVector, Vector3 objective)
 				dir.Set(1, 0, 0);
 			}
 			//(dir.Normalized() * (speed));
-			if (taken == 0)
+			if (drunk == 0)
 			{
 
-				vel += (dir.Normalized());
+				if (taken == 0)
+				{
+					vel += (dir.Normalized());
+				}
+				else
+				{
+					vel -= (dir.Normalized());
+				}
 			}
 			else
 			{
-				vel -= (dir.Normalized());
+				if (taken == 0)
+				{
+					vel += (dir.Normalized() * 0.8);
+				}
+				else
+				{
+					vel -= (dir.Normalized() * 0.8);
+				}
 			}
 }
 
