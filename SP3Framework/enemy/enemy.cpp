@@ -141,6 +141,11 @@ void enemy::setLeader(bool input)
 	leader = input;
 }
 
+void enemy::setDrunk(bool input)
+{
+	drunk = input;
+}
+
 void enemy::checkCollision(std::vector<enemy*> enemyVector)
 {
 	for (std::vector<enemy*>::iterator itE = enemyVector.begin(); itE != enemyVector.end(); ++itE)
