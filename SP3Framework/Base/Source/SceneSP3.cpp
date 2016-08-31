@@ -108,6 +108,10 @@ void SceneSP3::Init()
 	}
 	engineSound();
 	backSound();
+	if (sound == 0 && Sound_Back != NULL)
+	{
+		Sound_Back->setIsPaused(true);
+	}
 	/*for (int i = 0; i < 7; ++i)
 	{
 		animalStat->GetAnimalStat("Zebra");
