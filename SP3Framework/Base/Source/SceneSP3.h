@@ -96,7 +96,7 @@ public:
 
 	void CollisionMap(GameObject *go, GameObject *other, double dt);
 
-	void playerControl();
+	void playerControl(double dt);
 
 	void mapEditorUpdate(double dt);
 	void mapEditorRender();
@@ -151,6 +151,9 @@ protected:
 	GameObject *m_ghost;
 	int m_objectCount;
 	bool driftMode;
+	int dartMax;
+	int dartCount;
+	float dartROF;
 
 	string mapName;
 	bool nameType;

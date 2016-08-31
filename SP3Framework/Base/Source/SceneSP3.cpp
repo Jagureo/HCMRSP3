@@ -77,6 +77,9 @@ void SceneSP3::Init()
 	leader = NULL;
 	snapSet = 0;
 	sound = 1;
+	dartMax = 5;
+	dartCount = 5;
+	dartROF = 1;
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP2]);
@@ -219,7 +222,7 @@ GameObject* SceneSP3::FetchGO()
 	for (std::vector<GameObject*>::iterator iter = m_goList.begin(); iter != m_goList.end(); ++iter)
 	{
 		GameObject *go = *iter;
-		if (go->active == false && (go->type == GameObject::GO_BALL || go->type == GameObject::GO_PARTICLE))
+		if (go->active == false && (go->type == GameObject::GO_BALL || go->type == GameObject::GO_TRANQ))
 		{
 			m_objectCount++;
 			go->active = true;
@@ -617,7 +620,7 @@ void SceneSP3::CollisionMap(GameObject *go, GameObject *other, double dt)
 	}
 }
 
-void SceneSP3::playerControl()
+void SceneSP3::playerControl(double dt)
 {
 	if (Application::IsKeyPressed('W'))
 	{
@@ -732,12 +735,35 @@ void SceneSP3::playerControl()
 		player1->pos.y += testMap.getMapSize().y * 5 + m_worldBorder.y;
 	}
 	//cout << player1->pos << " mappos " << mapPosition - Vector3(m_worldWidth / 2, m_worldHeight / 2, 0) << endl;
+	static bool shotsFired = false;
+	if (Application::IsKeyPressed(VK_SPACE) && shotsFired == false)
+	{
+		shotsFired = true;
+		if (dartCount > 0 && dartROF <= 0)
+		{
+			GameObject* tranq = FetchGO();
+			tranq->type = GameObject::GO_TRANQ;
+			//GameObject* tranq = new GameObject(GameObject::GO_TRANQ);
+			tranq->pos.Set(player1->pos.x, player1->pos.y, 1);
+			tranq->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y, 0);
+			tranq->vel = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0).Normalized() * 75;
+			tranq->active = true;
+			//m_goList.push_back(tranq);
+			dartROF = 1 / (3 * dt);
+			dartCount--;
+		}
+	}
+	else if(!Application::IsKeyPressed(VK_SPACE) && shotsFired == true)
+	{
+		shotsFired = false;
+	}
 }
 
 void SceneSP3::Update(double dt)
 {
 	SceneBase::Update(dt);
 	time--;
+	dartROF--;
 	if (Application::IsKeyPressed('5'))
 	{
 		testMap.setBackground(meshList[GEO_TESTMAP]);
@@ -844,7 +870,7 @@ void SceneSP3::Update(double dt)
 		gameStates == states::s_LevelBoss ||
 		gameStates == states::s_MapEditor && testMode == 1)
 	{
-		playerControl();
+		playerControl(dt);
 		if (Application::IsKeyPressed('W') || (Application::IsKeyPressed('S')))
 		{
 			fuelAmount -= dt;
@@ -1347,6 +1373,28 @@ void SceneSP3::Update(double dt)
 					go->ballrotated += go->vel.Length() * (2 / go->scale.x);
 
 
+				}
+				else if (go->type == GameObject::GO_TRANQ)
+				{
+					go->pos.x += diffx;
+					go->pos.y += diffy;
+					if ((go->pos - player1->pos).LengthSquared() > 14400)
+					{
+						go->active = false;
+						continue;
+					}
+					for (std::vector<enemy *>::iterator it2 = enemyList.begin(); it2 != enemyList.end(); ++it2)
+					{
+						enemy *other = (enemy *)*it2;
+						if (other->getActive() == false)
+							continue;
+						if ((go->pos - other->getPos()).LengthSquared() < 100)
+						{
+							go->active = false;
+							other->setDrunk(true);
+							break;
+						}
+					}
 				}
 				//Exercise 8a: handle collision between GO_BALL and GO_BALL using velocity swap
 
@@ -2248,8 +2296,10 @@ void SceneSP3::mapEditorUpdate(double dt)
 		}
 		if (Application::IsKeyPressed(VK_F1))
 		{
+			testMap.addBorder();
 			testMode = true;
 			deleteMode = 0;
+			dartCount = 99;
 			for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 			{
 				GameObject *go = (GameObject *)*it;
@@ -2327,17 +2377,14 @@ void SceneSP3::mapEditorUpdate(double dt)
 		if (Application::IsKeyPressed(VK_F2))
 		{
 			player1->vel.SetZero();
+			dartCount = dartMax;
 			for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 			{
 				GameObject *go = (GameObject *)*it;
 				if (go->dead != true)
 					go->active = true;
 			}
-			for (std::vector<enemy *>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
-			{
-				enemy *go = (enemy *)*it;
-				go->setActive(false);
-			}
+			eraseEnemy();
 			testMode = false;
 			deleteMode = 0;
 		}
@@ -2474,6 +2521,16 @@ void SceneSP3::RenderGO(GameObject *go)
 		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
 		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
 		RenderMesh(meshList[GEO_ICE], false);
+		modelStack.PopMatrix();
+		break;
+	case GameObject::GO_TRANQ:
+		modelStack.PushMatrix();
+		modelStack.Translate(go->pos.x, go->pos.y, 1);
+		modelStack.Scale(0.5f, 0.5f, 1);
+		modelStack.PushMatrix();
+		modelStack.Rotate(90, 1, 0, 0);
+		RenderMesh(meshList[HUD_RADARDETECT], false);
+		modelStack.PopMatrix();
 		modelStack.PopMatrix();
 		break;
 	}

@@ -26,6 +26,7 @@ struct GameObject
 		GO_POWERUP,
 		GO_SAWBLADE,
 		GO_PARTICLE,
+		GO_TRANQ,
 
 		MAP_TREE,
 		MAP_ROCK,
