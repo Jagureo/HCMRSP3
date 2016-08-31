@@ -175,6 +175,13 @@ protected:
 
 	enemy* leader;
 
+	int money;
+	int dartMax;
+	int dartROF;
+	int dartCount;
+	int cost[8];
+	bool paused;
+
 	//Auditing
 	float m1, m2;
 	Vector3 u1, u2, v1, v2;
