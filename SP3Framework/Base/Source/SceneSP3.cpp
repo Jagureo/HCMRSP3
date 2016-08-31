@@ -634,7 +634,7 @@ void SceneSP3::CollisionMap(GameObject *go, GameObject *other, double dt)
 	}
 }
 
-void SceneSP3::playerControl(double dt)
+void SceneSP3::playerControl()
 {
 	if (Application::IsKeyPressed('W'))
 	{
@@ -749,35 +749,12 @@ void SceneSP3::playerControl(double dt)
 		player1->pos.y += testMap.getMapSize().y * 5 + m_worldBorder.y;
 	}
 	//cout << player1->pos << " mappos " << mapPosition - Vector3(m_worldWidth / 2, m_worldHeight / 2, 0) << endl;
-	static bool shotsFired = false;
-	if (Application::IsKeyPressed(VK_SPACE) && shotsFired == false)
-	{
-		shotsFired = true;
-		if (dartCount > 0 && dartROF <= 0)
-		{
-			GameObject* tranq = FetchGO();
-			tranq->type = GameObject::GO_TRANQ;
-			//GameObject* tranq = new GameObject(GameObject::GO_TRANQ);
-			tranq->pos.Set(player1->pos.x, player1->pos.y, 1);
-			tranq->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y, 0);
-			tranq->vel = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0).Normalized() * 75;
-			tranq->active = true;
-			//m_goList.push_back(tranq);
-			dartROF = 1 / (3 * dt);
-			dartCount--;
-		}
-	}
-	else if(!Application::IsKeyPressed(VK_SPACE) && shotsFired == true)
-	{
-		shotsFired = false;
-	}
 }
 
 void SceneSP3::Update(double dt)
 {
 	SceneBase::Update(dt);
 	time--;
-	dartROF--;
 	if (Application::IsKeyPressed('5'))
 	{
 		testMap.setBackground(meshList[GEO_TESTMAP]);
@@ -884,7 +861,7 @@ void SceneSP3::Update(double dt)
 		gameStates == states::s_LevelBoss ||
 		gameStates == states::s_MapEditor && testMode == 1)
 	{
-		playerControl(dt);
+		playerControl();
 		if (Application::IsKeyPressed('W') || (Application::IsKeyPressed('S')))
 		{
 			fuelAmount -= dt;
@@ -932,6 +909,7 @@ void SceneSP3::Update(double dt)
 				Sound_Back->stop();
 			}
 		}*/
+		
 		if (bLButtonState && !Application::IsMousePressed(0))
 		{
 			bLButtonState = false;
@@ -1041,9 +1019,9 @@ void SceneSP3::Update(double dt)
 			}
 			else if (gameStates == states::s_Options)
 			{
-				if (worldX > 0.341f * m_worldWidth && worldX < 0.647f * m_worldWidth)
+				if (worldX > 0.3f * m_worldWidth && worldX < 0.7f * m_worldWidth)
 				{
-					if (worldY > 73.64f && worldY < 77.26f)
+					if (worldY > 72.f && worldY < 78.f)
 					{
 						if (sound == 1)
 						{
@@ -1057,9 +1035,23 @@ void SceneSP3::Update(double dt)
 						}
 					}
 				}
+				if (worldX > 0.3f * m_worldWidth && worldX < 0.7f * m_worldWidth)
+				{
+					if (worldY > 53.f && worldY < 59.f)
+					{
+						if (highQ == 1)
+						{
+							highQ = 0;
+						}
+						else
+						{
+							highQ = 1;
+						}
+					}
+				}
 				if (worldX > 0.448f * m_worldWidth && worldX < 0.550f * m_worldWidth)
 				{
-					if (worldY > 34.5f && worldY < 38.5f)
+					if (worldY > 34.f && worldY < 39.f)
 					{
 						gameStates = states::s_Menu;
 					}
@@ -1443,28 +1435,6 @@ void SceneSP3::Update(double dt)
 
 
 				}
-				else if (go->type == GameObject::GO_TRANQ)
-				{
-					go->pos.x += diffx;
-					go->pos.y += diffy;
-					if ((go->pos - player1->pos).LengthSquared() > 14400)
-					{
-						go->active = false;
-						continue;
-					}
-					for (std::vector<enemy *>::iterator it2 = enemyList.begin(); it2 != enemyList.end(); ++it2)
-					{
-						enemy *other = (enemy *)*it2;
-						if (other->getActive() == false)
-							continue;
-						if ((go->pos - other->getPos()).LengthSquared() < 100)
-						{
-							go->active = false;
-							other->setDrunk(true);
-							break;
-						}
-					}
-				}
 				//Exercise 8a: handle collision between GO_BALL and GO_BALL using velocity swap
 
 				for (std::vector<GameObject *>::iterator it2 = it; it2 != m_goList.end(); ++it2)
@@ -1600,6 +1570,10 @@ void SceneSP3::Update(double dt)
 			if (sound == 1 && Sound_Back != NULL)
 			{
 				Sound_Back->setIsPaused(false);
+			}
+			if (Sound_Engine != NULL && sound == 1)
+			{
+				Sound_Engine->setIsPaused(true);
 			}
 		}
 		if (gameStates == states::s_Tutorial ||
@@ -2372,10 +2346,8 @@ void SceneSP3::mapEditorUpdate(double dt)
 		}
 		if (Application::IsKeyPressed(VK_F1))
 		{
-			testMap.addBorder();
 			testMode = true;
 			deleteMode = 0;
-			dartCount = 99;
 			for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 			{
 				GameObject *go = (GameObject *)*it;
@@ -2453,14 +2425,17 @@ void SceneSP3::mapEditorUpdate(double dt)
 		if (Application::IsKeyPressed(VK_F2))
 		{
 			player1->vel.SetZero();
-			dartCount = dartMax;
 			for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
 			{
 				GameObject *go = (GameObject *)*it;
 				if (go->dead != true)
 					go->active = true;
 			}
-			eraseEnemy();
+			for (std::vector<enemy *>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+			{
+				enemy *go = (enemy *)*it;
+				go->setActive(false);
+			}
 			testMode = false;
 			deleteMode = 0;
 		}
@@ -2599,16 +2574,6 @@ void SceneSP3::RenderGO(GameObject *go)
 		RenderMesh(meshList[GEO_ICE], false);
 		modelStack.PopMatrix();
 		break;
-	case GameObject::GO_TRANQ:
-		modelStack.PushMatrix();
-		modelStack.Translate(go->pos.x, go->pos.y, 1);
-		modelStack.Scale(0.5f, 0.5f, 1);
-		modelStack.PushMatrix();
-		modelStack.Rotate(90, 1, 0, 0);
-		RenderMesh(meshList[HUD_RADARDETECT], false);
-		modelStack.PopMatrix();
-		modelStack.PopMatrix();
-		break;
 	}
 }
 
@@ -2690,11 +2655,9 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					InitCarStat("Car1");
 					car1Bought = true;
 				}
 			}
-
 		}
 		if (gameStates == states::s_Upgrade_Cars2)
 		{
@@ -2702,23 +2665,17 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					InitCarStat("Car2");
-
-					if (money >= cost[0])
-						car2Bought = true;
+					car2Bought = true;
 				}
 			}
 		}
 		if (gameStates == states::s_Upgrade_Cars3)
 		{
-
 			if (worldX > 0.75549f * m_worldWidth && worldX < 0.82577f * m_worldWidth)
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					InitCarStat("Car3");
-					if (money >= cost[1])
-						car3Bought = true;
+					car3Bought = true;
 				}
 			}
 		}
@@ -2728,27 +2685,6 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (car1Bought == true)
-					{
-						int handling = player1->playerCar.handling;
-						handling += 2;
-						TextFile *HandlingStat = new TextFile();
-						HandlingStat->SetCarStat("Car1", "handling", to_string(handling));
-					}
-					if (car2Bought == true)
-					{
-						int handling = player1->playerCar.handling;
-						handling += 2;
-						TextFile *HandlingStat = new TextFile();
-						HandlingStat->SetCarStat("Car2", "handling", to_string(handling));
-					}
-					if (car3Bought == true)
-					{
-						int handling = player1->playerCar.handling;
-						handling += 2;
-						TextFile *HandlingStat = new TextFile();
-						HandlingStat->SetCarStat("Car3", "handling", to_string(handling));
-					}
 					tire1Bought = true;
 				}
 			}
@@ -2759,30 +2695,6 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (money >= cost[2])
-					{
-						if (car1Bought == true)
-						{
-							int handling = player1->playerCar.handling;
-							handling += 4;
-							TextFile *HandlingStat = new TextFile();
-							HandlingStat->SetCarStat("Car1", "handling", to_string(handling));
-						}
-						if (car2Bought == true)
-						{
-							int handling = player1->playerCar.handling;
-							handling += 4;
-							TextFile *HandlingStat = new TextFile();
-							HandlingStat->SetCarStat("Car2", "handling", to_string(handling));
-						}
-						if (car3Bought == true)
-						{
-							int handling = player1->playerCar.handling;
-							handling += 4;
-							TextFile *HandlingStat = new TextFile();
-							HandlingStat->SetCarStat("Car3", "handling", to_string(handling));
-						}
-					}
 					tire2Bought = true;
 				}
 			}
@@ -2793,30 +2705,6 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (money >= cost[3])
-					{
-						if (car1Bought == true)
-						{
-							int handling = player1->playerCar.handling;
-							handling += 5;
-							TextFile *HandlingStat = new TextFile();
-							HandlingStat->SetCarStat("Car1", "handling", to_string(handling));
-						}
-						if (car2Bought == true)
-						{
-							int handling = player1->playerCar.handling;
-							handling += 5;
-							TextFile *HandlingStat = new TextFile();
-							HandlingStat->SetCarStat("Car2", "handling", to_string(handling));
-						}
-						if (car3Bought == true)
-						{
-							int handling = player1->playerCar.handling;
-							handling += 5;
-							TextFile *HandlingStat = new TextFile();
-							HandlingStat->SetCarStat("Car3", "handling", to_string(handling));
-						}
-					}
 					tire3Bought = true;
 				}
 			}
@@ -2827,42 +2715,6 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (car1Bought == true)
-					{
-						int LassoLength = player1->playerCar.lassoLength;
-						LassoLength += 3;
-						TextFile *LassoLengthStat = new TextFile();
-						LassoLengthStat->SetCarStat("Car1", "lassolength", to_string(LassoLength));
-
-						int LassoStrength = player1->playerCar.lassoStrength;
-						LassoStrength += 3;
-						TextFile *LassoStrengthStat = new TextFile();
-						LassoStrengthStat->SetCarStat("Car1", "lassostrength", to_string(LassoStrength));
-					}
-					if (car2Bought == true)
-					{
-						int LassoLength = player1->playerCar.lassoLength;
-						LassoLength += 3;
-						TextFile *LassoLengthStat = new TextFile();
-						LassoLengthStat->SetCarStat("Car2", "lassolength", to_string(LassoLength));
-
-						int LassoStrength = player1->playerCar.lassoStrength;
-						LassoStrength += 3;
-						TextFile *LassoStrengthStat = new TextFile();
-						LassoStrengthStat->SetCarStat("Car2", "lassostrength", to_string(LassoStrength));
-					}
-					if (car3Bought == true)
-					{
-						int LassoLength = player1->playerCar.lassoLength;
-						LassoLength += 3;
-						TextFile *LassoLengthStat = new TextFile();
-						LassoLengthStat->SetCarStat("Car3", "lassolength", to_string(LassoLength));
-
-						int LassoStrength = player1->playerCar.lassoStrength;
-						LassoStrength += 3;
-						TextFile *LassoStrengthStat = new TextFile();
-						LassoStrengthStat->SetCarStat("Car3", "lassostrength", to_string(LassoStrength));
-					}
 					lasso1Bought = true;
 				}
 			}
@@ -2873,45 +2725,6 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (money >= cost[4])
-					{
-						if (car1Bought == true)
-						{
-							int LassoLength = player1->playerCar.lassoLength;
-							LassoLength += 5;
-							TextFile *LassoLengthStat = new TextFile();
-							LassoLengthStat->SetCarStat("Car1", "lassolength", to_string(LassoLength));
-
-							int LassoStrength = player1->playerCar.lassoStrength;
-							LassoStrength += 5;
-							TextFile *LassoStrengthStat = new TextFile();
-							LassoStrengthStat->SetCarStat("Car1", "lassostrength", to_string(LassoStrength));
-						}
-						if (car2Bought == true)
-						{
-							int LassoLength = player1->playerCar.lassoLength;
-							LassoLength += 5;
-							TextFile *LassoLengthStat = new TextFile();
-							LassoLengthStat->SetCarStat("Car2", "lassolength", to_string(LassoLength));
-
-							int LassoStrength = player1->playerCar.lassoStrength;
-							LassoStrength += 5;
-							TextFile *LassoStrengthStat = new TextFile();
-							LassoStrengthStat->SetCarStat("Car2", "lassostrength", to_string(LassoStrength));
-						}
-						if (car3Bought == true)
-						{
-							int LassoLength = player1->playerCar.lassoLength;
-							LassoLength += 5;
-							TextFile *LassoLengthStat = new TextFile();
-							LassoLengthStat->SetCarStat("Car3", "lassolength", to_string(LassoLength));
-
-							int LassoStrength = player1->playerCar.lassoStrength;
-							LassoStrength += 5;
-							TextFile *LassoStrengthStat = new TextFile();
-							LassoStrengthStat->SetCarStat("Car3", "lassostrength", to_string(LassoStrength));
-						}
-					}
 					lasso2Bought = true;
 				}
 			}
@@ -2922,45 +2735,6 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (money >= cost[5])
-					{
-						if (car1Bought == true)
-						{
-							int LassoLength = player1->playerCar.lassoLength;
-							LassoLength += 6;
-							TextFile *LassoLengthStat = new TextFile();
-							LassoLengthStat->SetCarStat("Car1", "lassolength", to_string(LassoLength));
-
-							int LassoStrength = player1->playerCar.lassoStrength;
-							LassoStrength += 6;
-							TextFile *LassoStrengthStat = new TextFile();
-							LassoStrengthStat->SetCarStat("Car1", "lassostrength", to_string(LassoStrength));
-						}
-						if (car2Bought == true)
-						{
-							int LassoLength = player1->playerCar.lassoLength;
-							LassoLength += 6;
-							TextFile *LassoLengthStat = new TextFile();
-							LassoLengthStat->SetCarStat("Car2", "lassolength", to_string(LassoLength));
-
-							int LassoStrength = player1->playerCar.lassoStrength;
-							LassoStrength += 6;
-							TextFile *LassoStrengthStat = new TextFile();
-							LassoStrengthStat->SetCarStat("Car2", "lassostrength", to_string(LassoStrength));
-						}
-						if (car3Bought == true)
-						{
-							int LassoLength = player1->playerCar.lassoLength;
-							LassoLength += 6;
-							TextFile *LassoLengthStat = new TextFile();
-							LassoLengthStat->SetCarStat("Car3", "lassolength", to_string(LassoLength));
-
-							int LassoStrength = player1->playerCar.lassoStrength;
-							LassoStrength += 6;
-							TextFile *LassoStrengthStat = new TextFile();
-							LassoStrengthStat->SetCarStat("Car3", "lassostrength", to_string(LassoStrength));
-						}
-					}
 					lasso3Bought = true;
 				}
 			}
@@ -2971,45 +2745,6 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (money >= cost[6])
-					{
-						if (car1Bought == true)
-						{
-							int TranqCount = player1->playerCar.tranqCount;
-							TranqCount += 1;
-							TextFile *TranqCountStat = new TextFile();
-							TranqCountStat->SetCarStat("Car1", "tranqcount", to_string(TranqCount));
-
-							int TranqDuration = player1->playerCar.tranqDuration;
-							TranqDuration += 1;
-							TextFile *TranqDurationStat = new TextFile();
-							TranqDurationStat->SetCarStat("Car1", "tranqduration", to_string(TranqDuration));
-						}
-						if (car2Bought == true)
-						{
-							int TranqCount = player1->playerCar.tranqCount;
-							TranqCount += 1;
-							TextFile *TranqCountStat = new TextFile();
-							TranqCountStat->SetCarStat("Car2", "tranqcount", to_string(TranqCount));
-
-							int TranqDuration = player1->playerCar.tranqDuration;
-							TranqDuration += 1;
-							TextFile *TranqDurationStat = new TextFile();
-							TranqDurationStat->SetCarStat("Car2", "tranqduration", to_string(TranqDuration));
-						}
-						if (car3Bought == true)
-						{
-							int TranqCount = player1->playerCar.tranqCount;
-							TranqCount += 1;
-							TextFile *TranqCountStat = new TextFile();
-							TranqCountStat->SetCarStat("Car3", "tranqcount", to_string(TranqCount));
-
-							int TranqDuration = player1->playerCar.tranqDuration;
-							TranqDuration += 1;
-							TextFile *TranqDurationStat = new TextFile();
-							TranqDurationStat->SetCarStat("Car3", "tranqduration", to_string(TranqDuration));
-						}
-					}
 					dart1Bought = true;
 				}
 			}
@@ -3020,45 +2755,6 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (money >= cost[7])
-					{
-						if (car1Bought == true)
-						{
-							int TranqCount = player1->playerCar.tranqCount;
-							TranqCount += 2;
-							TextFile *TranqCountStat = new TextFile();
-							TranqCountStat->SetCarStat("Car1", "tranqcount", to_string(TranqCount));
-
-							int TranqDuration = player1->playerCar.tranqDuration;
-							TranqDuration += 2;
-							TextFile *TranqDurationStat = new TextFile();
-							TranqDurationStat->SetCarStat("Car1", "tranqduration", to_string(TranqDuration));
-						}
-						if (car2Bought == true)
-						{
-							int TranqCount = player1->playerCar.tranqCount;
-							TranqCount += 2;
-							TextFile *TranqCountStat = new TextFile();
-							TranqCountStat->SetCarStat("Car2", "tranqcount", to_string(TranqCount));
-
-							int TranqDuration = player1->playerCar.tranqDuration;
-							TranqDuration += 2;
-							TextFile *TranqDurationStat = new TextFile();
-							TranqDurationStat->SetCarStat("Car2", "tranqduration", to_string(TranqDuration));
-						}
-						if (car3Bought == true)
-						{
-							int TranqCount = player1->playerCar.tranqCount;
-							TranqCount += 2;
-							TextFile *TranqCountStat = new TextFile();
-							TranqCountStat->SetCarStat("Car3", "tranqcount", to_string(TranqCount));
-
-							int TranqDuration = player1->playerCar.tranqDuration;
-							TranqDuration += 2;
-							TextFile *TranqDurationStat = new TextFile();
-							TranqDurationStat->SetCarStat("Car3", "tranqduration", to_string(TranqDuration));
-						}
-					}
 					dart2Bought = true;
 				}
 			}
@@ -3069,45 +2765,6 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (money >= cost[8])
-					{
-						if (car1Bought == true)
-						{
-							int TranqCount = player1->playerCar.tranqCount;
-							TranqCount += 3;
-							TextFile *TranqCountStat = new TextFile();
-							TranqCountStat->SetCarStat("Car1", "tranqcount", to_string(TranqCount));
-
-							int TranqDuration = player1->playerCar.tranqDuration;
-							TranqDuration += 3;
-							TextFile *TranqDurationStat = new TextFile();
-							TranqDurationStat->SetCarStat("Car1", "tranqduration", to_string(TranqDuration));
-						}
-						if (car2Bought == true)
-						{
-							int TranqCount = player1->playerCar.tranqCount;
-							TranqCount += 3;
-							TextFile *TranqCountStat = new TextFile();
-							TranqCountStat->SetCarStat("Car2", "tranqcount", to_string(TranqCount));
-
-							int TranqDuration = player1->playerCar.tranqDuration;
-							TranqDuration += 3;
-							TextFile *TranqDurationStat = new TextFile();
-							TranqDurationStat->SetCarStat("Car2", "tranqduration", to_string(TranqDuration));
-						}
-						if (car3Bought == true)
-						{
-							int TranqCount = player1->playerCar.tranqCount;
-							TranqCount += 3;
-							TextFile *TranqCountStat = new TextFile();
-							TranqCountStat->SetCarStat("Car3", "tranqcount", to_string(TranqCount));
-
-							int TranqDuration = player1->playerCar.tranqDuration;
-							TranqDuration += 3;
-							TextFile *TranqDurationStat = new TextFile();
-							TranqDurationStat->SetCarStat("Car3", "tranqduration", to_string(TranqDuration));
-						}
-					}
 					dart3Bought = true;
 				}
 			}
@@ -3133,12 +2790,11 @@ void SceneSP3::UpgradeController()
 					gameStates = states::s_Upgrade_Darts1;
 				}
 			}
-			//Press next level to next stage
 			if (worldX > 0.816f * m_worldWidth && worldX < 0.9423f * m_worldWidth)
 			{
 				if (worldY > 10.4f && worldY < 18.1f)
 				{
-					gameStates = states::s_LevelSelect;
+					gameStates = states::s_Upgrade_Cars1;
 				}
 			}
 		}
@@ -3147,6 +2803,7 @@ void SceneSP3::UpgradeController()
 	{
 		bLButtonState = true;
 	}
+
 }
 
 void SceneSP3::RenderProps(playMap* map)
@@ -3760,136 +3417,205 @@ bool SceneSP3::RenderMapFile()
 }
 void SceneSP3::renderMenu()
 {
+	if (gameStates == states::s_Menu)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -4);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 0);
+		RenderMesh(meshList[GEO_MENU_BACKGROUND], false);
+		modelStack.PopMatrix();
 
-		if (gameStates == states::s_Menu)
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 1.1, m_worldHeight / 1.1, -3);
+		modelStack.Scale(70, 70, 0);
+		RenderMesh(meshList[GEO_MENU_MAPEDITOR], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(140, 15, -2);
+		modelStack.Scale(33, 33, 0);
+		RenderMesh(meshList[GEO_MENU_SIGNBOARD], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(118, 38 - (arrowSelection * 7), -1);
+		modelStack.Scale(3, 3, 0);
+		RenderMesh(meshList[GEO_MENU_ARROW], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(140, 36, 0);
+		modelStack.Scale(30, 20, 0);
+		RenderMesh(meshList[GEO_MENU_STARTGAME], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(140, 29, 1);
+		modelStack.Scale(30, 20, 0);
+		RenderMesh(meshList[GEO_MENU_INSTRUCTIONS], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(140, 22, 2);
+		modelStack.Scale(30, 20, 0);
+		RenderMesh(meshList[GEO_MENU_OPTIONS], false);
+		modelStack.PopMatrix();
+
+
+		modelStack.PushMatrix();
+		modelStack.Translate(140, 15, 3);
+		modelStack.Scale(30, 20, 0);
+		RenderMesh(meshList[GEO_MENU_HIGHSCORE], false);
+		modelStack.PopMatrix();
+
+
+		modelStack.PushMatrix();
+		modelStack.Translate(140, 8, 4);
+		modelStack.Scale(30, 20, 0);
+		RenderMesh(meshList[GEO_MENU_QUIT], false);
+		modelStack.PopMatrix();
+	}
+	else if (gameStates == states::s_Options)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -4);
+		modelStack.Scale(m_worldWidth/2, m_worldHeight/2, 0);
+		RenderMesh(meshList[GEO_OPTIONS], false);
+		modelStack.PopMatrix();
+
+		if (sound == 1)
 		{
-			modelStack.PushMatrix();
-			modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -4);
-			modelStack.Scale(m_worldWidth, m_worldHeight, 0);
-			RenderMesh(meshList[GEO_MENU_BACKGROUND], false);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(m_worldWidth / 1.1, m_worldHeight / 1.1, -3);
-			modelStack.Scale(70, 70, 0);
-			RenderMesh(meshList[GEO_MENU_MAPEDITOR], false);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(140, 15, -2);
-			modelStack.Scale(33, 33, 0);
-			RenderMesh(meshList[GEO_MENU_SIGNBOARD], false);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(118, 38 - (arrowSelection * 7), -1);
-			modelStack.Scale(3, 3, 0);
-			RenderMesh(meshList[GEO_MENU_ARROW], false);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(140, 36, 0);
-			modelStack.Scale(30, 20, 0);
-			RenderMesh(meshList[GEO_MENU_STARTGAME], false);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(140, 29, 1);
-			modelStack.Scale(30, 20, 0);
-			RenderMesh(meshList[GEO_MENU_INSTRUCTIONS], false);
-			modelStack.PopMatrix();
-
-			modelStack.PushMatrix();
-			modelStack.Translate(140, 22, 2);
-			modelStack.Scale(30, 20, 0);
-			RenderMesh(meshList[GEO_MENU_OPTIONS], false);
-			modelStack.PopMatrix();
-
-
-			modelStack.PushMatrix();
-			modelStack.Translate(140, 15, 3);
-			modelStack.Scale(30, 20, 0);
-			RenderMesh(meshList[GEO_MENU_HIGHSCORE], false);
-			modelStack.PopMatrix();
-
-
-			modelStack.PushMatrix();
-			modelStack.Translate(140, 8, 4);
-			modelStack.Scale(30, 20, 0);
-			RenderMesh(meshList[GEO_MENU_QUIT], false);
-			modelStack.PopMatrix();
+			std::ostringstream sso1;
+			sso1.precision(5);
+			sso1 << "On";
+			RenderTextOnScreen(meshList[GEO_TEXT], sso1.str(), Color(0, 1, 0), 5, 45, 43);
 		}
-		if (gameStates == states::s_LevelSelect)
+		else
 		{
-			modelStack.PushMatrix();
-			modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -3);
-			modelStack.Scale(m_worldWidth, m_worldHeight, 0);
-			RenderMesh(meshList[GEO_LEVELSELECT], false);
-			modelStack.PopMatrix();
-
+			std::ostringstream sso1;
+			sso1.precision(5);
+			sso1 << "Off";
+			RenderTextOnScreen(meshList[GEO_TEXT], sso1.str(), Color(1, 0, 0), 5, 45, 43);
 		}
-		if (gameStates == states::s_CustomLevelSelect)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -3);
-			modelStack.Scale(m_worldWidth, m_worldHeight, 0);
-			RenderMesh(meshList[GEO_LEVELSELECT_CUSTOM], false);
-			modelStack.PopMatrix();
 
+		if (highQ == 1)
+		{
+			std::ostringstream sso2;
+			sso2.precision(5);
+			sso2 << "On";
+			RenderTextOnScreen(meshList[GEO_TEXT], sso2.str(), Color(0, 1, 0), 5, 45, 31.5);
 		}
-		if (gameStates == states::s_Instructions)
+		else
+		{
+			std::ostringstream sso2;
+			sso2.precision(5);
+			sso2 << "Off";
+			RenderTextOnScreen(meshList[GEO_TEXT], sso2.str(), Color(1, 0, 0), 5, 45, 31.5);
+		}
+	}
+	else if (gameStates == states::s_LevelSelect)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -3);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 0);
+		RenderMesh(meshList[GEO_LEVELSELECT], false);
+		modelStack.PopMatrix();
+
+	}
+	if (gameStates == states::s_CustomLevelSelect)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -3);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 0);
+		RenderMesh(meshList[GEO_LEVELSELECT_CUSTOM], false);
+		modelStack.PopMatrix();
+
+	}
+	if (gameStates == states::s_Instructions)
+	{
+		modelStack.PushMatrix();
+		//modelStack.Translate(140, 58, 4);
+		//modelStack.Scale(50, 20, 0);
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[GEO_MENU_INSTRUCTIONS_PAGE], false);
+		modelStack.PopMatrix();
+
+		if (Application::IsKeyPressed(VK_BACK))
+		{
+			gameStates = states::s_Menu;
+		}
+	}
+	if (gameStates == states::s_Upgrade)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[GEO_UPGRADE_BACKGROUND], false);
+		modelStack.PopMatrix();
+	}
+	if (gameStates == states::s_Upgrade_Cars1 || gameStates == states::s_Upgrade_Cars2 || gameStates == states::s_Upgrade_Cars3)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -7);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[GEO_UPGRADE_UI_CARS], false);
+		modelStack.PopMatrix();
+
+		if (car2Bought == true)
 		{
 			modelStack.PushMatrix();
-			//modelStack.Translate(140, 58, 4);
-			//modelStack.Scale(50, 20, 0);
-			modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
-			modelStack.Scale(m_worldWidth, m_worldHeight, 1);
-			RenderMesh(meshList[GEO_MENU_INSTRUCTIONS_PAGE], false);
+			modelStack.Translate(m_worldWidth / 3.2, m_worldHeight / 5, -4);
+			modelStack.Scale(30, 30, 1);
+			RenderMesh(meshList[GEO_SOLD], false);
 			modelStack.PopMatrix();
+<<<<<<< Updated upstream
 
 			if (Application::IsKeyPressed(VK_ESCAPE))
 			{
 				gameStates = states::s_Menu;
 			}
+=======
+>>>>>>> Stashed changes
 		}
-		else if (gameStates == states::s_Options)
+		if (car3Bought == true)
 		{
 			modelStack.PushMatrix();
-			modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -4);
-			modelStack.Scale(m_worldWidth / 2, m_worldHeight / 2, 0);
-			RenderMesh(meshList[GEO_OPTIONS], false);
+			modelStack.Translate(m_worldWidth / 2.1, m_worldHeight / 5, -4);
+			modelStack.Scale(30, 30, 1);
+			RenderMesh(meshList[GEO_SOLD], false);
 			modelStack.PopMatrix();
+		}
 
-			if (sound == 1)
-			{
-				std::ostringstream sso1;
-				sso1.precision(5);
-				sso1 << "On";
-				RenderTextOnScreen(meshList[GEO_TEXT], sso1.str(), Color(0, 1, 0), 5, 45, 43);
-			}
-			else
-			{
-				std::ostringstream sso1;
-				sso1.precision(5);
-				sso1 << "Off";
-				RenderTextOnScreen(meshList[GEO_TEXT], sso1.str(), Color(1, 0, 0), 5, 45, 43);
-			}
+		if (Application::IsKeyPressed(VK_BACK))
+		{
+			gameStates = states::s_Upgrade;
 		}
-		if (gameStates == states::s_Upgrade)
+	}
+	if (gameStates == states::s_Upgrade_Tires1 || gameStates == states::s_Upgrade_Tires2 || gameStates == states::s_Upgrade_Tires3)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -5);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[GEO_UPGRADE_UI_TIRES], false);
+		modelStack.PopMatrix();
+
+		if (tire2Bought == true)
 		{
 			modelStack.PushMatrix();
-			modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
-			modelStack.Scale(m_worldWidth, m_worldHeight, 1);
-			RenderMesh(meshList[GEO_UPGRADE_BACKGROUND], false);
+			modelStack.Translate(m_worldWidth / 3.2, m_worldHeight / 5, -4);
+			modelStack.Scale(30, 30, 1);
+			RenderMesh(meshList[GEO_SOLD], false);
 			modelStack.PopMatrix();
 		}
-		if (gameStates == states::s_Upgrade_Cars1 || gameStates == states::s_Upgrade_Cars2 || gameStates == states::s_Upgrade_Cars3)
+		if (tire3Bought == true)
 		{
 			modelStack.PushMatrix();
-			modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, -7);
-			modelStack.Scale(m_worldWidth, m_worldHeight, 1);
-			RenderMesh(meshList[GEO_UPGRADE_UI_CARS], false);
+			modelStack.Translate(m_worldWidth / 2.1, m_worldHeight / 5, -4);
+			modelStack.Scale(30, 30, 1);
+			RenderMesh(meshList[GEO_SOLD], false);
 			modelStack.PopMatrix();
+<<<<<<< Updated upstream
 
 			if (car1Bought == true)
 			{
@@ -4417,6 +4143,13 @@ void SceneSP3::renderMenu()
 			RenderTextOnScreen(meshList[GEO_TEXT], s11.str(), Color(0, 1, 0), 2.5, 4.5, 35);
 
 			for (int i = 0; i < player1->playerCar.lassoStrength * 5; i += 5)
+		{
+			gameStates = states::s_Upgrade;
+		}
+	}
+
+	// if SOLD
+	if (car1Bought == true)
 			{
 				modelStack.PushMatrix();
 				modelStack.Translate(m_worldWidth * 0.072 + i, m_worldHeight * 0.55, 2);
