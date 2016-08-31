@@ -20,6 +20,7 @@ public:
 		SCORE,
 		TOTAL,
 	};
+	int scorearray[100];
 	void ReadFile(const string FileName);
 	void WriteFile(const string FileName);
 	string CreateMapFile(const string MapName, bool Loading);

@@ -576,12 +576,33 @@ void TextFile::ListHighScore(string Level)
 			}
 		}
 	}
+	bool sorted = false;
+	int optimize = 1;
+	while (true)
+	{
+		sorted = true;
+		for (int i = 0; i < arraycount - optimize; i++)
+		{
+			if (ScoreArray[i] < ScoreArray[i + 1])
+			{
+				int temp = ScoreArray[i];
+				ScoreArray[i] = ScoreArray[i + 1];
+				ScoreArray[i + 1] = temp;
+				sorted = false;
+			}
+		}
+		if (sorted == true)
+		{
+			break;
+		}
+		optimize++;
+	}
 	cout << "Displaying scores for: " << Level << endl;
 	for (int i = 0; i < arraycount; i++)
 	{
 		if (ScoreArray[i] > 0)
 		{
-			cout << ScoreArray[i] << endl;
+			scorearray[i] = ScoreArray[i];
 		}
 	}
 }

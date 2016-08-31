@@ -199,6 +199,10 @@ void SceneBase::Init()
 	meshList[GEO_MENU_PAUSE]->textureID = LoadTGA("Image//Pause.tga");
 	meshList[GEO_MENU_QUIT] = MeshBuilder::GenerateQuad("menu_quit", Color(1, 1, 1), 2.f);
 	meshList[GEO_MENU_QUIT]->textureID = LoadTGA("Image//menu_Quit.tga");
+	meshList[GEO_MENU_HIGHSCORE_PAGE] = MeshBuilder::GenerateQuad("menu_highscore", Color(1, 1, 1), 1.f);
+	meshList[GEO_MENU_HIGHSCORE_PAGE]->textureID = LoadTGA("Image//menu_Highscore_page.tga");
+	meshList[GEO_MENU_HIGHSCORE_PAGE2] = MeshBuilder::GenerateQuad("menu_highscore2", Color(1, 1, 1), 1.f);
+	meshList[GEO_MENU_HIGHSCORE_PAGE2]->textureID = LoadTGA("Image//menu_Highscore_page2.tga");
 
 	meshList[GEO_UPGRADE_BACKGROUND] = MeshBuilder::GenerateQuad("upgrade_background", Color(1, 1, 1), 1.f);
 	meshList[GEO_UPGRADE_BACKGROUND]->textureID = LoadTGA("Image//UpgradeScene.tga");

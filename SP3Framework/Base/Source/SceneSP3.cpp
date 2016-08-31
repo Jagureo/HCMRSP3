@@ -91,6 +91,8 @@ void SceneSP3::Init()
 	dartCount = 5;
 	dartROF = 1;
 	paused = false;
+	scroll = 0;
+	scrollimit = 275;
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP2]);
@@ -826,6 +828,9 @@ void SceneSP3::Update(double dt)
 		testMap.addClusterProp(testRock);
 
 		testMap.addBorder();
+
+		animalStat->SetScore(Math::RandInt(), "levelwat");
+		animalStat->ListHighScore("levelwat");
 	}
 	if (Application::IsKeyPressed('T'))
 	{
@@ -1206,6 +1211,19 @@ void SceneSP3::Update(double dt)
 			paused = true;
 		}
 	}
+	if (gameStates == states::s_Highscore)
+	{
+		if (Application::IsKeyPressed(VK_UP) || Application::IsKeyPressed('W'))
+		{
+			if (scroll <= scrollimit)
+			scroll++;
+		}
+		if (Application::IsKeyPressed(VK_DOWN) || Application::IsKeyPressed('S'))
+		{
+			if (scroll >= 0)
+			scroll--;
+		}
+	}
 	if (paused == true)
 	{
 		if (bLButtonState && !Application::IsMousePressed(0))
@@ -1440,6 +1458,28 @@ void SceneSP3::Update(double dt)
 					go->ballrotated += go->vel.Length() * (2 / go->scale.x);
 
 
+				}
+				else if (go->type == GameObject::GO_TRANQ)
+				{
+					go->pos.x += diffx;
+					go->pos.y += diffy;
+					if ((go->pos - player1->pos).LengthSquared() > 14400)
+					{
+						go->active = false;
+						continue;
+					}
+					for (std::vector<enemy *>::iterator it2 = enemyList.begin(); it2 != enemyList.end(); ++it2)
+					{
+						enemy *other = (enemy *)*it2;
+						if (other->getActive() == false)
+							continue;
+						if ((go->pos - other->getPos()).LengthSquared() < 50)
+						{
+							go->active = false;
+							other->setDrunk(true);
+							break;
+						}
+					}
 				}
 				//Exercise 8a: handle collision between GO_BALL and GO_BALL using velocity swap
 
@@ -4319,35 +4359,79 @@ void SceneSP3::renderMenu()
 			RenderMesh(meshList[GEO_CUBE], false);
 			modelStack.PopMatrix();
 		}
-		std::ostringstream s12;
-		s12.precision(5);
-		s12 << "$" << cost[8];
-		RenderTextOnScreen(meshList[GEO_TEXT], s12.str(), Color(0, 0, 1), 2.5, 14.5, 1);
+			std::ostringstream s12;
+			s12.precision(5);
+			s12 << "$" << cost[8];
+			RenderTextOnScreen(meshList[GEO_TEXT], s12.str(), Color(0, 0, 1), 2.5, 14.5, 1);
 
-		std::ostringstream s13;
-		s13.precision(5);
-		s13 << "$" << money;
-		RenderTextOnScreen(meshList[GEO_TEXT], s13.str(), Color(0, 1, 0), 2.5, 59.5, 1);
-	}
+			std::ostringstream s13;
+			s13.precision(5);
+			s13 << "$" << money;
+			RenderTextOnScreen(meshList[GEO_TEXT], s13.str(), Color(0, 1, 0), 2.5, 59.5, 1);
+		}
 
-	if (gameStates == states::s_Lose)
-	{
-		modelStack.PushMatrix();
-		//modelStack.Translate(140, 58, 4);
-		//modelStack.Scale(50, 20, 0);
-		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
-		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
-		RenderMesh(meshList[GEO_LOSE_SCENE], false);
-		modelStack.PopMatrix();
-	}
-	if (paused == true)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
-		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
-		RenderMesh(meshList[GEO_MENU_PAUSE], false);
-		modelStack.PopMatrix();
-	}
+		if (gameStates == states::s_Lose)
+		{
+			modelStack.PushMatrix();
+			//modelStack.Translate(140, 58, 4);
+			//modelStack.Scale(50, 20, 0);
+			modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
+			modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+			RenderMesh(meshList[GEO_LOSE_SCENE], false);
+			modelStack.PopMatrix();
+		}
+		if (paused == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
+			modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+			RenderMesh(meshList[GEO_MENU_PAUSE], false);
+			modelStack.PopMatrix();
+		}
+		if (gameStates == states::s_Highscore)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
+			modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+			RenderMesh(meshList[GEO_MENU_HIGHSCORE_PAGE], false);
+			modelStack.PopMatrix();
+
+			if (Application::IsKeyPressed(VK_ESCAPE))
+			{
+				gameStates = states::s_Menu;
+			}
+
+			std::ostringstream ss;
+			int counter = 0;
+			for (int i = 0; i < (sizeof(animalStat->scorearray) / sizeof(*(animalStat->scorearray))); i++)
+			{
+				if (animalStat->scorearray[i] > 0)
+				{
+					counter++;
+					ss.str("");
+					ss.precision(3);
+					ss << "#" << i + 1 << " ";
+					if (i < 99)
+					{
+						ss << " ";
+					}
+					if (i < 9)
+					{
+						ss << " ";
+					}
+					ss << animalStat->scorearray[i];
+					RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 20, 37 - (i * 3) + scroll);
+				}
+			}
+			scrollimit = 275 - ((100 - counter) * 3);
+
+			modelStack.PushMatrix();
+			modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 7);
+			modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+			RenderMesh(meshList[GEO_MENU_HIGHSCORE_PAGE2], false);
+			modelStack.PopMatrix();
+
+		}
 }
 
 void SceneSP3::Render()

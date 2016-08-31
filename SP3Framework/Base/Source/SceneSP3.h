@@ -130,6 +130,8 @@ protected:
 	GameObject* player1;
 
 	TextFile* animalStat;
+	int scroll;
+	int scrollimit;
 
 	lasso* Dalasso = newLasso();
 
