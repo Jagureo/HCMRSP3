@@ -354,51 +354,103 @@ void enemy::updatePos(float dt)
 	{
 		active = 0;
 	}
-	if (running == 1 && stamina > 0)
+	if (drunk == 0)
 	{
 
-		if (vel.x > 80 * speed)
+		if (running == 1 && stamina > 0)
 		{
-			vel.x = 80 * speed;
+			if (vel.x > 80 * speed)
+			{
+				vel.x = 80 * speed;
+			}
+			else if (vel.x < -80 * speed)
+			{
+				vel.x = -80 * speed;
+			}
+			if (vel.y < -80 * speed)
+			{
+				vel.y = -80 * speed;
+			}
+			else if (vel.y > 80 * speed)
+			{
+				vel.y = 80 * speed;
+			}
+			if (vel.z != 0)
+			{
+				vel.z = 0;
+			}
 		}
-		else if (vel.x < -80 * speed)
+		else
 		{
-			vel.x = -80 * speed;
-		}
-		if (vel.y < -80 * speed)
-		{
-			vel.y = -80 * speed;
-		}
-		else if (vel.y > 80 * speed)
-		{
-			vel.y = 80 * speed;
-		}
-		if (vel.z != 0)
-		{
-			vel.z = 0;
+			if (vel.x > 50 * speed)
+			{
+				vel.x = 50 * speed;
+			}
+			else if (vel.x < -50 * speed)
+			{
+				vel.x = -50 * speed;
+			}
+			if (vel.y < -50 * speed)
+			{
+				vel.y = -50 * speed;
+			}
+			else if (vel.y > 50 * speed)
+			{
+				vel.y = 50 * speed;
+			}
+			if (vel.z != 0)
+			{
+				vel.z = 0;
+			}
 		}
 	}
 	else
 	{
-		if (vel.x > 50 * speed)
+		if (running == 1 && stamina > 0)
 		{
-			vel.x = 50 * speed;
+			if (vel.x > 40 * speed)
+			{
+				vel.x = 40 * speed;
+			}
+			else if (vel.x < -40 * speed)
+			{
+				vel.x = -40 * speed;
+			}
+			if (vel.y < -40 * speed)
+			{
+				vel.y = -40 * speed;
+			}
+			else if (vel.y > 40 * speed)
+			{
+				vel.y = 40 * speed;
+			}
+			if (vel.z != 0)
+			{
+				vel.z = 0;
+			}
 		}
-		else if (vel.x < -50 * speed)
+		else
 		{
-			vel.x = -50 * speed;
-		}
-		if (vel.y < -50 * speed)
-		{
-			vel.y = -50 * speed;
-		}
-		else if (vel.y > 50 * speed)
-		{
-			vel.y = 50 * speed;
-		}
-		if (vel.z != 0)
-		{
-			vel.z = 0;
+			if (vel.x > 25 * speed)
+			{
+				vel.x = 25 * speed;
+			}
+			else if (vel.x < -25 * speed)
+			{
+				vel.x = -25 * speed;
+			}
+			if (vel.y < -25 * speed)
+			{
+				vel.y = -25 * speed;
+			}
+			else if (vel.y > 25 * speed)
+			{
+				vel.y = 25 * speed;
+			}
+			if (vel.z != 0)
+			{
+				vel.z = 0;
+			}
 		}
 	}
 }
