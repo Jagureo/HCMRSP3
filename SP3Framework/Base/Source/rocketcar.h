@@ -9,6 +9,11 @@ struct rocketCar
 	float engine;
 	float hp;
 	float handling;
+	float lassoLength;
+	float lassoStrength;
+	float money;
+	float tranqCount;
+	float tranqDuration;
 	float topSpeed;
 	float turnSpeed;
 	float mass;

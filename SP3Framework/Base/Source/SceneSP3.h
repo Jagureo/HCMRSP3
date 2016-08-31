@@ -58,6 +58,8 @@ class SceneSP3 : public SceneBase
 	float rotateDisplayX;
 	float rotateDisplayY;
 	float fuelAmount;
+	int money;
+	int cost[8];
 
 	bool car1Bought;
 	bool car2Bought;
@@ -72,6 +74,7 @@ class SceneSP3 : public SceneBase
 	bool dart2Bought;
 	bool dart3Bought;
 
+	bool paused;
 	int currentLevel;
 
 	void InitCarStat(string varname);
