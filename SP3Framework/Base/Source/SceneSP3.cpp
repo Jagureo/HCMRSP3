@@ -875,7 +875,10 @@ void SceneSP3::Update(double dt)
 		playerControl();
 		if (Application::IsKeyPressed('W') || (Application::IsKeyPressed('S')))
 		{
-			fuelAmount -= dt;
+			if (gameStates != states::s_MapEditor)
+			{
+				fuelAmount -= dt;
+			}
 		}
 	}
 
@@ -1774,7 +1777,7 @@ void SceneSP3::Update(double dt)
 										{
 											float test = -(testMap.getMapSize().x) * 5;
 											goE->setActive(false);
-											points--;
+											//points--;
 										}
 									}
 									objective = NULL;
@@ -4359,34 +4362,34 @@ void SceneSP3::renderMenu()
 			RenderMesh(meshList[GEO_CUBE], false);
 			modelStack.PopMatrix();
 		}
-			std::ostringstream s12;
-			s12.precision(5);
-			s12 << "$" << cost[8];
-			RenderTextOnScreen(meshList[GEO_TEXT], s12.str(), Color(0, 0, 1), 2.5, 14.5, 1);
+		std::ostringstream s12;
+		s12.precision(5);
+		s12 << "$" << cost[8];
+		RenderTextOnScreen(meshList[GEO_TEXT], s12.str(), Color(0, 0, 1), 2.5, 14.5, 1);
 
-			std::ostringstream s13;
-			s13.precision(5);
-			s13 << "$" << money;
-			RenderTextOnScreen(meshList[GEO_TEXT], s13.str(), Color(0, 1, 0), 2.5, 59.5, 1);
-		}
+		std::ostringstream s13;
+		s13.precision(5);
+		s13 << "$" << money;
+		RenderTextOnScreen(meshList[GEO_TEXT], s13.str(), Color(0, 1, 0), 2.5, 59.5, 1);
+	}
 
-		if (gameStates == states::s_Lose)
-		{
-			modelStack.PushMatrix();
-			//modelStack.Translate(140, 58, 4);
-			//modelStack.Scale(50, 20, 0);
-			modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
-			modelStack.Scale(m_worldWidth, m_worldHeight, 1);
-			RenderMesh(meshList[GEO_LOSE_SCENE], false);
-			modelStack.PopMatrix();
-		}
-		if (paused == true)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
-			modelStack.Scale(m_worldWidth, m_worldHeight, 1);
-			RenderMesh(meshList[GEO_MENU_PAUSE], false);
-			modelStack.PopMatrix();
+	if (gameStates == states::s_Lose)
+	{
+		modelStack.PushMatrix();
+		//modelStack.Translate(140, 58, 4);
+		//modelStack.Scale(50, 20, 0);
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[GEO_LOSE_SCENE], false);
+		modelStack.PopMatrix();
+	}
+	if (paused == true)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+		RenderMesh(meshList[GEO_MENU_PAUSE], false);
+		modelStack.PopMatrix();
 		}
 		if (gameStates == states::s_Highscore)
 		{
@@ -4431,7 +4434,7 @@ void SceneSP3::renderMenu()
 			RenderMesh(meshList[GEO_MENU_HIGHSCORE_PAGE2], false);
 			modelStack.PopMatrix();
 
-		}
+	}
 }
 
 void SceneSP3::Render()
@@ -4709,25 +4712,15 @@ void SceneSP3::Render()
 	float worldX = x * m_worldWidth / w;
 	float worldY = (h - y) * m_worldHeight / h;
 
-	std::ostringstream ss11;
+	/*std::ostringstream ss11;
 	ss11.precision(5);
 	ss11 << "count: " << testMap.propCount;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss11.str(), Color(0, 1, 0), 3, 0, 6);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss11.str(), Color(0, 1, 0), 3, 0, 6);*/
 
-	std::ostringstream ss22;
-	ss22.precision(5);
-	ss22 << "score: " << points;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss22.str(), Color(0, 1, 0), 3, 0, 9);
-
-	std::ostringstream ss;
+	/*std::ostringstream ss;
 	ss.precision(5);
 	ss << "Pos: " << worldX / m_worldWidth << ", " << worldY;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
-
-	std::ostringstream ss3;
-	ss3.precision(5);
-	ss3 << "Fuel: " << fuelAmount;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 12);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);*/
 
 	std::ostringstream ssz;
 	ssz.precision(5);
@@ -4735,6 +4728,22 @@ void SceneSP3::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], ssz.str(), Color(0, 1, 0), 3, 0, 0);
 
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Collision", Color(0, 1, 0), 3, 0, 0);
+	if (gameStates == states::s_Tutorial ||
+		gameStates == states::s_Level2 ||
+		gameStates == states::s_Level3 ||
+		gameStates == states::s_LevelBoss ||
+		gameStates == states::s_MapEditor && testMode == 1)
+	{
+		std::ostringstream ss3;
+		ss3.precision(3);
+		ss3 << "Fuel: " << fuelAmount;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 1), 3.5, 3, 55);
+
+		std::ostringstream ss22;
+		ss22.precision(5);
+		ss22 << "score: " << points;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss22.str(), Color(0, 1, 1), 3.5, 50, 55);
+	}
 }
 
 void SceneSP3::Exit()
