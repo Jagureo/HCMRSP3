@@ -95,8 +95,8 @@ void SceneSP3::Init()
 	testMap.setMapSize(30, 20);
 
 	//gameStates = states::s_Menu;
-	//gameStates = states::s_Upgrade;
-	gameStates = states::s_Tutorial;
+	gameStates = states::s_Upgrade;
+	//gameStates = states::s_Tutorial;
 
 	animalStat = new TextFile(TextFile::ANIMAL);
 
@@ -136,6 +136,10 @@ void SceneSP3::InitCarStat(string varname)
 	player1->playerCar.engine = var->get_engine();
 	player1->playerCar.hp= var->get_hp();
 	player1->playerCar.handling = var->get_handling();
+	player1->playerCar.lassoLength = var->get_lassolength();
+	player1->playerCar.lassoStrength = var->get_lassostrength();
+	player1->playerCar.tranqCount = var->get_tranqcount();
+	player1->playerCar.tranqDuration = var->get_tranqduration();
 	cout << "bought" << endl;
 }
 void SceneSP3::Reset()
@@ -1193,7 +1197,7 @@ void SceneSP3::Update(double dt)
 		}
 	}
 
-	if (Application::IsKeyPressed(VK_BACK))
+	if (Application::IsKeyPressed(VK_ESCAPE))
 	{
 		if (gameStates == states::s_Tutorial ||
 			gameStates == states::s_Level2 ||
@@ -1239,31 +1243,43 @@ void SceneSP3::Update(double dt)
 		static bool pressedBack = false;
 		if (gameStates == states::s_CustomLevelSelect)
 		{
-			if (Application::IsKeyPressed(VK_BACK) && pressedBack == false)
+			if (Application::IsKeyPressed(VK_ESCAPE) && pressedBack == false)
 			{
 				pressedBack = true;
 				gameStates = states::s_LevelSelect;
 			}
-			else if (!Application::IsKeyPressed(VK_BACK) && pressedBack == true)
+			else if (!Application::IsKeyPressed(VK_ESCAPE) && pressedBack == true)
 			{
 				pressedBack = false;
 			}
 		}
 		if (gameStates == states::s_LevelSelect)
 		{
-			if (Application::IsKeyPressed(VK_BACK) && pressedBack == false)
+			if (Application::IsKeyPressed(VK_ESCAPE) && pressedBack == false)
 			{
 				pressedBack = true;
 				gameStates = states::s_Menu;
 			}
-			else if (!Application::IsKeyPressed(VK_BACK) && pressedBack == true)
+			else if (!Application::IsKeyPressed(VK_ESCAPE) && pressedBack == true)
+			{
+				pressedBack = false;
+			}
+		}
+		if (gameStates == states::s_Options)
+		{
+			if (Application::IsKeyPressed(VK_ESCAPE) && pressedBack == false)
+			{
+				pressedBack = true;
+				gameStates = states::s_Menu;
+			}
+			else if (!Application::IsKeyPressed(VK_ESCAPE) && pressedBack == true)
 			{
 				pressedBack = false;
 			}
 		}
 		if (gameStates == states::s_Lose)
 		{
-			if (Application::IsKeyPressed(VK_BACK))
+			if (Application::IsKeyPressed(VK_ESCAPE))
 			{
 				gameStates = states::s_Menu;
 				fuelAmount = 100.0f;
@@ -1890,7 +1906,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 	{
 		if (editName == true && nameType == false)
 		{
-			if (Application::IsKeyPressed(VK_BACK) && mapName.length() > 0)
+			if (Application::IsKeyPressed(VK_ESCAPE) && mapName.length() > 0)
 			{
 				mapName.pop_back();
 				nameType = true;
@@ -1913,7 +1929,7 @@ void SceneSP3::mapEditorUpdate(double dt)
 		else
 		{
 			nameType = false;
-			if (Application::IsKeyPressed(VK_BACK))
+			if (Application::IsKeyPressed(VK_ESCAPE))
 			{
 				nameType = true;
 			}
@@ -3831,7 +3847,7 @@ void SceneSP3::renderMenu()
 			RenderMesh(meshList[GEO_MENU_INSTRUCTIONS_PAGE], false);
 			modelStack.PopMatrix();
 
-			if (Application::IsKeyPressed(VK_BACK))
+			if (Application::IsKeyPressed(VK_ESCAPE))
 			{
 				gameStates = states::s_Menu;
 			}
@@ -3903,7 +3919,7 @@ void SceneSP3::renderMenu()
 				modelStack.PopMatrix();
 			}
 
-			if (Application::IsKeyPressed(VK_BACK))
+			if (Application::IsKeyPressed(VK_ESCAPE))
 			{
 				gameStates = states::s_Upgrade;
 			}
@@ -3940,7 +3956,7 @@ void SceneSP3::renderMenu()
 				RenderMesh(meshList[GEO_SOLD], false);
 				modelStack.PopMatrix();
 			}
-			if (Application::IsKeyPressed(VK_BACK))
+			if (Application::IsKeyPressed(VK_ESCAPE))
 			{
 				gameStates = states::s_Upgrade;
 			}
@@ -3978,7 +3994,7 @@ void SceneSP3::renderMenu()
 				modelStack.PopMatrix();
 			}
 
-			if (Application::IsKeyPressed(VK_BACK))
+			if (Application::IsKeyPressed(VK_ESCAPE))
 			{
 				gameStates = states::s_Upgrade;
 			}
@@ -4018,7 +4034,7 @@ void SceneSP3::renderMenu()
 				modelStack.PopMatrix();
 			}
 
-			if (Application::IsKeyPressed(VK_BACK))
+			if (Application::IsKeyPressed(VK_ESCAPE))
 			{
 				gameStates = states::s_Upgrade;
 			}
@@ -4892,7 +4908,7 @@ void SceneSP3::Render()
 		}*/
 
 		mapEditorRender();
-		if (Application::IsKeyPressed(VK_BACK))
+		if (Application::IsKeyPressed(VK_ESCAPE))
 		{
 			gameStates = states::s_Menu;
 		}

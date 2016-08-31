@@ -196,7 +196,7 @@ void SceneBase::Init()
 	meshList[GEO_MENU_HIGHSCORE] = MeshBuilder::GenerateQuad("menu_highscore", Color(1, 1, 1), 2.f);
 	meshList[GEO_MENU_HIGHSCORE]->textureID = LoadTGA("Image//menu_Highscore.tga");
 	meshList[GEO_MENU_PAUSE] = MeshBuilder::GenerateQuad("menu_pause", Color(1, 1, 1), 1.f);
-	meshList[GEO_MENU_PAUSE]->textureID = LoadTGA("Image//pauseScreen.tga");
+	meshList[GEO_MENU_PAUSE]->textureID = LoadTGA("Image//Pause.tga");
 	meshList[GEO_MENU_QUIT] = MeshBuilder::GenerateQuad("menu_quit", Color(1, 1, 1), 2.f);
 	meshList[GEO_MENU_QUIT]->textureID = LoadTGA("Image//menu_Quit.tga");
 
