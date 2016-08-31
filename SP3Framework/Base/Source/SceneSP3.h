@@ -58,6 +58,8 @@ class SceneSP3 : public SceneBase
 	float rotateDisplayX;
 	float rotateDisplayY;
 	float fuelAmount;
+	int money;
+	int cost[8];
 
 	bool car1Bought;
 	bool car2Bought;
@@ -72,6 +74,7 @@ class SceneSP3 : public SceneBase
 	bool dart2Bought;
 	bool dart3Bought;
 
+	bool paused;
 	int currentLevel;
 
 	void InitCarStat(string varname);
@@ -96,7 +99,7 @@ public:
 
 	void CollisionMap(GameObject *go, GameObject *other, double dt);
 
-	void playerControl();
+	void playerControl(double dt);
 
 	void mapEditorUpdate(double dt);
 	void mapEditorRender();
@@ -124,7 +127,7 @@ public:
 	void eraseEnemy();
 
 	string FileName;
-	
+	bool sound;
 protected:
 
 	GameObject* player1;
@@ -151,6 +154,9 @@ protected:
 	GameObject *m_ghost;
 	int m_objectCount;
 	bool driftMode;
+	int dartMax;
+	int dartCount;
+	float dartROF;
 
 	string mapName;
 	bool nameType;
@@ -179,8 +185,6 @@ protected:
 	float m1, m2;
 	Vector3 u1, u2, v1, v2;
 
-	bool highQ;
-	bool sound;
 	bool snapSet;
 	ISoundEngine* theSoundEngine;
 	ISound* Sound_Engine;
