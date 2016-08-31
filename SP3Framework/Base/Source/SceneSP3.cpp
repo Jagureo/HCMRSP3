@@ -1603,11 +1603,13 @@ void SceneSP3::Update(double dt)
 								}
 								else
 								{
+									bool objCheck = 0;
 									for(std::vector<GameObject *>::iterator itO = testMap.mapProps.begin(); itO != testMap.mapProps.end(); ++itO)
 									{
 										GameObject *goO = (GameObject *)*itO;
-										if (goO->type == GameObject::MAP_OBJECTIVE)
+										if (goO->type == GameObject::MAP_OBJECTIVE && goO->active == 1)
 										{
+											objCheck = 1;
 											if (objective == NULL)
 											{
 												objective = goO->pos;
@@ -1617,6 +1619,11 @@ void SceneSP3::Update(double dt)
 												objective = goO->pos;
 											}
 										}
+										
+									}
+									if (objCheck == 0)
+									{
+										objective = center;
 									}
 									goE->slowDown(enemyList, objective);
 									if (goE->getPos().x > objective.x - 10 && goE->getPos().x < objective.x + 10 && goE->getPos().y > objective.y - 10 && goE->getPos().y < objective.y + 10 && goE->getTaken() == 0)
