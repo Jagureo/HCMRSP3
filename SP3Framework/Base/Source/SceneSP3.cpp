@@ -2029,10 +2029,13 @@ void SceneSP3::Update(double dt)
 				float worldY = (h - y) * m_worldHeight / h;
 				//m_ghost->pos.Set(worldX, worldY, 0);
 				//m_ghost->active = true;
-				Dalasso->throwLasso(player1->pos, Vector3(worldX, worldY, 0));
-				if (sound == 1)
+				if (Dalasso->throwLasso(player1->pos, Vector3(worldX, worldY, 0)) == 1)
 				{
-					throwSound();
+
+					if (sound == 1)
+					{
+						throwSound();
+					}
 				}
 
 				snapSet = 1;

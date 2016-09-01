@@ -19,7 +19,7 @@ public:
 	
 	
 	
-	void throwLasso(Vector3 playerPos, Vector3 mousePos);
+	bool throwLasso(Vector3 playerPos, Vector3 mousePos);
 	bool checkCaught(Vector3 playerPos, Vector3 enemyPos, float animalSize);
 	bool caughtUpdate(Vector3 playerPos, Vector3 enemyPos, bool enemyActive);
 	bool updateLasso(Vector3 playerPos,float dt);

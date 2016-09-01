@@ -23,53 +23,64 @@ void lasso::setLassoSpd(float input)
 }
 
 
-void lasso::throwLasso(Vector3 playerPos, Vector3 mousePos)
+bool lasso::throwLasso(Vector3 playerPos, Vector3 mousePos)
 {
-	
-	lassoPos = playerPos;
-	targetPos = mousePos;
-	currLassoRange = 0;
-	currLassoState = THROWN;
-	lassoVel = (targetPos - lassoPos);
-	lassoVel.Normalize();
-	lassoVel *= lassoSpd;
+	if ((mousePos - playerPos).Length() > 3)
+	{
+		lassoPos = playerPos;
+		targetPos = mousePos;
+		currLassoRange = 0;
+		currLassoState = THROWN;
+		lassoVel = (targetPos - lassoPos);
+		lassoVel.Normalize();
+		lassoVel *= lassoSpd;
+		return true;
+	}
+	return false;
 
 }
 
 bool lasso::updateLasso(Vector3 playerPos, float dt)
 {
-	if (currLassoState == 1)
-	{
-		if (currLassoRange > maxLassoRange || lassoPos.x > targetPos.x - 1 &&  lassoPos.x < targetPos.x + 1 && lassoPos.y > targetPos.y - 1 &&  lassoPos.y < targetPos.y + 1)
+	
+		if (currLassoState == 1)
 		{
-			lassoVel = (0, 0, 0);
-			currLassoState = MISS;
+			if (currLassoRange > maxLassoRange || lassoPos.x > targetPos.x - 1 && lassoPos.x < targetPos.x + 1 && lassoPos.y > targetPos.y - 1 && lassoPos.y < targetPos.y + 1)
+			{
+				lassoVel = (0, 0, 0);
+				currLassoState = MISS;
+			}
+			else
+			{
+				if (targetPos.x - lassoPos.x != 0 && targetPos.y - lassoPos.y != 0)
+				{
+					lassoVel = (targetPos - lassoPos);
+					lassoVel.Normalize();
+					lassoVel *= lassoSpd;
+					lassoPos += lassoVel;
+					currLassoRange = (lassoPos - playerPos).Length();
+				}
+				//std::cout << currLassoRange << std::endl;
+			}
+
 		}
-		else
+		else if (currLassoState == 3)
 		{
-			lassoVel = (targetPos - lassoPos);
-			lassoVel.Normalize();
-			lassoVel *= lassoSpd;
-			lassoPos += lassoVel;
-			currLassoRange = (lassoPos - playerPos).Length();
-			//std::cout << currLassoRange << std::endl;
+			if (targetPos.x - lassoPos.x != 0 && targetPos.y - lassoPos.y != 0)
+			{
+				lassoVel += (lassoPos - playerPos);
+				lassoVel.Normalize();
+				lassoVel *= 0.5 * lassoSpd;
+				lassoPos -= lassoVel;
+				currLassoRange = (lassoPos - playerPos).Length();
+			}
+			if (/*lassoPos.x > playerPos.x - 3 &&  lassoPos.x < playerPos.x + 3 && lassoPos.y > playerPos.y - 3 &&  lassoPos.y < playerPos.y + 3*/currLassoRange < 5)
+			{
+				currLassoState = READY;
+				lassoVel = (0, 0, 0);
+			}
+			//std::cout << "cumming bak" << std::endl;
 		}
-		
-	}
-	else if (currLassoState == 3)
-	{
-		lassoVel += (lassoPos - playerPos);
-		lassoVel.Normalize();
-		lassoVel *= 0.5 * lassoSpd;
-		lassoPos -= lassoVel;
-		currLassoRange = (lassoPos - playerPos).Length();
-		if (/*lassoPos.x > playerPos.x - 3 &&  lassoPos.x < playerPos.x + 3 && lassoPos.y > playerPos.y - 3 &&  lassoPos.y < playerPos.y + 3*/currLassoRange < 5)
-		{
-			currLassoState = READY;
-			lassoVel = (0,0,0);
-		}
-		//std::cout << "cumming bak" << std::endl;
-	}
 
 	return false;
 }
