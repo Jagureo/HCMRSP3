@@ -76,7 +76,7 @@ void SceneSP3::Init()
 	fuelAmount = 100.0f;
 	leader = NULL;
 	snapSet = 0;
-	money = 1000;
+	money = 100;
 	cost[0] = 100; //car2
 	cost[1] = 200; //car3
 	cost[2] = 300; //tire2
