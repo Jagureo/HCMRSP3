@@ -2285,6 +2285,12 @@ void SceneSP3::mapEditorUpdate(double dt)
 							human->SetData("human", go->pos.x - mapPosition.x, go->pos.y - mapPosition.y);
 							human->WriteFile(FileName);
 						}
+						else if (go->type == GameObject::MAP_OBJECTIVE)
+						{
+							TextFile *human = new TextFile(TextFile::MAP);
+							human->SetData("objective", go->pos.x - mapPosition.x, go->pos.y - mapPosition.y);
+							human->WriteFile(FileName);
+						}
 					}
 				}
 				cout << "SAVING" << endl;
@@ -3479,6 +3485,17 @@ bool SceneSP3::RenderMapFile()
 			obs->fresh = true;
 			obs->active = true;
 			obs->scale.Set(6,6,6);
+			testMap.forceAddSingleProp(obs);
+
+			cout << "human added" << endl;
+		}\
+		else if (map->get_type() == "objective")
+		{
+			obs = new GameObject(GameObject::MAP_OBJECTIVE);
+			obs->pos.Set(map->get_x(), map->get_y(), 1);
+			obs->fresh = true;
+			obs->active = true;
+			obs->scale.Set(5, 5, 5);
 			testMap.forceAddSingleProp(obs);
 
 			cout << "human added" << endl;
