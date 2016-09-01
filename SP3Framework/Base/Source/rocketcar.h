@@ -10,7 +10,7 @@ struct rocketCar
 	float hp;
 	float handling;
 	float lassoLength;
-	float lassoStrength;
+	float lassoSpeed;
 	float money;
 	float tranqCount;
 	float tranqDuration;

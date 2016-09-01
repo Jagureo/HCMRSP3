@@ -148,7 +148,7 @@ void SceneSP3::InitCarStat(string varname)
 	player1->playerCar.hp= var->get_hp();
 	player1->playerCar.handling = var->get_handling();
 	player1->playerCar.lassoLength = var->get_lassolength();
-	player1->playerCar.lassoStrength = var->get_lassostrength();
+	player1->playerCar.lassoSpeed = var->get_lassoSpeed();
 	player1->playerCar.tranqCount = var->get_tranqcount();
 	player1->playerCar.tranqDuration = var->get_tranqduration();
 	cout << "bought" << endl;
@@ -3004,10 +3004,10 @@ void SceneSP3::UpgradeController()
 							TextFile *LassoLengthStat = new TextFile();
 							LassoLengthStat->SetCarStat("Car1", "lassolength", to_string(LassoLength));
 
-							int LassoStrength = player1->playerCar.lassoStrength;
-							LassoStrength += 5;
-							TextFile *LassoStrengthStat = new TextFile();
-							LassoStrengthStat->SetCarStat("Car1", "lassostrength", to_string(LassoStrength));
+							int lassoSpeed = player1->playerCar.lassoSpeed;
+							lassoSpeed += 5;
+							TextFile *lassoSpeedStat = new TextFile();
+							lassoSpeedStat->SetCarStat("Car1", "lassoSpeed", to_string(lassoSpeed));
 						}
 						if (car2Bought == true)
 						{
@@ -3016,10 +3016,10 @@ void SceneSP3::UpgradeController()
 							TextFile *LassoLengthStat = new TextFile();
 							LassoLengthStat->SetCarStat("Car2", "lassolength", to_string(LassoLength));
 
-							int LassoStrength = player1->playerCar.lassoStrength;
-							LassoStrength += 5;
-							TextFile *LassoStrengthStat = new TextFile();
-							LassoStrengthStat->SetCarStat("Car2", "lassostrength", to_string(LassoStrength));
+							int lassoSpeed = player1->playerCar.lassoSpeed;
+							lassoSpeed += 5;
+							TextFile *lassoSpeedStat = new TextFile();
+							lassoSpeedStat->SetCarStat("Car2", "lassoSpeed", to_string(lassoSpeed));
 						}
 						if (car3Bought == true)
 						{
@@ -3028,10 +3028,10 @@ void SceneSP3::UpgradeController()
 							TextFile *LassoLengthStat = new TextFile();
 							LassoLengthStat->SetCarStat("Car3", "lassolength", to_string(LassoLength));
 
-							int LassoStrength = player1->playerCar.lassoStrength;
-							LassoStrength += 5;
-							TextFile *LassoStrengthStat = new TextFile();
-							LassoStrengthStat->SetCarStat("Car3", "lassostrength", to_string(LassoStrength));
+							int lassoSpeed = player1->playerCar.lassoSpeed;
+							lassoSpeed += 5;
+							TextFile *lassoSpeedStat = new TextFile();
+							lassoSpeedStat->SetCarStat("Car3", "lassoSpeed", to_string(lassoSpeed));
 						}*/
 						Dalasso->setLassoRange(50);
 						Dalasso->setLassoSpd(1);
@@ -3056,10 +3056,10 @@ void SceneSP3::UpgradeController()
 							TextFile *LassoLengthStat = new TextFile();
 							LassoLengthStat->SetCarStat("Car1", "lassolength", to_string(LassoLength));
 
-							int LassoStrength = player1->playerCar.lassoStrength;
-							LassoStrength += 6;
-							TextFile *LassoStrengthStat = new TextFile();
-							LassoStrengthStat->SetCarStat("Car1", "lassostrength", to_string(LassoStrength));
+							int lassoSpeed = player1->playerCar.lassoSpeed;
+							lassoSpeed += 6;
+							TextFile *lassoSpeedStat = new TextFile();
+							lassoSpeedStat->SetCarStat("Car1", "lassoSpeed", to_string(lassoSpeed));
 						}
 						if (car2Bought == true)
 						{
@@ -3068,10 +3068,10 @@ void SceneSP3::UpgradeController()
 							TextFile *LassoLengthStat = new TextFile();
 							LassoLengthStat->SetCarStat("Car2", "lassolength", to_string(LassoLength));
 
-							int LassoStrength = player1->playerCar.lassoStrength;
-							LassoStrength += 6;
-							TextFile *LassoStrengthStat = new TextFile();
-							LassoStrengthStat->SetCarStat("Car2", "lassostrength", to_string(LassoStrength));
+							int lassoSpeed = player1->playerCar.lassoSpeed;
+							lassoSpeed += 6;
+							TextFile *lassoSpeedStat = new TextFile();
+							lassoSpeedStat->SetCarStat("Car2", "lassoSpeed", to_string(lassoSpeed));
 						}
 						if (car3Bought == true)
 						{
@@ -3080,10 +3080,10 @@ void SceneSP3::UpgradeController()
 							TextFile *LassoLengthStat = new TextFile();
 							LassoLengthStat->SetCarStat("Car3", "lassolength", to_string(LassoLength));
 
-							int LassoStrength = player1->playerCar.lassoStrength;
-							LassoStrength += 6;
-							TextFile *LassoStrengthStat = new TextFile();
-							LassoStrengthStat->SetCarStat("Car3", "lassostrength", to_string(LassoStrength));
+							int lassoSpeed = player1->playerCar.lassoSpeed;
+							lassoSpeed += 6;
+							TextFile *lassoSpeedStat = new TextFile();
+							lassoSpeedStat->SetCarStat("Car3", "lassoSpeed", to_string(lassoSpeed));
 						}*/
 						Dalasso->setLassoRange(60);
 						Dalasso->setLassoSpd(1.2);
@@ -4535,10 +4535,10 @@ void SceneSP3::renderMenu()
 
 		std::ostringstream s11;
 		s11.precision(5);
-		s11 << "STRENGTH";
+		s11 << "SPEED";
 		RenderTextOnScreen(meshList[GEO_TEXT], s11.str(), Color(0, 1, 0), 2.5, 4.5, 35);
 
-		for (int i = 0; i < player1->playerCar.lassoStrength * 5; i += 5)
+		for (int i = 0; i < player1->playerCar.lassoSpeed * 5; i += 5)
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(m_worldWidth * 0.072 + i, m_worldHeight * 0.55, 2);
@@ -4584,10 +4584,10 @@ void SceneSP3::renderMenu()
 
 		std::ostringstream s11;
 		s11.precision(5);
-		s11 << "STRENGTH";
+		s11 << "SPEED";
 		RenderTextOnScreen(meshList[GEO_TEXT], s11.str(), Color(0, 1, 0), 2.5, 4.5, 35);
 
-		for (int i = 0; i < player1->playerCar.lassoStrength * 5; i += 5)
+		for (int i = 0; i < player1->playerCar.lassoSpeed * 5; i += 5)
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(m_worldWidth * 0.072 + i, m_worldHeight * 0.55, 2);
@@ -4632,10 +4632,10 @@ void SceneSP3::renderMenu()
 
 		std::ostringstream s11;
 		s11.precision(5);
-		s11 << "STRENGTH";
+		s11 << "SPEED";
 		RenderTextOnScreen(meshList[GEO_TEXT], s11.str(), Color(0, 1, 0), 2.5, 4.5, 35);
 
-		for (int i = 0; i < player1->playerCar.lassoStrength * 5; i += 5)
+		for (int i = 0; i < player1->playerCar.lassoSpeed * 5; i += 5)
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(m_worldWidth * 0.072 + i, m_worldHeight * 0.55, 2);
