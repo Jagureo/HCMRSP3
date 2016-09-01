@@ -1425,7 +1425,7 @@ void SceneSP3::Update(double dt)
 			for (std::vector<enemy*>::iterator itE3 = enemyList.begin(); itE3 != enemyList.end(); ++itE3)
 			{
 				enemy *goE3 = (enemy *)*itE3;
-				if (goE3 -> getActive() == true && winCondition == true)
+				if (goE3 -> getActive() == true && winCondition == true && goE3->getType() != 3)
 				{
 					winCondition = false;
 				}
