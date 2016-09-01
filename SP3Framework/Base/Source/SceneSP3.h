@@ -133,7 +133,7 @@ protected:
 	int scroll;
 	int scrollimit;
 
-	lasso* Dalasso = newLasso();
+	lasso* Dalasso = newLasso(40, 1);
 
 	float friction;
 

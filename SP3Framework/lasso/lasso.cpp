@@ -1,8 +1,10 @@
 #include "lasso.h"
 
-lasso::lasso()
+lasso::lasso(float range, float spd)
 {
 	currLassoState = READY;
+	maxLassoRange = range;
+	lassoSpd = spd;
 }
 
 lasso::~lasso()
@@ -15,6 +17,12 @@ void lasso::setLassoRange(float input)
 	maxLassoRange = input;
 }
 
+void lasso::setLassoSpd(float input)
+{
+	lassoSpd = input;
+}
+
+
 void lasso::throwLasso(Vector3 playerPos, Vector3 mousePos)
 {
 	
@@ -22,7 +30,9 @@ void lasso::throwLasso(Vector3 playerPos, Vector3 mousePos)
 	targetPos = mousePos;
 	currLassoRange = 0;
 	currLassoState = THROWN;
-	lassoVel = (targetPos - lassoPos)* 10;
+	lassoVel = (targetPos - lassoPos);
+	lassoVel.Normalize();
+	lassoVel *= lassoSpd;
 
 }
 
@@ -37,8 +47,10 @@ bool lasso::updateLasso(Vector3 playerPos, float dt)
 		}
 		else
 		{
-			lassoVel += (targetPos - lassoPos) * 0.1;
-			lassoPos += lassoVel * dt * 0.1;
+			lassoVel = (targetPos - lassoPos);
+			lassoVel.Normalize();
+			lassoVel *= lassoSpd;
+			lassoPos += lassoVel;
 			currLassoRange = (lassoPos - playerPos).Length();
 			//std::cout << currLassoRange << std::endl;
 		}
@@ -46,8 +58,10 @@ bool lasso::updateLasso(Vector3 playerPos, float dt)
 	}
 	else if (currLassoState == 3)
 	{
-		lassoVel += (lassoPos - playerPos) * 0.1;
-		lassoPos -= lassoVel * dt * 0.1;
+		lassoVel += (lassoPos - playerPos);
+		lassoVel.Normalize();
+		lassoVel *= 0.5 * lassoSpd;
+		lassoPos -= lassoVel;
 		currLassoRange = (lassoPos - playerPos).Length();
 		if (/*lassoPos.x > playerPos.x - 3 &&  lassoPos.x < playerPos.x + 3 && lassoPos.y > playerPos.y - 3 &&  lassoPos.y < playerPos.y + 3*/currLassoRange < 5)
 		{
@@ -104,7 +118,7 @@ int lasso::getLassoState()
 	return currLassoState;
 }
 
-lasso* newLasso()
+lasso* newLasso(float range, float speed)
 {
-	return new lasso();
+	return new lasso(range, speed);
 }

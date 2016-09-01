@@ -13,7 +13,7 @@
 class LASSO_API lasso
 {
 public:
-	lasso();
+	lasso(float range, float spd);
 	~lasso();
 
 	
@@ -24,6 +24,7 @@ public:
 	bool caughtUpdate(Vector3 playerPos, Vector3 enemyPos, bool enemyActive);
 	bool updateLasso(Vector3 playerPos,float dt);
 	void setLassoRange(float range);
+	void setLassoSpd(float spd);
 	Vector3 getLassoPos();
 	int getLassoState();
 	Vector3 getLassoVel();
@@ -37,7 +38,8 @@ private:
 		CAUGHT,
 		MISS,
 	};
-	float maxLassoRange = 40;
+	float lassoSpd;
+	float maxLassoRange;
 	float currLassoRange;
 	Vector3 lassoPos;
 	lassoStates currLassoState;
@@ -47,4 +49,4 @@ private:
 
 };
 
-LASSO_API lasso* newLasso();
+LASSO_API lasso* newLasso(float range, float speed);

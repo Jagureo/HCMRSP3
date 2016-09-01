@@ -918,10 +918,10 @@ void SceneSP3::Update(double dt)
 			eraseEnemy();
 		}
 	}
-	else if (gameStates == states::s_MapEditor && testMode == 1)
+	/*else if (gameStates == states::s_MapEditor && testMode == 1)
 	{
 		testMode = 0;
-	}
+	}*/
 
 	if (gameStates == states::s_MapEditor)
 	{
@@ -2674,11 +2674,11 @@ void SceneSP3::RenderLasso(lasso *go)
 	if (go->getLassoState() != 0)
 	{
 
-		/*modelStack.PushMatrix();
+		modelStack.PushMatrix();
 		modelStack.Translate(go->getLassoPos().x, go->getLassoPos().y, 2);
 		modelStack.Scale(3, 3, 1);
 		RenderMesh(meshList[GEO_ENEMYBULLET], false);
-		modelStack.PopMatrix();*/
+		modelStack.PopMatrix();
 
 		float yDist = go->getLassoPos().y - player1->pos.y;
 		float xDist = go->getLassoPos().x - player1->pos.x;
