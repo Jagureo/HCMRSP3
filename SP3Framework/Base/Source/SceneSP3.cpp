@@ -1483,44 +1483,44 @@ void SceneSP3::Update(double dt)
 
 			if (arrowSelection > 0)
 			{
-				if (Application::IsKeyPressed(VK_UP) || Application::IsKeyPressed('W') && arrowkeyUp == false)
+				if (Application::IsKeyPressed('W') && arrowkeyUp == false)
 				{
 					arrowkeyUp = true;
 					arrowSelection--;
 				}
-				else if (!Application::IsKeyPressed(VK_UP) || Application::IsKeyPressed('W') && arrowkeyUp == true)
+				else if (!Application::IsKeyPressed('W') && arrowkeyUp == true)
 					arrowkeyUp = false;
 			}
 			else if (arrowSelection == 0)
 			{
-				if (Application::IsKeyPressed(VK_UP) || Application::IsKeyPressed('W') && arrowkeyUp == false)
+				if (Application::IsKeyPressed('W') && arrowkeyUp == false)
 				{
 					arrowkeyUp = true;
 					arrowSelection = 4;
 				}
-				else if (!Application::IsKeyPressed(VK_UP) || Application::IsKeyPressed('W') && arrowkeyUp == true)
+				else if (!Application::IsKeyPressed('W')  && arrowkeyUp == true)
 					arrowkeyUp = false;
 
 			}
 
 			if (arrowSelection < 4)
 			{
-				if (Application::IsKeyPressed(VK_DOWN) || Application::IsKeyPressed('S') && arrowkeyDown == false)
+				if (Application::IsKeyPressed('S') && arrowkeyDown == false)
 				{
 					arrowkeyDown = true;
 					arrowSelection++;
 				}
-				else if (!Application::IsKeyPressed(VK_DOWN) || Application::IsKeyPressed('S') && arrowkeyDown == true)
+				else if (!Application::IsKeyPressed('S')  && arrowkeyDown == true)
 					arrowkeyDown = false;
 			}
 			else if (arrowSelection == 4)
 			{
-				if (Application::IsKeyPressed(VK_DOWN) || Application::IsKeyPressed('S') && arrowkeyDown == false)
+				if (Application::IsKeyPressed('S') && arrowkeyDown == false)
 				{
 					arrowkeyDown = true;
 					arrowSelection = 0;
 				}
-				else if (!Application::IsKeyPressed(VK_DOWN) || Application::IsKeyPressed('S') && arrowkeyDown == true)
+				else if (!Application::IsKeyPressed('S') && arrowkeyDown == true)
 					arrowkeyDown = false;
 			}
 			if (Application::IsKeyPressed(VK_RETURN))
@@ -3262,7 +3262,7 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 10.4f && worldY < 18.1f)
 				{
-					gameStates = states::s_Upgrade_Cars1;
+					gameStates = states::s_LevelSelect;
 				}
 			}
 		}
@@ -4032,6 +4032,11 @@ void SceneSP3::renderMenu()
 		modelStack.Scale(m_worldWidth, m_worldHeight, 1);
 		RenderMesh(meshList[GEO_UPGRADE_BACKGROUND], false);
 		modelStack.PopMatrix();
+
+		std::ostringstream s13;
+		s13.precision(5);
+		s13 << "$" << money;
+		RenderTextOnScreen(meshList[GEO_TEXT], s13.str(), Color(0, 1, 0), 2.5, 59.5, 1);
 	}
 	if (gameStates == states::s_Upgrade_Cars1 || gameStates == states::s_Upgrade_Cars2 || gameStates == states::s_Upgrade_Cars3)
 	{
@@ -4154,10 +4159,10 @@ void SceneSP3::renderMenu()
 				modelStack.PopMatrix();
 			}
 
-			if (Application::IsKeyPressed(VK_ESCAPE))
-			{
-				gameStates = states::s_Upgrade;
-			}
+		}
+		if (Application::IsKeyPressed(VK_ESCAPE))
+		{
+			gameStates = states::s_Upgrade;
 		}
 	}
 	if (gameStates == states::s_Upgrade_Darts1 || gameStates == states::s_Upgrade_Darts2 || gameStates == states::s_Upgrade_Darts3)
