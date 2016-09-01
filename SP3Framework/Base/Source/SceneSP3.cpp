@@ -2674,11 +2674,11 @@ void SceneSP3::RenderLasso(lasso *go)
 	if (go->getLassoState() != 0)
 	{
 
-		modelStack.PushMatrix();
+		/*modelStack.PushMatrix();
 		modelStack.Translate(go->getLassoPos().x, go->getLassoPos().y, 2);
 		modelStack.Scale(3, 3, 1);
 		RenderMesh(meshList[GEO_ENEMYBULLET], false);
-		modelStack.PopMatrix();
+		modelStack.PopMatrix();*/
 
 		float yDist = go->getLassoPos().y - player1->pos.y;
 		float xDist = go->getLassoPos().x - player1->pos.x;
@@ -4130,33 +4130,34 @@ void SceneSP3::renderMenu()
 
 		if (lasso2Bought == true)
 		{
-		
-		if (gameStates == states::s_Upgrade)
 
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(m_worldWidth / 3.2, m_worldHeight / 5, -4);
-			modelStack.Scale(30, 30, 1);
-			RenderMesh(meshList[GEO_SOLD], false);
-			modelStack.PopMatrix();
+			if (gameStates == states::s_Upgrade)
 
-			std::ostringstream s13;
-			s13.precision(5);
-			s13 << "$" << money;
-			RenderTextOnScreen(meshList[GEO_TEXT], s13.str(), Color(0, 1, 0), 2.5, 59.5, 1);
-		}
-		if (lasso3Bought == true)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(m_worldWidth / 2.1, m_worldHeight / 5, -4);
-			modelStack.Scale(30, 30, 1);
-			RenderMesh(meshList[GEO_SOLD], false);
-			modelStack.PopMatrix();
-		}
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(m_worldWidth / 3.2, m_worldHeight / 5, -4);
+				modelStack.Scale(30, 30, 1);
+				RenderMesh(meshList[GEO_SOLD], false);
+				modelStack.PopMatrix();
 
-		if (Application::IsKeyPressed(VK_ESCAPE))
-		{
-			gameStates = states::s_Upgrade;
+				std::ostringstream s13;
+				s13.precision(5);
+				s13 << "$" << money;
+				RenderTextOnScreen(meshList[GEO_TEXT], s13.str(), Color(0, 1, 0), 2.5, 59.5, 1);
+			}
+			if (lasso3Bought == true)
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(m_worldWidth / 2.1, m_worldHeight / 5, -4);
+				modelStack.Scale(30, 30, 1);
+				RenderMesh(meshList[GEO_SOLD], false);
+				modelStack.PopMatrix();
+			}
+
+			if (Application::IsKeyPressed(VK_ESCAPE))
+			{
+				gameStates = states::s_Upgrade;
+			}
 		}
 	}
 	if (gameStates == states::s_Upgrade_Darts1 || gameStates == states::s_Upgrade_Darts2 || gameStates == states::s_Upgrade_Darts3)
@@ -5192,7 +5193,7 @@ void SceneSP3::Render()
 	std::ostringstream ss;
 	ss.precision(5);
 	ss << "Pos: " << worldX / m_worldWidth << ", " << worldY;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);*/
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
 
 	std::ostringstream ssz;
 	ssz.precision(5);
