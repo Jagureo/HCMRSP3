@@ -161,7 +161,7 @@ void SceneSP3::InitCarStat(string varname, string fileName)
 	player1->playerCar.hp= var->get_hp();
 	player1->playerCar.handling = var->get_handling();
 	player1->playerCar.lassoLength = var->get_lassolength();
-	player1->playerCar.lassoSpeed = var->get_lassostrength();
+	player1->playerCar.lassoSpeed = var->get_lassospeed();
 	player1->playerCar.tranqCount = var->get_tranqcount();
 	player1->playerCar.tranqDuration = var->get_tranqduration();
 	cout << "bought" << endl;
@@ -3035,7 +3035,7 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					InitCarStat("Car2");
+					InitCarStat("Car2", "tempsave");
 
 					if (money >= cost[0] && car2Bought == false)
 					{
@@ -3051,7 +3051,7 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					InitCarStat("Car3");
+					InitCarStat("Car3","tempsave");
 					if (money >= cost[1] && car3Bought == false)
 					{
 						car3Bought = true;
@@ -3101,8 +3101,8 @@ void SceneSP3::UpgradeController()
 							TextFile *HandlingStat = new TextFile();
 							HandlingStat->SetCarStat("Car3", "handling", to_string(handling));
 						}
+						tire2Bought = true;
 					}
-					tire2Bought = true;
 				}
 			}
 		}
@@ -3136,8 +3136,8 @@ void SceneSP3::UpgradeController()
 							TextFile *HandlingStat = new TextFile();
 							HandlingStat->SetCarStat("Car3", "handling", to_string(handling));
 						}
+						tire3Bought = true;
 					}
-					tire3Bought = true;
 				}
 			}
 		}
@@ -3198,8 +3198,9 @@ void SceneSP3::UpgradeController()
 						}*/
 						Dalasso->setLassoRange(50.f);
 						Dalasso->setLassoSpd(1.0f);
+						lasso2Bought = true;
 					}
-					lasso2Bought = true;
+					
 				}
 			}
 		}
@@ -3250,8 +3251,8 @@ void SceneSP3::UpgradeController()
 						}*/
 						Dalasso->setLassoRange(60.f);
 						Dalasso->setLassoSpd(1.2f);
+						lasso3Bought = true;
 					}
-					lasso3Bought = true;
 				}
 			}
 		}
@@ -3310,8 +3311,8 @@ void SceneSP3::UpgradeController()
 							TextFile *TranqDurationStat = new TextFile();
 							TranqDurationStat->SetCarStat("Car3", "tranqduration", to_string(TranqDuration));
 						}
+						dart2Bought = true;
 					}
-					dart2Bought = true;
 				}
 			}
 		}
@@ -3360,8 +3361,8 @@ void SceneSP3::UpgradeController()
 							TextFile *TranqDurationStat = new TextFile();
 							TranqDurationStat->SetCarStat("Car3", "tranqduration", to_string(TranqDuration));
 						}
+						dart3Bought = true;
 					}
-					dart3Bought = true;
 				}
 			}
 		}
@@ -4274,31 +4275,22 @@ void SceneSP3::renderMenu()
 
 		if (lasso2Bought == true)
 		{
-
-			if (gameStates == states::s_Upgrade)
-
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(m_worldWidth / 3.2, m_worldHeight / 5, -4);
-				modelStack.Scale(30, 30, 1);
-				RenderMesh(meshList[GEO_SOLD], false);
-				modelStack.PopMatrix();
-
-				std::ostringstream s13;
-				s13.precision(5);
-				s13 << "$" << money;
-				RenderTextOnScreen(meshList[GEO_TEXT], s13.str(), Color(0, 1, 0), 2.5, 59.5, 1);
-			}
-			if (lasso3Bought == true)
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(m_worldWidth / 2.1, m_worldHeight / 5, -4);
-				modelStack.Scale(30, 30, 1);
-				RenderMesh(meshList[GEO_SOLD], false);
-				modelStack.PopMatrix();
-			}
-
+			modelStack.PushMatrix();
+			modelStack.Translate(m_worldWidth / 3.2, m_worldHeight / 5, -4);
+			modelStack.Scale(30, 30, 1);
+			RenderMesh(meshList[GEO_SOLD], false);
+			modelStack.PopMatrix();
 		}
+		if (lasso3Bought == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(m_worldWidth / 2.1, m_worldHeight / 5, -4);
+			modelStack.Scale(30, 30, 1);
+			RenderMesh(meshList[GEO_SOLD], false);
+			modelStack.PopMatrix();
+		}
+
+		
 		if (Application::IsKeyPressed(VK_ESCAPE))
 		{
 			gameStates = states::s_Upgrade;
@@ -5048,7 +5040,7 @@ void SceneSP3::renderMenu()
 			RenderMesh(meshList[GEO_LOSE_SCENE], false);
 			modelStack.PopMatrix();
 		}
-		if (paused == true)
+		if (gameStates == states::s_Highscore)
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 7);

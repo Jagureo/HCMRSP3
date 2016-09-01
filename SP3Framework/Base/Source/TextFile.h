@@ -51,7 +51,7 @@ public:
 	int get_handling();
 
 	int get_lassolength();
-	int get_lassostrength();
+	int get_lassospeed();
 
 	int get_tranqcount();
 	int get_tranqduration();
@@ -75,7 +75,7 @@ private:
 
 	string name;
 	int engine, hp, handling;
-	int lassolength, lassostrength;
+	int lassolength, lassospeed;
 	int tranqcount, tranqduration;
 	int money;
 };
