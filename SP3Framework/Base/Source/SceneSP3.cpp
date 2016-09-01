@@ -103,7 +103,7 @@ void SceneSP3::Init()
 	testMap.setBackground(meshList[GEO_TESTMAP2]);
 	testMap.setMapSize(30, 20);
 
-	gameStates = states::s_Menu;
+	gameStates = states::s_Upgrade;
 	
 
 	animalStat = new TextFile(TextFile::ANIMAL);
@@ -3035,7 +3035,9 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (money >= cost[0])
+					InitCarStat("Car2");
+
+					if (money >= cost[0] && car2Bought == false)
 					{
 						car2Bought = true;
 						money -= cost[0];
@@ -3049,7 +3051,8 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (money >= cost[1])
+					InitCarStat("Car3");
+					if (money >= cost[1] && car3Bought == false)
 					{
 						car3Bought = true;
 						money -= cost[1];
@@ -3073,7 +3076,7 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (money >= cost[2])
+					if (money >= cost[2] && tire2Bought == false)
 					{
 						money -= cost[2];
 						if (car1Bought == true)
@@ -3109,7 +3112,7 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (money >= cost[3])
+					if (money >= cost[3] && tire3Bought == false)
 					{
 						money -= cost[3];
 						if (car1Bought == true)
@@ -3154,7 +3157,7 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (money >= cost[4])
+					if (money >= cost[4] && lasso2Bought == false)
 					{
 						money -= cost[4];
 						/*if (car1Bought == true)
@@ -3206,7 +3209,7 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (money >= cost[5])
+					if (money >= cost[5] && lasso3Bought == false)
 					{
 						money -= cost[5];
 						/*if (car1Bought == true)
@@ -3258,46 +3261,6 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (money >= cost[6])
-					{
-						money -= cost[6];
-						if (car1Bought == true)
-						{
-							int TranqCount = player1->playerCar.tranqCount;
-							TranqCount += 1;
-							TextFile *TranqCountStat = new TextFile();
-							TranqCountStat->SetCarStat("Car1", "tranqcount", to_string(TranqCount));
-
-							int TranqDuration = player1->playerCar.tranqDuration;
-							TranqDuration += 1;
-							TextFile *TranqDurationStat = new TextFile();
-							TranqDurationStat->SetCarStat("Car1", "tranqduration", to_string(TranqDuration));
-						}
-						if (car2Bought == true)
-						{
-							int TranqCount = player1->playerCar.tranqCount;
-							TranqCount += 1;
-							TextFile *TranqCountStat = new TextFile();
-							TranqCountStat->SetCarStat("Car2", "tranqcount", to_string(TranqCount));
-
-							int TranqDuration = player1->playerCar.tranqDuration;
-							TranqDuration += 1;
-							TextFile *TranqDurationStat = new TextFile();
-							TranqDurationStat->SetCarStat("Car2", "tranqduration", to_string(TranqDuration));
-						}
-						if (car3Bought == true)
-						{
-							int TranqCount = player1->playerCar.tranqCount;
-							TranqCount += 1;
-							TextFile *TranqCountStat = new TextFile();
-							TranqCountStat->SetCarStat("Car3", "tranqcount", to_string(TranqCount));
-
-							int TranqDuration = player1->playerCar.tranqDuration;
-							TranqDuration += 1;
-							TextFile *TranqDurationStat = new TextFile();
-							TranqDurationStat->SetCarStat("Car3", "tranqduration", to_string(TranqDuration));
-						}
-					}
 					dart1Bought = true;
 				}
 			}
@@ -3308,9 +3271,9 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (money >= cost[7])
+					if (money >= cost[6] && dart2Bought == false)
 					{
-						money -= cost[7];
+						money -= cost[6];
 						if (car1Bought == true)
 						{
 							int TranqCount = player1->playerCar.tranqCount;
@@ -3358,9 +3321,9 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					if (money >= cost[8])
+					if (money >= cost[7] && dart3Bought == false)
 					{
-						money -= cost[8];
+						money -= cost[7];
 						if (car1Bought == true)
 						{
 							int TranqCount = player1->playerCar.tranqCount;
@@ -4986,7 +4949,7 @@ void SceneSP3::renderMenu()
 		}
 		std::ostringstream s12;
 		s12.precision(5);
-		s12 << "$" << cost[8];
+		s12 << "$" << cost[7];
 		RenderTextOnScreen(meshList[GEO_TEXT], s12.str(), Color(0, 0, 1), 2.5, 14.5, 1);
 
 		std::ostringstream s13;
