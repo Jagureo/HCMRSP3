@@ -3034,6 +3034,7 @@ void SceneSP3::UpgradeController()
 							LassoStrengthStat->SetCarStat("Car3", "lassostrength", to_string(LassoStrength));
 						}*/
 						Dalasso->setLassoRange(50);
+						Dalasso->setLassoSpd(1);
 					}
 					lasso2Bought = true;
 				}
@@ -3085,6 +3086,7 @@ void SceneSP3::UpgradeController()
 							LassoStrengthStat->SetCarStat("Car3", "lassostrength", to_string(LassoStrength));
 						}*/
 						Dalasso->setLassoRange(60);
+						Dalasso->setLassoSpd(1.2);
 					}
 					lasso3Bought = true;
 				}
@@ -3915,45 +3917,45 @@ void SceneSP3::renderMenu()
 		modelStack.PopMatrix();
 
 		modelStack.PushMatrix();
-		modelStack.Translate(140, 15, -2);
+		modelStack.Translate(m_worldWidth / 1.25, m_worldHeight / 6.5, -2);
 		modelStack.Scale(33, 33, 0);
 		RenderMesh(meshList[GEO_MENU_SIGNBOARD], false);
 		modelStack.PopMatrix();
 
 		modelStack.PushMatrix();
-		modelStack.Translate(118, 38 - (arrowSelection * 7), -1);
+		modelStack.Translate(m_worldWidth / 1.5, 38 - (arrowSelection * 7), -1);
 		modelStack.Scale(3, 3, 0);
 		RenderMesh(meshList[GEO_MENU_ARROW], false);
 		modelStack.PopMatrix();
 
 		modelStack.PushMatrix();
-		modelStack.Translate(140, 36, 0);
+		modelStack.Translate(m_worldWidth / 1.25, m_worldHeight / 2.8, 0);
 		modelStack.Scale(30, 20, 0);
 		RenderMesh(meshList[GEO_MENU_STARTGAME], false);
 		modelStack.PopMatrix();
 
 		modelStack.PushMatrix();
-		modelStack.Translate(140, 29, 1);
+		modelStack.Translate(m_worldWidth / 1.25, m_worldHeight / 3.4, 1);
 		modelStack.Scale(30, 20, 0);
 		RenderMesh(meshList[GEO_MENU_INSTRUCTIONS], false);
 		modelStack.PopMatrix();
 
 		modelStack.PushMatrix();
-		modelStack.Translate(140, 22, 2);
+		modelStack.Translate(m_worldWidth / 1.25, m_worldHeight / 4.5, 2);
 		modelStack.Scale(30, 20, 0);
 		RenderMesh(meshList[GEO_MENU_OPTIONS], false);
 		modelStack.PopMatrix();
 
 
 		modelStack.PushMatrix();
-		modelStack.Translate(140, 15, 3);
+		modelStack.Translate(m_worldWidth / 1.25, m_worldHeight / 6.4, 3);
 		modelStack.Scale(30, 20, 0);
 		RenderMesh(meshList[GEO_MENU_HIGHSCORE], false);
 		modelStack.PopMatrix();
 
 
 		modelStack.PushMatrix();
-		modelStack.Translate(140, 8, 4);
+		modelStack.Translate(m_worldWidth / 1.25, m_worldHeight / 11, 4);
 		modelStack.Scale(30, 20, 0);
 		RenderMesh(meshList[GEO_MENU_QUIT], false);
 		modelStack.PopMatrix();
