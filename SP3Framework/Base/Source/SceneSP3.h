@@ -18,6 +18,14 @@ using std::ifstream;
 
 class SceneSP3 : public SceneBase
 {
+	enum events
+	{
+		e_Earthquake,
+		e_Fog,
+		e_Flood,
+		e_Nothing,
+	};
+	events thisEvent;
 	enum class states
 	{
 		s_Menu,
@@ -74,7 +82,7 @@ class SceneSP3 : public SceneBase
 
 	int currentLevel;
 
-	void InitCarStat(string varname);
+	void InitCarStat(string varname, string fileName);
 
 public:
 	SceneSP3();
@@ -124,6 +132,17 @@ public:
 	void eraseEnemy();
 
 	string FileName;
+
+	void SetEvent(events);
+
+	bool fogActive;
+	int SpecialCount;
+	float Timer;
+	int seconds;
+	bool EventActive;
+	int Cooldown;
+	int EventSeconds;
+	int EventType;
 	
 protected:
 

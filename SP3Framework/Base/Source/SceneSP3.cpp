@@ -90,6 +90,7 @@ void SceneSP3::Init()
 	dartMax = 5;
 	dartCount = 5;
 	dartROF = 1;
+	EventType = 0;
 
 	paused = false;
 	scroll = 0;
@@ -139,16 +140,28 @@ void SceneSP3::Init()
 	animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
 	animal->setLeader(0);
 	enemyList.push_back(animal);*/
+	InitCarStat("Car1", "CarStats.txt");
+
+	TextFile *car = new TextFile();
+	car->SaveFile("CarStats.txt", "tempsave.txt");
+	car->SaveFile("tempsave.txt", "SavedCarStats.txt");
+
+	fogActive = false;
+	EventActive = false;
+	Cooldown = 0;
+	Timer = 0.f;
+	seconds = 0;
+	EventSeconds = 0;
 }
-void SceneSP3::InitCarStat(string varname)
+void SceneSP3::InitCarStat(string varname, string fileName)
 {
 	TextFile* var = new TextFile();
-	var->GetCarStat(varname, "CarStats.txt");
+	var->GetCarStat(varname, fileName);
 	player1->playerCar.engine = var->get_engine();
 	player1->playerCar.hp= var->get_hp();
 	player1->playerCar.handling = var->get_handling();
 	player1->playerCar.lassoLength = var->get_lassolength();
-	player1->playerCar.lassoSpeed = var->get_lassospeed();
+	player1->playerCar.lassoSpeed = var->get_lassostrength();
 	player1->playerCar.tranqCount = var->get_tranqcount();
 	player1->playerCar.tranqDuration = var->get_tranqduration();
 	cout << "bought" << endl;
@@ -2126,11 +2139,100 @@ void SceneSP3::Update(double dt)
 					player1->engine += 1;
 				}
 			}
-			
+			Timer++;
 		}
 		
+		if (Timer > 1.f / dt)
+		{
+			Timer = 0;
+			seconds++;
+		
+			if (EventActive == false && Cooldown != 0)
+			{
+				Cooldown--;
+			}
+			if (EventActive)
+			{
+				EventSeconds++;
+			}
+		}
+		if (EventActive == false && Cooldown == 0 && points > 0)
+		{
+			EventActive = true;
+		}
+		if (EventActive && EventType == 0)
+		{
+			int chance = Math::RandIntMinMax(0, 10);
+			if (chance <= 3)
+			{
+				EventType = 1;
+			}
+			else if (chance > 3 && chance <= 7)
+			{
+				EventType = 2;
+			}
+			else
+			{
+				EventType = 3;
+			}
+		}
+		if (EventActive == true)
+		{
+			if (EventType == 1)
+			{
+				SetEvent(e_Earthquake);
+				std::cout << "earthquake" << std::endl;
+			}
+			else if (EventType == 2)
+			{
+				SetEvent(e_Fog);
+				std::cout << "haze" << std::endl;
+			}
+			else if (EventType == 3)
+			{
+				SetEvent(e_Flood);
+				std::cout << "surf" << std::endl;
+			}
+			if (EventSeconds > 10)
+			{
+				SetEvent(e_Nothing);
+				EventActive = false;
+				Cooldown = 20;
+				EventType = 0;
+				EventSeconds = 0;
+			}
+		}
 }
 
+void SceneSP3::SetEvent(events thisEvent)
+{
+	switch (thisEvent)
+	{
+	case e_Earthquake:
+		player1->pos.x += Math::RandFloatMinMax(-1, 1);
+		player1->pos.y += Math::RandFloatMinMax(-1, 1);
+		break;
+	case e_Fog:
+		fogActive = true;
+		break;
+	case e_Flood:
+		if (SpecialCount < 20)
+		{
+			//stuff
+			GameObject* obs = new GameObject(GameObject::MAP_WATER);
+			obs->pos.Set(Math::RandFloatMinMax(-testMap.getMapSize().x * 2.5, testMap.getMapSize().x * 2.5), Math::RandFloatMinMax(-testMap.getMapSize().y *2.5, testMap.getMapSize().y * 2.5), 1);
+			obs->fresh = true;
+			obs->active = true;
+			obs->scale.Set(6, 6, 6);
+			testMap.forceAddSingleProp(obs);
+			SpecialCount++;
+		}
+		break;
+	case e_Nothing:
+		fogActive = false;
+		break;
+	}
+}
 
 void SceneSP3::mapEditorUpdate(double dt)
 {
@@ -2933,8 +3035,6 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					InitCarStat("Car2");
-
 					if (money >= cost[0])
 					{
 						car2Bought = true;
@@ -2949,7 +3049,6 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					InitCarStat("Car3");
 					if (money >= cost[1])
 					{
 						car3Bought = true;
@@ -2983,6 +3082,7 @@ void SceneSP3::UpgradeController()
 							handling += 4;
 							TextFile *HandlingStat = new TextFile();
 							HandlingStat->SetCarStat("Car1", "handling", to_string(handling));
+							HandlingStat->SaveFile("SavedCarStats.txt", "tempsave.txt");
 						}
 						if (car2Bought == true)
 						{
@@ -3059,42 +3159,42 @@ void SceneSP3::UpgradeController()
 						money -= cost[4];
 						/*if (car1Bought == true)
 						{
-							int LassoLength = player1->playerCar.lassoLength;
-							LassoLength += 5;
-							TextFile *LassoLengthStat = new TextFile();
-							LassoLengthStat->SetCarStat("Car1", "lassolength", to_string(LassoLength));
+						int LassoLength = player1->playerCar.lassoLength;
+						LassoLength += 5;
+						TextFile *LassoLengthStat = new TextFile();
+						LassoLengthStat->SetCarStat("Car1", "lassolength", to_string(LassoLength));
 
-							int lassoSpeed = player1->playerCar.lassoSpeed;
-							lassoSpeed += 5;
-							TextFile *lassoSpeedStat = new TextFile();
-							lassoSpeedStat->SetCarStat("Car1", "lassoSpeed", to_string(lassoSpeed));
+						int LassoStrength = player1->playerCar.lassoStrength;
+						LassoStrength += 5;
+						TextFile *LassoStrengthStat = new TextFile();
+						LassoStrengthStat->SetCarStat("Car1", "lassostrength", to_string(LassoStrength));
 						}
 						if (car2Bought == true)
 						{
-							int LassoLength = player1->playerCar.lassoLength;
-							LassoLength += 5;
-							TextFile *LassoLengthStat = new TextFile();
-							LassoLengthStat->SetCarStat("Car2", "lassolength", to_string(LassoLength));
+						int LassoLength = player1->playerCar.lassoLength;
+						LassoLength += 5;
+						TextFile *LassoLengthStat = new TextFile();
+						LassoLengthStat->SetCarStat("Car2", "lassolength", to_string(LassoLength));
 
-							int lassoSpeed = player1->playerCar.lassoSpeed;
-							lassoSpeed += 5;
-							TextFile *lassoSpeedStat = new TextFile();
-							lassoSpeedStat->SetCarStat("Car2", "lassoSpeed", to_string(lassoSpeed));
+						int LassoStrength = player1->playerCar.lassoStrength;
+						LassoStrength += 5;
+						TextFile *LassoStrengthStat = new TextFile();
+						LassoStrengthStat->SetCarStat("Car2", "lassostrength", to_string(LassoStrength));
 						}
 						if (car3Bought == true)
 						{
-							int LassoLength = player1->playerCar.lassoLength;
-							LassoLength += 5;
-							TextFile *LassoLengthStat = new TextFile();
-							LassoLengthStat->SetCarStat("Car3", "lassolength", to_string(LassoLength));
+						int LassoLength = player1->playerCar.lassoLength;
+						LassoLength += 5;
+						TextFile *LassoLengthStat = new TextFile();
+						LassoLengthStat->SetCarStat("Car3", "lassolength", to_string(LassoLength));
 
-							int lassoSpeed = player1->playerCar.lassoSpeed;
-							lassoSpeed += 5;
-							TextFile *lassoSpeedStat = new TextFile();
-							lassoSpeedStat->SetCarStat("Car3", "lassoSpeed", to_string(lassoSpeed));
+						int LassoStrength = player1->playerCar.lassoStrength;
+						LassoStrength += 5;
+						TextFile *LassoStrengthStat = new TextFile();
+						LassoStrengthStat->SetCarStat("Car3", "lassostrength", to_string(LassoStrength));
 						}*/
-						Dalasso->setLassoRange(50);
-						Dalasso->setLassoSpd(1);
+						Dalasso->setLassoRange(50.f);
+						Dalasso->setLassoSpd(1.0f);
 					}
 					lasso2Bought = true;
 				}
@@ -3111,42 +3211,42 @@ void SceneSP3::UpgradeController()
 						money -= cost[5];
 						/*if (car1Bought == true)
 						{
-							int LassoLength = player1->playerCar.lassoLength;
-							LassoLength += 6;
-							TextFile *LassoLengthStat = new TextFile();
-							LassoLengthStat->SetCarStat("Car1", "lassolength", to_string(LassoLength));
+						int LassoLength = player1->playerCar.lassoLength;
+						LassoLength += 6;
+						TextFile *LassoLengthStat = new TextFile();
+						LassoLengthStat->SetCarStat("Car1", "lassolength", to_string(LassoLength));
 
-							int lassoSpeed = player1->playerCar.lassoSpeed;
-							lassoSpeed += 6;
-							TextFile *lassoSpeedStat = new TextFile();
-							lassoSpeedStat->SetCarStat("Car1", "lassoSpeed", to_string(lassoSpeed));
+						int LassoStrength = player1->playerCar.lassoStrength;
+						LassoStrength += 6;
+						TextFile *LassoStrengthStat = new TextFile();
+						LassoStrengthStat->SetCarStat("Car1", "lassostrength", to_string(LassoStrength));
 						}
 						if (car2Bought == true)
 						{
-							int LassoLength = player1->playerCar.lassoLength;
-							LassoLength += 6;
-							TextFile *LassoLengthStat = new TextFile();
-							LassoLengthStat->SetCarStat("Car2", "lassolength", to_string(LassoLength));
+						int LassoLength = player1->playerCar.lassoLength;
+						LassoLength += 6;
+						TextFile *LassoLengthStat = new TextFile();
+						LassoLengthStat->SetCarStat("Car2", "lassolength", to_string(LassoLength));
 
-							int lassoSpeed = player1->playerCar.lassoSpeed;
-							lassoSpeed += 6;
-							TextFile *lassoSpeedStat = new TextFile();
-							lassoSpeedStat->SetCarStat("Car2", "lassoSpeed", to_string(lassoSpeed));
+						int LassoStrength = player1->playerCar.lassoStrength;
+						LassoStrength += 6;
+						TextFile *LassoStrengthStat = new TextFile();
+						LassoStrengthStat->SetCarStat("Car2", "lassostrength", to_string(LassoStrength));
 						}
 						if (car3Bought == true)
 						{
-							int LassoLength = player1->playerCar.lassoLength;
-							LassoLength += 6;
-							TextFile *LassoLengthStat = new TextFile();
-							LassoLengthStat->SetCarStat("Car3", "lassolength", to_string(LassoLength));
+						int LassoLength = player1->playerCar.lassoLength;
+						LassoLength += 6;
+						TextFile *LassoLengthStat = new TextFile();
+						LassoLengthStat->SetCarStat("Car3", "lassolength", to_string(LassoLength));
 
-							int lassoSpeed = player1->playerCar.lassoSpeed;
-							lassoSpeed += 6;
-							TextFile *lassoSpeedStat = new TextFile();
-							lassoSpeedStat->SetCarStat("Car3", "lassoSpeed", to_string(lassoSpeed));
+						int LassoStrength = player1->playerCar.lassoStrength;
+						LassoStrength += 6;
+						TextFile *LassoStrengthStat = new TextFile();
+						LassoStrengthStat->SetCarStat("Car3", "lassostrength", to_string(LassoStrength));
 						}*/
-						Dalasso->setLassoRange(60);
-						Dalasso->setLassoSpd(1.2);
+						Dalasso->setLassoRange(60.f);
+						Dalasso->setLassoSpd(1.2f);
 					}
 					lasso3Bought = true;
 				}
@@ -3327,6 +3427,18 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 10.4f && worldY < 18.1f)
 				{
+					if (car1Bought && !car2Bought)
+					{
+						InitCarStat("Car1", "SavedCarStats.txt");
+					}
+					else if (car2Bought && !car3Bought)
+					{
+						InitCarStat("Car2", "SavedCarStats.txt");
+					}
+					else if (car3Bought)
+					{
+						InitCarStat("Car3", "SavedCarStats.txt");
+					}
 					gameStates = states::s_LevelSelect;
 				}
 			}
@@ -3336,7 +3448,6 @@ void SceneSP3::UpgradeController()
 	{
 		bLButtonState = true;
 	}
-
 }
 
 void SceneSP3::RenderProps(playMap* map)
@@ -4273,7 +4384,7 @@ void SceneSP3::renderMenu()
 
 	if (gameStates == states::s_Upgrade_Cars1)
 	{
-		InitCarStat("Car1");
+		InitCarStat("Car1","SavedCarStats.txt");
 
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.400, 2);
@@ -4328,7 +4439,7 @@ void SceneSP3::renderMenu()
 	}
 	if (gameStates == states::s_Upgrade_Cars2)
 	{
-		InitCarStat("Car2");
+		InitCarStat("Car2", "SavedCarStats.txt");
 
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.400, 2);
@@ -4384,7 +4495,7 @@ void SceneSP3::renderMenu()
 	}
 	if (gameStates == states::s_Upgrade_Cars3)
 	{
-		InitCarStat("Car3");
+		InitCarStat("Car3", "SavedCarStats.txt");
 
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth * 0.790, m_worldHeight * 0.400, 2);
@@ -4457,7 +4568,7 @@ void SceneSP3::renderMenu()
 
 		TextFile* aa = new TextFile();
 		aa->GetCarStat("Car1", "CarStats.txt");
-		InitCarStat("Car1");
+		InitCarStat("Car1", "SavedCarStats.txt");
 
 		std::ostringstream s10;
 		s10.precision(5);
@@ -4500,7 +4611,7 @@ void SceneSP3::renderMenu()
 
 		TextFile* aa = new TextFile();
 		aa->GetCarStat("Car2", "CarStats.txt");
-		InitCarStat("Car2");
+		InitCarStat("Car2", "SavedCarStats.txt");
 
 		std::ostringstream s10;
 		s10.precision(5);
@@ -4543,7 +4654,7 @@ void SceneSP3::renderMenu()
 
 		TextFile* aa = new TextFile();
 		aa->GetCarStat("Car3", "CarStats.txt");
-		InitCarStat("Car3");
+		InitCarStat("Car3", "SavedCarStats.txt");
 
 		std::ostringstream s10;
 		s10.precision(5);
@@ -4578,7 +4689,7 @@ void SceneSP3::renderMenu()
 
 		TextFile* aa = new TextFile();
 		aa->GetCarStat("Car1", "CarStats.txt");
-		InitCarStat("Car1");
+		InitCarStat("Car1", "SavedCarStats.txt");
 
 		std::ostringstream s10;
 		s10.precision(5);
@@ -4627,7 +4738,7 @@ void SceneSP3::renderMenu()
 
 		TextFile* aa = new TextFile();
 		aa->GetCarStat("Car2", "CarStats.txt");
-		InitCarStat("Car2");
+		InitCarStat("Car2", "SavedCarStats.txt");
 
 		std::ostringstream s10;
 		s10.precision(5);
@@ -4675,7 +4786,7 @@ void SceneSP3::renderMenu()
 
 		TextFile* aa = new TextFile();
 		aa->GetCarStat("Car3", "CarStats.txt");
-		InitCarStat("Car3");
+		InitCarStat("Car3", "SavedCarStats.txt");
 
 		std::ostringstream s10;
 		s10.precision(5);
@@ -4732,7 +4843,7 @@ void SceneSP3::renderMenu()
 
 		TextFile* aa = new TextFile();
 		aa->GetCarStat("Car1", "CarStats.txt");
-		InitCarStat("Car1");
+		InitCarStat("Car1", "SavedCarStats.txt");
 
 		std::ostringstream s10;
 		s10.precision(5);
@@ -4789,7 +4900,7 @@ void SceneSP3::renderMenu()
 
 		TextFile* aa = new TextFile();
 		aa->GetCarStat("Car2", "CarStats.txt");
-		InitCarStat("Car2");
+		InitCarStat("Car2", "SavedCarStats.txt");
 
 		std::ostringstream s10;
 		s10.precision(5);
@@ -4845,7 +4956,7 @@ void SceneSP3::renderMenu()
 
 		TextFile* aa = new TextFile();
 		aa->GetCarStat("Car3", "CarStats.txt");
-		InitCarStat("Car3");
+		InitCarStat("Car3", "SavedCarStats.txt");
 
 		std::ostringstream s10;
 		s10.precision(5);
@@ -5286,7 +5397,17 @@ void SceneSP3::Render()
 		ss22.precision(5);
 		ss22 << "score: " << points;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss22.str(), Color(0, 1, 1), 3.5, 50, 55);
+
+		if (fogActive)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, 9);
+			modelStack.Scale(1000, 1000, 1);
+			RenderMesh(meshList[GEO_FOG], false);
+			modelStack.PopMatrix();
+		}
 	}
+
 }
 
 void SceneSP3::Exit()

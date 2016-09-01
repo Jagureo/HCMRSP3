@@ -131,6 +131,8 @@ public:
 		GEO_LOSE_SCENE,
 		GEO_WIN_SCENE,
 
+		GEO_FOG,
+
 		NUM_GEOMETRY,
 	};
 public:

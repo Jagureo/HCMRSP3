@@ -250,6 +250,8 @@ void SceneBase::Init()
 
 	meshList[GEO_ROPE] = MeshBuilder::GenerateCube("rope", Color(1, 1, 0), 1.f);
 
+	meshList[GEO_FOG] = MeshBuilder::GenerateQuad("Fog", Color(1, 1, 1), 1.f);
+	meshList[GEO_FOG]->textureID = LoadTGA("Image//Fog.tga");
 	bLightEnabled = false;
 }
 
