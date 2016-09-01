@@ -96,7 +96,7 @@ public:
 
 	void CollisionMap(GameObject *go, GameObject *other, double dt);
 
-	void playerControl();
+	void playerControl(double dt);
 
 	void mapEditorUpdate(double dt);
 	void mapEditorRender();

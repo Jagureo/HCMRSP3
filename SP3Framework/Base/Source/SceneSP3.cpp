@@ -642,7 +642,7 @@ void SceneSP3::CollisionMap(GameObject *go, GameObject *other, double dt)
 	}
 }
 
-void SceneSP3::playerControl()
+void SceneSP3::playerControl(double dt)
 {
 	if (Application::IsKeyPressed('W'))
 	{
@@ -757,6 +757,28 @@ void SceneSP3::playerControl()
 		player1->pos.y += testMap.getMapSize().y * 5 + m_worldBorder.y;
 	}
 	//cout << player1->pos << " mappos " << mapPosition - Vector3(m_worldWidth / 2, m_worldHeight / 2, 0) << endl;
+	static bool shotsFired = false;
+	if (Application::IsKeyPressed(VK_SPACE) && shotsFired == false)
+	{
+		shotsFired = true;
+		if (dartCount > 0 && dartROF <= 0)
+		{
+			GameObject* tranq = FetchGO();
+			tranq->type = GameObject::GO_TRANQ;
+			//GameObject* tranq = new GameObject(GameObject::GO_TRANQ);
+			tranq->pos.Set(player1->pos.x, player1->pos.y, 1);
+			tranq->pos += Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y, sin(Math::DegreeToRadian(player1->rotationAngle)) * player1->scale.y, 0);
+			tranq->vel = Vector3(cos(Math::DegreeToRadian(player1->rotationAngle)), sin(Math::DegreeToRadian(player1->rotationAngle)), 0).Normalized() * 75;
+			tranq->active = true;
+			//m_goList.push_back(tranq);
+			dartROF = 1 / (3 * dt);
+			dartCount--;
+		}
+	}
+	else if (!Application::IsKeyPressed(VK_SPACE) && shotsFired == true)
+	{
+		shotsFired = false;
+	}
 }
 
 void SceneSP3::Update(double dt)
@@ -872,7 +894,7 @@ void SceneSP3::Update(double dt)
 		gameStates == states::s_LevelBoss ||
 		gameStates == states::s_MapEditor && testMode == 1)
 	{
-		playerControl();
+		playerControl(dt);
 		if (Application::IsKeyPressed('W') || (Application::IsKeyPressed('S')))
 		{
 			if (gameStates != states::s_MapEditor)
