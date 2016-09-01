@@ -170,6 +170,7 @@ protected:
 	float time;
 
 	int points = 0;
+	bool loadMapStuff;
 
 	Vector3 objective;
 	bool updateObjective;
@@ -191,6 +192,7 @@ protected:
 	bool highQ;
 	bool sound;
 	bool snapSet;
+	bool sound;
 	ISoundEngine* theSoundEngine;
 	ISound* Sound_Engine;
 	ISound* Sound_Throw;

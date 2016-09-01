@@ -37,7 +37,7 @@ private:
 		CAUGHT,
 		MISS,
 	};
-	float maxLassoRange = 50;
+	float maxLassoRange = 40;
 	float currLassoRange;
 	Vector3 lassoPos;
 	lassoStates currLassoState;

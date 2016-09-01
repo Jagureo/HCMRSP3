@@ -10,6 +10,11 @@ lasso::~lasso()
 
 }
 
+void lasso::setLassoRange(float input)
+{
+	maxLassoRange = input;
+}
+
 void lasso::throwLasso(Vector3 playerPos, Vector3 mousePos)
 {
 	

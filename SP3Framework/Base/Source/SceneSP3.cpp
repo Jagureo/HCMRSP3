@@ -76,31 +76,34 @@ void SceneSP3::Init()
 	fuelAmount = 100.0f;
 	leader = NULL;
 	snapSet = 0;
-	money = 0;
-	cost[0] = 100;
-	cost[1] = 200;
-	cost[2] = 300;
-	cost[3] = 400;
-	cost[4] = 500;
-	cost[5] = 600;
-	cost[6] = 700;
-	cost[7] = 800;
+	money = 1000;
+	cost[0] = 100; //car2
+	cost[1] = 200; //car3
+	cost[2] = 300; //tire2
+	cost[3] = 400; //tire3
+	cost[4] = 500; //lasso2
+	cost[5] = 600; //lasso3
+	cost[6] = 700; //darts2
+	cost[7] = 800; //darts3
 	sound = 1;
 	highQ = 0;
 	dartMax = 5;
 	dartCount = 5;
 	dartROF = 1;
+
 	paused = false;
 	scroll = 0;
 	scrollimit = 275;
+
+	loadMapStuff = 0;
+
 
 	mapPosition = Vector3(m_worldWidth / 2, m_worldHeight / 2, 0);
 	testMap.setBackground(meshList[GEO_TESTMAP2]);
 	testMap.setMapSize(30, 20);
 
 	gameStates = states::s_Menu;
-	//gameStates = states::s_Upgrade;
-	//gameStates = states::s_Tutorial;
+	
 
 	animalStat = new TextFile(TextFile::ANIMAL);
 
@@ -903,7 +906,22 @@ void SceneSP3::Update(double dt)
 			}
 		}
 	}
-
+	if (gameStates == states::s_Tutorial ||
+		gameStates == states::s_Level2 ||
+		gameStates == states::s_Level3 ||
+		gameStates == states::s_LevelBoss ||
+		gameStates == states::s_MapEditor && testMode == 0)
+	{
+		if (Application::IsKeyPressed(VK_ESCAPE))
+		{
+			gameStates = states::s_Menu;
+			eraseEnemy();
+		}
+	}
+	else if (gameStates == states::s_MapEditor && testMode == 1)
+	{
+		testMode = 0;
+	}
 
 	if (gameStates == states::s_MapEditor)
 	{
@@ -1012,18 +1030,23 @@ void SceneSP3::Update(double dt)
 				{
 					if (worldX > 0.33f * m_worldWidth && worldX < 0.36f * m_worldWidth)
 					{
+						loadMapStuff = 1;
 						gameStates = states::s_Tutorial;
+						
 					}
 					if (worldX > 0.428f * m_worldWidth && worldX < 0.461f * m_worldWidth)
 					{
+						loadMapStuff = 1;
 						gameStates = states::s_Level2;
 					}
 					if (worldX > 0.5322f * m_worldWidth && worldX < 0.563f * m_worldWidth)
 					{
+						loadMapStuff = 1;
 						gameStates = states::s_Level3;
 					}
 					if (worldX > 0.631f * m_worldWidth && worldX < 0.669f * m_worldWidth)
 					{
+						loadMapStuff = 1;
 						gameStates = states::s_LevelBoss;
 					}
 				}
@@ -1093,7 +1116,6 @@ void SceneSP3::Update(double dt)
 					}
 				}
 			}
-
 			if (gameStates == states::s_Upgrade_Cars1 || gameStates == states::s_Upgrade_Cars3)
 			{
 				if (worldX > 0.232f * m_worldWidth && worldX < 0.3777f * m_worldWidth)
@@ -1223,9 +1245,70 @@ void SceneSP3::Update(double dt)
 
 			bLButtonState = true;
 		}
+		
+	}
+	if (gameStates == states::s_Level2)
+	{
+		if (loadMapStuff == 1)
+		{
+		TextFile* map = new TextFile(TextFile::MAP);
+		//call LevelJW textfile
+		NameofMap = map->CreateMapFile("LEVELJW", true);
+		RenderMapFile();
+		
+			for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
+			{
+				GameObject *go = (GameObject *)*it;
+				if (go->active == false)
+				{
+					go->dead = true;
+				}
+				if (go->dead == true)
+				{
+					continue;
+				}
+				if (go->type == GameObject::MAP_LION)
+				{
+					animalStat->GetAnimalStat("Lion");
+					enemy* animal = newEnemy(go->pos.x - mapPosition.x, go->pos.y - mapPosition.y, 0, 2, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+					animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+					animal->setLeader(0);
+					enemyList.push_back(animal);
+					go->active = false;
+				}
+				else if (go->type == GameObject::MAP_ZEBRA)
+				{
+					animalStat->GetAnimalStat("Zebra");
+					enemy* animal = newEnemy(go->pos.x - mapPosition.x, go->pos.y - mapPosition.y, 0, 0, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+					animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+					animal->setLeader(0);
+					enemyList.push_back(animal);
+					go->active = false;
+				}
+				else if (go->type == GameObject::MAP_RHINO)
+				{
+					animalStat->GetAnimalStat("Rhino");
+					enemy* animal = newEnemy(go->pos.x - mapPosition.x, go->pos.y - mapPosition.y, 0, 1, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+					animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+					animal->setLeader(0);
+					enemyList.push_back(animal);
+					go->active = false;
+				}
+				else if (go->type == GameObject::MAP_HUMAN)
+				{
+					animalStat->GetAnimalStat("Human");
+					enemy* animal = newEnemy(go->pos.x - mapPosition.x, go->pos.y - mapPosition.y, 0, 3, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+					animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+					animal->setLeader(0);
+					enemyList.push_back(animal);
+					go->active = false;
+				}
+			}
+			loadMapStuff = 0;
+		}
 	}
 
-	if (Application::IsKeyPressed(VK_ESCAPE))
+	/*if (Application::IsKeyPressed(VK_ESCAPE))
 	{
 		if (gameStates == states::s_Tutorial ||
 			gameStates == states::s_Level2 ||
@@ -1280,7 +1363,7 @@ void SceneSP3::Update(double dt)
 		{
 			bLButtonState = true;
 		}
-	}
+	}*/
 		static bool pressedBack = false;
 		if (gameStates == states::s_CustomLevelSelect)
 		{
@@ -1324,7 +1407,52 @@ void SceneSP3::Update(double dt)
 			{
 				gameStates = states::s_Menu;
 				fuelAmount = 100.0f;
+				points = 0;
 			}
+		}
+		if (gameStates == states::s_Win)
+		{
+			if (Application::IsKeyPressed(VK_ESCAPE))
+			{
+				gameStates = states::s_Menu;
+				fuelAmount = 100.0f;
+				points = 0;
+			}
+		}
+		if (gameStates == states::s_LevelBoss || gameStates == states::s_Level3 || gameStates == states::s_Level2 || gameStates == states::s_Tutorial)
+		{
+			bool winCondition = true;
+			for (std::vector<enemy*>::iterator itE3 = enemyList.begin(); itE3 != enemyList.end(); ++itE3)
+			{
+				enemy *goE3 = (enemy *)*itE3;
+				if (goE3 -> getActive() == true && winCondition == true)
+				{
+					winCondition = false;
+				}
+
+			}
+			if (winCondition == true)
+			{
+				if (gameStates == states::s_LevelBoss)
+				{
+					gameStates = states::s_Win;
+				}
+				else if (gameStates == states::s_Level3)
+				{
+					gameStates = states::s_Upgrade;
+				}
+				else if (gameStates == states::s_Level2)
+				{
+					gameStates = states::s_Upgrade;
+				}
+				else if (gameStates == states::s_Tutorial)
+				{
+					gameStates = states::s_Upgrade;
+				}
+				eraseEnemy();
+				winCondition = false;
+			}
+
 		}
 		if (gameStates == states::s_Upgrade_Cars1 || gameStates == states::s_Upgrade_Cars2 || gameStates == states::s_Upgrade_Cars3 ||
 			gameStates == states::s_Upgrade_Tires1 || gameStates == states::s_Upgrade_Tires2 || gameStates == states::s_Upgrade_Tires3 ||
@@ -1355,44 +1483,44 @@ void SceneSP3::Update(double dt)
 
 			if (arrowSelection > 0)
 			{
-				if (Application::IsKeyPressed(VK_UP) && arrowkeyUp == false)
+				if (Application::IsKeyPressed(VK_UP) || Application::IsKeyPressed('W') && arrowkeyUp == false)
 				{
 					arrowkeyUp = true;
 					arrowSelection--;
 				}
-				else if (!Application::IsKeyPressed(VK_UP) && arrowkeyUp == true)
+				else if (!Application::IsKeyPressed(VK_UP) || Application::IsKeyPressed('W') && arrowkeyUp == true)
 					arrowkeyUp = false;
 			}
 			else if (arrowSelection == 0)
 			{
-				if (Application::IsKeyPressed(VK_UP) && arrowkeyUp == false)
+				if (Application::IsKeyPressed(VK_UP) || Application::IsKeyPressed('W') && arrowkeyUp == false)
 				{
 					arrowkeyUp = true;
 					arrowSelection = 4;
 				}
-				else if (!Application::IsKeyPressed(VK_UP) && arrowkeyUp == true)
+				else if (!Application::IsKeyPressed(VK_UP) || Application::IsKeyPressed('W') && arrowkeyUp == true)
 					arrowkeyUp = false;
 
 			}
 
 			if (arrowSelection < 4)
 			{
-				if (Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == false)
+				if (Application::IsKeyPressed(VK_DOWN) || Application::IsKeyPressed('S') && arrowkeyDown == false)
 				{
 					arrowkeyDown = true;
 					arrowSelection++;
 				}
-				else if (!Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == true)
+				else if (!Application::IsKeyPressed(VK_DOWN) || Application::IsKeyPressed('S') && arrowkeyDown == true)
 					arrowkeyDown = false;
 			}
 			else if (arrowSelection == 4)
 			{
-				if (Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == false)
+				if (Application::IsKeyPressed(VK_DOWN) || Application::IsKeyPressed('S') && arrowkeyDown == false)
 				{
 					arrowkeyDown = true;
 					arrowSelection = 0;
 				}
-				else if (!Application::IsKeyPressed(VK_DOWN) && arrowkeyDown == true)
+				else if (!Application::IsKeyPressed(VK_DOWN) || Application::IsKeyPressed('S') && arrowkeyDown == true)
 					arrowkeyDown = false;
 			}
 			if (Application::IsKeyPressed(VK_RETURN))
@@ -2742,7 +2870,13 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					car2Bought = true;
+					InitCarStat("Car2");
+
+					if (money >= cost[0])
+					{
+						car2Bought = true;
+						money -= cost[0];
+					}
 				}
 			}
 		}
@@ -2752,7 +2886,12 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
-					car3Bought = true;
+					InitCarStat("Car3");
+					if (money >= cost[1])
+					{
+						car3Bought = true;
+						money -= cost[1];
+					}
 				}
 			}
 		}
@@ -2772,6 +2911,31 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
+					if (money >= cost[2])
+					{
+						money -= cost[2];
+						if (car1Bought == true)
+						{
+							int handling = player1->playerCar.handling;
+							handling += 4;
+							TextFile *HandlingStat = new TextFile();
+							HandlingStat->SetCarStat("Car1", "handling", to_string(handling));
+						}
+						if (car2Bought == true)
+						{
+							int handling = player1->playerCar.handling;
+							handling += 4;
+							TextFile *HandlingStat = new TextFile();
+							HandlingStat->SetCarStat("Car2", "handling", to_string(handling));
+						}
+						if (car3Bought == true)
+						{
+							int handling = player1->playerCar.handling;
+							handling += 4;
+							TextFile *HandlingStat = new TextFile();
+							HandlingStat->SetCarStat("Car3", "handling", to_string(handling));
+						}
+					}
 					tire2Bought = true;
 				}
 			}
@@ -2782,6 +2946,31 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
+					if (money >= cost[3])
+					{
+						money -= cost[3];
+						if (car1Bought == true)
+						{
+							int handling = player1->playerCar.handling;
+							handling += 5;
+							TextFile *HandlingStat = new TextFile();
+							HandlingStat->SetCarStat("Car1", "handling", to_string(handling));
+						}
+						if (car2Bought == true)
+						{
+							int handling = player1->playerCar.handling;
+							handling += 5;
+							TextFile *HandlingStat = new TextFile();
+							HandlingStat->SetCarStat("Car2", "handling", to_string(handling));
+						}
+						if (car3Bought == true)
+						{
+							int handling = player1->playerCar.handling;
+							handling += 5;
+							TextFile *HandlingStat = new TextFile();
+							HandlingStat->SetCarStat("Car3", "handling", to_string(handling));
+						}
+					}
 					tire3Bought = true;
 				}
 			}
@@ -2802,6 +2991,47 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
+					if (money >= cost[4])
+					{
+						money -= cost[4];
+						/*if (car1Bought == true)
+						{
+							int LassoLength = player1->playerCar.lassoLength;
+							LassoLength += 5;
+							TextFile *LassoLengthStat = new TextFile();
+							LassoLengthStat->SetCarStat("Car1", "lassolength", to_string(LassoLength));
+
+							int LassoStrength = player1->playerCar.lassoStrength;
+							LassoStrength += 5;
+							TextFile *LassoStrengthStat = new TextFile();
+							LassoStrengthStat->SetCarStat("Car1", "lassostrength", to_string(LassoStrength));
+						}
+						if (car2Bought == true)
+						{
+							int LassoLength = player1->playerCar.lassoLength;
+							LassoLength += 5;
+							TextFile *LassoLengthStat = new TextFile();
+							LassoLengthStat->SetCarStat("Car2", "lassolength", to_string(LassoLength));
+
+							int LassoStrength = player1->playerCar.lassoStrength;
+							LassoStrength += 5;
+							TextFile *LassoStrengthStat = new TextFile();
+							LassoStrengthStat->SetCarStat("Car2", "lassostrength", to_string(LassoStrength));
+						}
+						if (car3Bought == true)
+						{
+							int LassoLength = player1->playerCar.lassoLength;
+							LassoLength += 5;
+							TextFile *LassoLengthStat = new TextFile();
+							LassoLengthStat->SetCarStat("Car3", "lassolength", to_string(LassoLength));
+
+							int LassoStrength = player1->playerCar.lassoStrength;
+							LassoStrength += 5;
+							TextFile *LassoStrengthStat = new TextFile();
+							LassoStrengthStat->SetCarStat("Car3", "lassostrength", to_string(LassoStrength));
+						}*/
+						Dalasso->setLassoRange(50);
+					}
 					lasso2Bought = true;
 				}
 			}
@@ -2812,6 +3042,47 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
+					if (money >= cost[5])
+					{
+						money -= cost[5];
+						/*if (car1Bought == true)
+						{
+							int LassoLength = player1->playerCar.lassoLength;
+							LassoLength += 6;
+							TextFile *LassoLengthStat = new TextFile();
+							LassoLengthStat->SetCarStat("Car1", "lassolength", to_string(LassoLength));
+
+							int LassoStrength = player1->playerCar.lassoStrength;
+							LassoStrength += 6;
+							TextFile *LassoStrengthStat = new TextFile();
+							LassoStrengthStat->SetCarStat("Car1", "lassostrength", to_string(LassoStrength));
+						}
+						if (car2Bought == true)
+						{
+							int LassoLength = player1->playerCar.lassoLength;
+							LassoLength += 6;
+							TextFile *LassoLengthStat = new TextFile();
+							LassoLengthStat->SetCarStat("Car2", "lassolength", to_string(LassoLength));
+
+							int LassoStrength = player1->playerCar.lassoStrength;
+							LassoStrength += 6;
+							TextFile *LassoStrengthStat = new TextFile();
+							LassoStrengthStat->SetCarStat("Car2", "lassostrength", to_string(LassoStrength));
+						}
+						if (car3Bought == true)
+						{
+							int LassoLength = player1->playerCar.lassoLength;
+							LassoLength += 6;
+							TextFile *LassoLengthStat = new TextFile();
+							LassoLengthStat->SetCarStat("Car3", "lassolength", to_string(LassoLength));
+
+							int LassoStrength = player1->playerCar.lassoStrength;
+							LassoStrength += 6;
+							TextFile *LassoStrengthStat = new TextFile();
+							LassoStrengthStat->SetCarStat("Car3", "lassostrength", to_string(LassoStrength));
+						}*/
+						Dalasso->setLassoRange(60);
+					}
 					lasso3Bought = true;
 				}
 			}
@@ -2822,6 +3093,46 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
+					if (money >= cost[6])
+					{
+						money -= cost[6];
+						if (car1Bought == true)
+						{
+							int TranqCount = player1->playerCar.tranqCount;
+							TranqCount += 1;
+							TextFile *TranqCountStat = new TextFile();
+							TranqCountStat->SetCarStat("Car1", "tranqcount", to_string(TranqCount));
+
+							int TranqDuration = player1->playerCar.tranqDuration;
+							TranqDuration += 1;
+							TextFile *TranqDurationStat = new TextFile();
+							TranqDurationStat->SetCarStat("Car1", "tranqduration", to_string(TranqDuration));
+						}
+						if (car2Bought == true)
+						{
+							int TranqCount = player1->playerCar.tranqCount;
+							TranqCount += 1;
+							TextFile *TranqCountStat = new TextFile();
+							TranqCountStat->SetCarStat("Car2", "tranqcount", to_string(TranqCount));
+
+							int TranqDuration = player1->playerCar.tranqDuration;
+							TranqDuration += 1;
+							TextFile *TranqDurationStat = new TextFile();
+							TranqDurationStat->SetCarStat("Car2", "tranqduration", to_string(TranqDuration));
+						}
+						if (car3Bought == true)
+						{
+							int TranqCount = player1->playerCar.tranqCount;
+							TranqCount += 1;
+							TextFile *TranqCountStat = new TextFile();
+							TranqCountStat->SetCarStat("Car3", "tranqcount", to_string(TranqCount));
+
+							int TranqDuration = player1->playerCar.tranqDuration;
+							TranqDuration += 1;
+							TextFile *TranqDurationStat = new TextFile();
+							TranqDurationStat->SetCarStat("Car3", "tranqduration", to_string(TranqDuration));
+						}
+					}
 					dart1Bought = true;
 				}
 			}
@@ -2832,6 +3143,46 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
+					if (money >= cost[7])
+					{
+						money -= cost[7];
+						if (car1Bought == true)
+						{
+							int TranqCount = player1->playerCar.tranqCount;
+							TranqCount += 2;
+							TextFile *TranqCountStat = new TextFile();
+							TranqCountStat->SetCarStat("Car1", "tranqcount", to_string(TranqCount));
+
+							int TranqDuration = player1->playerCar.tranqDuration;
+							TranqDuration += 2;
+							TextFile *TranqDurationStat = new TextFile();
+							TranqDurationStat->SetCarStat("Car1", "tranqduration", to_string(TranqDuration));
+						}
+						if (car2Bought == true)
+						{
+							int TranqCount = player1->playerCar.tranqCount;
+							TranqCount += 2;
+							TextFile *TranqCountStat = new TextFile();
+							TranqCountStat->SetCarStat("Car2", "tranqcount", to_string(TranqCount));
+
+							int TranqDuration = player1->playerCar.tranqDuration;
+							TranqDuration += 2;
+							TextFile *TranqDurationStat = new TextFile();
+							TranqDurationStat->SetCarStat("Car2", "tranqduration", to_string(TranqDuration));
+						}
+						if (car3Bought == true)
+						{
+							int TranqCount = player1->playerCar.tranqCount;
+							TranqCount += 2;
+							TextFile *TranqCountStat = new TextFile();
+							TranqCountStat->SetCarStat("Car3", "tranqcount", to_string(TranqCount));
+
+							int TranqDuration = player1->playerCar.tranqDuration;
+							TranqDuration += 2;
+							TextFile *TranqDurationStat = new TextFile();
+							TranqDurationStat->SetCarStat("Car3", "tranqduration", to_string(TranqDuration));
+						}
+					}
 					dart2Bought = true;
 				}
 			}
@@ -2842,6 +3193,46 @@ void SceneSP3::UpgradeController()
 			{
 				if (worldY > 16.8f && worldY < 22.6f)
 				{
+					if (money >= cost[8])
+					{
+						money -= cost[8];
+						if (car1Bought == true)
+						{
+							int TranqCount = player1->playerCar.tranqCount;
+							TranqCount += 3;
+							TextFile *TranqCountStat = new TextFile();
+							TranqCountStat->SetCarStat("Car1", "tranqcount", to_string(TranqCount));
+
+							int TranqDuration = player1->playerCar.tranqDuration;
+							TranqDuration += 3;
+							TextFile *TranqDurationStat = new TextFile();
+							TranqDurationStat->SetCarStat("Car1", "tranqduration", to_string(TranqDuration));
+						}
+						if (car2Bought == true)
+						{
+							int TranqCount = player1->playerCar.tranqCount;
+							TranqCount += 3;
+							TextFile *TranqCountStat = new TextFile();
+							TranqCountStat->SetCarStat("Car2", "tranqcount", to_string(TranqCount));
+
+							int TranqDuration = player1->playerCar.tranqDuration;
+							TranqDuration += 3;
+							TextFile *TranqDurationStat = new TextFile();
+							TranqDurationStat->SetCarStat("Car2", "tranqduration", to_string(TranqDuration));
+						}
+						if (car3Bought == true)
+						{
+							int TranqCount = player1->playerCar.tranqCount;
+							TranqCount += 3;
+							TextFile *TranqCountStat = new TextFile();
+							TranqCountStat->SetCarStat("Car3", "tranqcount", to_string(TranqCount));
+
+							int TranqDuration = player1->playerCar.tranqDuration;
+							TranqDuration += 3;
+							TextFile *TranqDurationStat = new TextFile();
+							TranqDurationStat->SetCarStat("Car3", "tranqduration", to_string(TranqDuration));
+						}
+					}
 					dart3Bought = true;
 				}
 			}
@@ -3736,13 +4127,23 @@ void SceneSP3::renderMenu()
 			RenderMesh(meshList[GEO_SOLD], false);
 			modelStack.PopMatrix();
 		}
+
 		if (lasso2Bought == true)
+		{
+		
+		if (gameStates == states::s_Upgrade)
+
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(m_worldWidth / 3.2, m_worldHeight / 5, -4);
 			modelStack.Scale(30, 30, 1);
 			RenderMesh(meshList[GEO_SOLD], false);
 			modelStack.PopMatrix();
+
+			std::ostringstream s13;
+			s13.precision(5);
+			s13 << "$" << money;
+			RenderTextOnScreen(meshList[GEO_TEXT], s13.str(), Color(0, 1, 0), 2.5, 59.5, 1);
 		}
 		if (lasso3Bought == true)
 		{
@@ -4467,13 +4868,49 @@ void SceneSP3::renderMenu()
 			}
 			scrollimit = 275 - ((100 - counter) * 3);
 
+			std::ostringstream s13;
+			s13.precision(5);
+			s13 << "$" << money;
+			RenderTextOnScreen(meshList[GEO_TEXT], s13.str(), Color(0, 1, 0), 2.5, 59.5, 1);
+		}
+		if (gameStates == states::s_Win)
+		{
+			modelStack.PushMatrix();
+			//modelStack.Translate(140, 58, 4);
+			//modelStack.Scale(50, 20, 0);
+			modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
+			modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+			RenderMesh(meshList[GEO_WIN_SCENE], false);
+			modelStack.PopMatrix();
+
+			std::ostringstream ss22;
+			ss22.precision(5);
+			ss22 << " Final score: " << points;
+			RenderTextOnScreen(meshList[GEO_TEXT], ss22.str(), Color(0, 1, 0), 3, 17, 21);
+		}
+		if (gameStates == states::s_Lose)
+		{
+			std::ostringstream ss22;
+			ss22.precision(5);
+			ss22 << "score: " << points;
+			RenderTextOnScreen(meshList[GEO_TEXT], ss22.str(), Color(0, 1, 0), 3, 17, 21);
+
+			modelStack.PushMatrix();
+			//modelStack.Translate(140, 58, 4);
+			//modelStack.Scale(50, 20, 0);
+			modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 0);
+			modelStack.Scale(m_worldWidth, m_worldHeight, 1);
+			RenderMesh(meshList[GEO_LOSE_SCENE], false);
+			modelStack.PopMatrix();
+		}
+		if (paused == true)
+		{
 			modelStack.PushMatrix();
 			modelStack.Translate(m_worldWidth / 2, m_worldHeight / 2, 7);
 			modelStack.Scale(m_worldWidth, m_worldHeight, 1);
 			RenderMesh(meshList[GEO_MENU_HIGHSCORE_PAGE2], false);
 			modelStack.PopMatrix();
-
-	}
+		}
 }
 
 void SceneSP3::Render()
@@ -4548,7 +4985,7 @@ void SceneSP3::Render()
 	RenderMesh(testMap.getBackground(), false);
 	modelStack.PopMatrix();
 
-	if (gameStates != states::s_MapEditor)
+	if (gameStates != states::s_MapEditor || gameStates != states::s_Tutorial || gameStates != states::s_Level2 || gameStates != states::s_Level3 || gameStates != states::s_LevelBoss)
 	{
 		renderMenu();
 	}
@@ -4696,25 +5133,10 @@ void SceneSP3::Render()
 		RenderMesh(meshList[GEO_BUY], false);
 		modelStack.PopMatrix();
 	}
-	if (gameStates == states::s_MapEditor)
+	if (gameStates == states::s_MapEditor )
 	{
-		/*if (testMode == true)
-		{
-			for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
-			{
-				GameObject *go = (GameObject *)*it;
-				if (go->active)
-				{
-					RenderGO(go);
-				}
-			}
-		}*/
 
 		mapEditorRender();
-		if (Application::IsKeyPressed(VK_ESCAPE))
-		{
-			gameStates = states::s_Menu;
-		}
 	}
 
 	//modelStack.PushMatrix();
@@ -4756,7 +5178,18 @@ void SceneSP3::Render()
 	ss11 << "count: " << testMap.propCount;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss11.str(), Color(0, 1, 0), 3, 0, 6);*/
 
-	/*std::ostringstream ss;
+	if (gameStates == states::s_Tutorial ||
+		gameStates == states::s_Level2 ||
+		gameStates == states::s_Level3 ||
+		gameStates == states::s_LevelBoss)
+	{
+		std::ostringstream ss22;
+		ss22.precision(5);
+		ss22 << "score: " << points;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss22.str(), Color(0, 1, 0), 3, 0, 9);
+	}
+
+	std::ostringstream ss;
 	ss.precision(5);
 	ss << "Pos: " << worldX / m_worldWidth << ", " << worldY;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);*/

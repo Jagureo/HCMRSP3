@@ -195,6 +195,8 @@ void SceneBase::Init()
 	meshList[GEO_MENU_OPTIONS]->textureID = LoadTGA("Image//menu_Options.tga");
 	meshList[GEO_MENU_HIGHSCORE] = MeshBuilder::GenerateQuad("menu_highscore", Color(1, 1, 1), 2.f);
 	meshList[GEO_MENU_HIGHSCORE]->textureID = LoadTGA("Image//menu_Highscore.tga");
+	meshList[GEO_MENU_HIGHSCORE_PAGE] = MeshBuilder::GenerateQuad("menu_highscore_page", Color(1, 1, 1), 1.f);
+	meshList[GEO_MENU_HIGHSCORE_PAGE]->textureID = LoadTGA("Image//menu_Highscore_page.tga");
 	meshList[GEO_MENU_PAUSE] = MeshBuilder::GenerateQuad("menu_pause", Color(1, 1, 1), 1.f);
 	meshList[GEO_MENU_PAUSE]->textureID = LoadTGA("Image//Pause.tga");
 	meshList[GEO_MENU_QUIT] = MeshBuilder::GenerateQuad("menu_quit", Color(1, 1, 1), 2.f);
@@ -243,6 +245,8 @@ void SceneBase::Init()
 
 	meshList[GEO_LOSE_SCENE] = MeshBuilder::GenerateQuad("loseScreen", Color(1, 1, 1), 1.f);
 	meshList[GEO_LOSE_SCENE]->textureID = LoadTGA("Image//loseScreen.tga");
+	meshList[GEO_WIN_SCENE] = MeshBuilder::GenerateQuad("winScreen", Color(1, 1, 1), 1.f);
+	meshList[GEO_WIN_SCENE]->textureID = LoadTGA("Image//winScreen.tga");
 
 	meshList[GEO_ROPE] = MeshBuilder::GenerateCube("rope", Color(1, 1, 0), 1.f);
 
