@@ -1307,6 +1307,66 @@ void SceneSP3::Update(double dt)
 			loadMapStuff = 0;
 		}
 	}
+	if (gameStates == states::s_LevelBoss)
+	{
+		if (loadMapStuff == 1)
+		{
+			TextFile* map = new TextFile(TextFile::MAP);
+			//call LevelJW textfile
+			NameofMap = map->CreateMapFile("LEVELFOU", true);
+			RenderMapFile();
+
+			for (std::vector<GameObject *>::iterator it = testMap.mapProps.begin(); it != testMap.mapProps.end(); ++it)
+			{
+				GameObject *go = (GameObject *)*it;
+				if (go->active == false)
+				{
+					go->dead = true;
+				}
+				if (go->dead == true)
+				{
+					continue;
+				}
+				if (go->type == GameObject::MAP_LION)
+				{
+					animalStat->GetAnimalStat("Lion");
+					enemy* animal = newEnemy(go->pos.x - mapPosition.x, go->pos.y - mapPosition.y, 0, 2, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+					animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+					animal->setLeader(0);
+					enemyList.push_back(animal);
+					go->active = false;
+				}
+				else if (go->type == GameObject::MAP_ZEBRA)
+				{
+					animalStat->GetAnimalStat("Zebra");
+					enemy* animal = newEnemy(go->pos.x - mapPosition.x, go->pos.y - mapPosition.y, 0, 0, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+					animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+					animal->setLeader(0);
+					enemyList.push_back(animal);
+					go->active = false;
+				}
+				else if (go->type == GameObject::MAP_RHINO)
+				{
+					animalStat->GetAnimalStat("Rhino");
+					enemy* animal = newEnemy(go->pos.x - mapPosition.x, go->pos.y - mapPosition.y, 0, 1, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+					animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+					animal->setLeader(0);
+					enemyList.push_back(animal);
+					go->active = false;
+				}
+				else if (go->type == GameObject::MAP_HUMAN)
+				{
+					animalStat->GetAnimalStat("Human");
+					enemy* animal = newEnemy(go->pos.x - mapPosition.x, go->pos.y - mapPosition.y, 0, 3, animalStat->get_stamina(), animalStat->get_speed(), animalStat->get_strength());
+					animal->setVel(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10), 0);
+					animal->setLeader(0);
+					enemyList.push_back(animal);
+					go->active = false;
+				}
+			}
+			loadMapStuff = 0;
+		}
+	}
 
 	/*if (Application::IsKeyPressed(VK_ESCAPE))
 	{

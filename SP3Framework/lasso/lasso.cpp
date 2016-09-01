@@ -52,29 +52,27 @@ bool lasso::updateLasso(Vector3 playerPos, float dt)
 			}
 			else
 			{
-				if (targetPos.x - lassoPos.x != 0 && targetPos.y - lassoPos.y != 0)
-				{
-					lassoVel = (targetPos - lassoPos);
-					lassoVel.Normalize();
-					lassoVel *= lassoSpd;
-					lassoPos += lassoVel;
-					currLassoRange = (lassoPos - playerPos).Length();
-				}
+
+				lassoVel = (targetPos - lassoPos);
+				lassoVel.Normalize();
+				lassoVel *= lassoSpd;
+				lassoPos += lassoVel;
+				currLassoRange = (lassoPos - playerPos).Length();
+
 				//std::cout << currLassoRange << std::endl;
 			}
 
 		}
 		else if (currLassoState == 3)
 		{
-			if (targetPos.x - lassoPos.x != 0 && targetPos.y - lassoPos.y != 0)
-			{
-				lassoVel += (lassoPos - playerPos);
-				lassoVel.Normalize();
-				lassoVel *= 0.5 * lassoSpd;
-				lassoPos -= lassoVel;
-				currLassoRange = (lassoPos - playerPos).Length();
-			}
-			if (/*lassoPos.x > playerPos.x - 3 &&  lassoPos.x < playerPos.x + 3 && lassoPos.y > playerPos.y - 3 &&  lassoPos.y < playerPos.y + 3*/currLassoRange < 5)
+
+			lassoVel += (lassoPos - playerPos);
+			lassoVel.Normalize();
+			lassoVel *= 0.5 * lassoSpd;
+			lassoPos -= lassoVel;
+			currLassoRange = (lassoPos - playerPos).Length();
+
+			if (/*lassoPos.x > playerPos.x - 3 &&  lassoPos.x < playerPos.x + 3 && lassoPos.y > playerPos.y - 3 &&  lassoPos.y < playerPos.y + 3*/(lassoPos - playerPos).Length() < 5)
 			{
 				currLassoState = READY;
 				lassoVel = (0, 0, 0);
