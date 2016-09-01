@@ -148,7 +148,7 @@ void SceneSP3::InitCarStat(string varname)
 	player1->playerCar.hp= var->get_hp();
 	player1->playerCar.handling = var->get_handling();
 	player1->playerCar.lassoLength = var->get_lassolength();
-	player1->playerCar.lassoSpeed = var->get_lassoSpeed();
+	player1->playerCar.lassoSpeed = var->get_lassospeed();
 	player1->playerCar.tranqCount = var->get_tranqcount();
 	player1->playerCar.tranqDuration = var->get_tranqduration();
 	cout << "bought" << endl;
